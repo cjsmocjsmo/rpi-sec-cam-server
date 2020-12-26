@@ -1,0 +1,59 @@
+//    MovieGo
+//    Copyright (C) 2017  Charlie J Smotherman
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#fs {
+	display: block;
+	margin-top: 25px;
+}
+
+#movbut, #tvbut {
+	display: block;
+	height: 200px;
+	margin-top: -1px;
+}
+
+#playBtn, #pauseBtn, #nextBtn, #prevBtn, #stopBtn {
+	display: block;
+	height: 5em;
+}
+
+.oddone {
+	display: block;
+	margin: auto;
+	height: 270px;
+}
+
+.blkAImg, .blkBImg, .blkCImg, .blkDImg {
+	display: block;
+	margin: auto;
+	padding: 10px;
+	height: 250px;
+}
+
+#introimg, #movimg, #tvimg {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	height: 100px;
+	width: 75%:
+}
+
+.title, .year {
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+	width: 75%;
+}

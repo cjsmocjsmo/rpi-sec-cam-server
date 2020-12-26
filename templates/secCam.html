@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>MovieTime</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link type="text/css" rel="stylesheet" href="static/css/jquery.mobile-1.4.5.min.css" />
+	<link type="text/css" rel="stylesheet" href="static/css/jquery.mobile.theme-1.4.5.min.css" />
+	<link type="text/css" rel="stylesheet" href="static/css/movietime.css" />
+	<script src="static/js/jquery-2.1.4.min.js"></script>
+	<script src="static/js/jquery.mobile-1.4.5.min.js"></script>
+	<!-- <script src="static/js/movietime.js"></script> -->
+	<script src="static/js/movietime2.js"></script>
+</head>
+<body>
+<div class='amp' data-role="page" id="intro" data-theme="b">
+	<div id="sttvPan" data-role='panel'>
+		<a id="sttv1" href="#sttv" class="ui-btn ui-corner-all">Season 1</a>	
+		<a id="sttv2" href="#sttv" class="ui-btn ui-corner-all">Season 2</a>
+		<a id="sttv3" href="#sttv" class="ui-btn ui-corner-all">Season 3</a>
+		<a class="ui-btn ui-corner-all" data-rel="close">Close</a>
+	</div>
+	<div id="tngPan" data-role='panel'>
+		<a id="tng1" href="#tng" class="ui-btn ui-corner-all">Season 1</a>	
+		<a id="tng2" href="#tng" class="ui-btn ui-corner-all">Season 2</a>
+		<a id="tng3" href="#tng" class="ui-btn ui-corner-all">Season 3</a>
+		<a id="tng4" href="#tng" class="ui-btn ui-corner-all">Season 4</a>	
+		<a id="tng5" href="#tng" class="ui-btn ui-corner-all">Season 5</a>
+		<a id="tng6" href="#tng" class="ui-btn ui-corner-all">Season 6</a>
+		<a id="tng7" href="#tng" class="ui-btn ui-corner-all">Season 7</a>
+		<a class="ui-btn ui-corner-all" data-rel="close">Close</a>
+	</div>
+	<div id="voyPan" data-role='panel'>
+		<a id="voy1" href="#voy" class="ui-btn ui-corner-all">Season 1</a>	
+		<a id="voy2" href="#voy" class="ui-btn ui-corner-all">Season 2</a>
+		<a id="voy3" href="#voy" class="ui-btn ui-corner-all">Season 3</a>
+		<a id="voy4" href="#voy" class="ui-btn ui-corner-all">Season 4</a>	
+		<a id="voy5" href="#voy" class="ui-btn ui-corner-all">Season 5</a>
+		<a id="voy6" href="#voy" class="ui-btn ui-corner-all">Season 6</a>
+		<a id="voy7" href="#voy" class="ui-btn ui-corner-all">Season 7</a>
+		<a class="ui-btn ui-corner-all" data-rel="close">Close</a>
+	</div>
+	<div id="entPan" data-role='panel'>
+		<a id="ent1" href="#ent" class="ui-btn ui-corner-all">Season 1</a>	
+		<a id="ent2" href="#ent" class="ui-btn ui-corner-all">Season 2</a>
+		<a id="ent3" href="#ent" class="ui-btn ui-corner-all">Season 3</a>
+		<a id="ent4" href="#ent" class="ui-btn ui-corner-all">Season 4</a>
+		<a class="ui-btn ui-corner-all" data-rel="close">Close</a>
+	</div>
+	<div id="disPan" data-role='panel'>
+		<a id="dis1" href="#dis" class="ui-btn ui-corner-all">Season 1</a>	
+		<a id="dis2" href="#dis" class="ui-btn ui-corner-all">Season 2</a>
+		<a class="ui-btn ui-corner-all" data-rel="close">Close</a>
+	</div>
+	<div id="orvPan" data-role='panel'>
+		<a id="orv1" href="#orv" class="ui-btn ui-corner-all">Season 1</a>	
+		<a id="orv2" href="#orv" class="ui-btn ui-corner-all">Season 2</a>
+		<a class="ui-btn ui-corner-all" data-rel="close">Close</a>
+	</div>
+	<div id="tlsPan" data-role="panel">
+		<a id="tls1" href="#tls" class="ui-btn ui-corner-all">Season 1</a>
+		<a id="tls2" href="#tls" class="ui-btn ui-corner-all">Season 2</a>
+		<a id="tls3" href="#tls" class="ui-btn ui-corner-all">Season 3</a>
+		<a id="tls4" href="#tls" class="ui-btn ui-corner-all">Season 4</a>
+		<a class="ui-btn ui-corner-all" data-rel="close">Close</a>
+	</div>
+	<div data-role="header" data-theme="b" data-position="fixed">
+	<!--	<a href="#" id="shutdownBtn" data-ajax='false' class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all">Power Off</a>-->
+		<a href="#updatePg" id="updateBtn" data-ajax='false' class="ui-btn-left ui-btn ui-btn-inline ui-mini ui-corner-all">Update</a>
+		<h1 id="introH1">MovieTime</h1>
+	</div>
+	
+	<div data-role="tabs" id="tags">
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#Moovs" data-ajax="false"><img id="movimg" src="static/images/movie-7.png"></img></a></li>
+				<li><a href="#TVVs" data-ajax="false"><img id="tvimg" src="static/images/tv.png"></img></a></li>
+			</ul>
+			<ul>
+				<button id="pauseBtn" class="ui-btn ui-corner-all">Play/Pause</button>
+				<button id="stopBtn" class="ui-btn ui-corner-all">Stop</a>
+				<button id="nextBtn" class="ui-btn ui-corner-all">Next</button>
+				<button id="prevBtn" class="ui-btn ui-corner-all">Prev</button>
+			</ul>
+		</div>
+
+		<div id="Moovs" class="ui-body-d ui-content">
+			<a id="actionBtn" href="#action" class="ui-btn ui-corner-all">Action</a>
+			<a id="cartoonsBtn" href="#cartoons" class="ui-btn ui-corner-all">Cartoons</a>
+			<a id="comedyBtn" href="#comedy" class="ui-btn ui-corner-all">Comedy</a>
+			<a id="dramaBtn" href="#drama" class="ui-btn ui-corner-all">Drama</a>
+			<a id="godzillaBtn" href="#godzilla" class="ui-btn ui-corner-all">Godzilla</a>
+			<a id="harrypotterBtn" href="#harrypotter" class="ui-btn ui-corner-all">Harry Potter</a>
+			<a id="indianajonesBtn" href="#indianajones" class="ui-btn ui-corner-all">Indiana Jones</a>
+			<a id="johnwayneBtn" href="#johnwayne" class="ui-btn ui-corner-all">John Wayne</a>
+			<a id="jurassicparkBtn" href="#jurassicpark" class="ui-btn ui-corner-all">Jurassic Park</a>
+			<a id="kingsmanBtn" href="#kingsman" class="ui-btn ui-corner-all">KingsMan</a>
+			<a id="meninblackBtn" href="#meninblack" class="ui-btn ui-corner-all">Men In Black</a>
+			<a id="scifiBtn" href="#scifi" class="ui-btn ui-corner-all">SciFi</a>
+			<a id="startrekMBtn" href="#startrekM" class="ui-btn ui-corner-all">Star Trek</a>
+			<a id="starwarsBtn" href="#starwars" class="ui-btn ui-corner-all">Star Wars</a>
+			<a id="superherosBtn" href="#superheros" class="ui-btn ui-corner-all">Super Heros</a>
+			<a id="tremorsBtn" href="#tremors" class="ui-btn ui-corner-all">Tremors</a>
+			<a id="miscBtn" href="#misc" class="ui-btn ui-corner-all">Misc</a>
+		</div>
+		<div id="TVVs" class="ui-body-d ui-content">
+			<a href="#sttvPan" class="ui-btn ui-corner-all">Star Trek</a>
+			<a href="#tngPan" class="ui-btn ui-corner-all">The Next Generation</a>
+			<a href="#voyPan" class="ui-btn ui-corner-all">Voyager</a>
+			<a href="#entPan" class="ui-btn ui-corner-all">Enterprise</a>
+			<a href="#disPan" class="ui-btn ui-corner-all">Discovery</a>
+			<a href="#orvPan" class="ui-btn ui-corner-all">Orville</a>
+			<a href="#tlsPan" class="ui-btn ui-corner-all">The Last Ship</a>
+		</div>
+	</div>
+</div>
+
+
+
+<div data-role="page" id="comedy" data-theme="b">
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<h1>MovieTime</h1>
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#intro" data-theme='a'>Home</a></li>			
+			</ul>
+		</div>
+	</div>
+	<div id='comedyMain' role='main' class='ui-content' data-theme='b'>
+	</div>		
+</div>
+
+
+<div data-role="page" id="tls" data-theme="b">
+	<div data-role="header" data-theme="b" data-position="fixed">
+		<h1>MovieTime</h1>
+		<div data-role='navbar'>
+			<ul>
+				<li><a href="#intro" data-theme='a'>Home</a></li>
+			</ul>
+		</div>
+	</div>
+	<div id="tlsMain" role="main" class="ui-content" data-theme="b">
+
+	</div>
+</div>
+
+
+
+
+
+</div>
+</body>
+</html>
