@@ -25,14 +25,15 @@ import yaml
 from datetime import date
 import filecmp
 
+with open('secCam.yaml') as f:
+    conf = yaml.load(f, Loader=yaml.FullLoader)[0]
+
 class ParseLogs:
     def __init__(self):
-        with open('secCam.yaml') as f:
-            self.conf = yaml.load(f, Loader=yaml.FullLoader)[0]
-        d1 = date.today()
-        self.today = d1.strftime("%Y-%m-%d")
-        self.log_file = self.conf["log_file_path"]
-        self.log_file_copy = self.conf["log_file_copy_path"]
+        td = date.today()
+        self.today = td.strftime("%Y-%m-%d")
+        self.log_file = conf["log_file_path"]
+        self.log_file_copy = conf["log_file_copy_path"]
         self.pc1 = re.compile("PiCam1")
         self.pc2 = re.compile("PiCam2")
         self.moving = re.compile("moving")
