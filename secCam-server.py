@@ -33,7 +33,7 @@ import parselogs
 
 with open('secCam.yaml') as f:
     conf = yaml.load(f, Loader=yaml.FullLoader)[0]
-define('port', default=conf["imagehug_port"], help='run on the given port', type=int)
+define('port', default=conf["imagehub_port"], help='run on the given port', type=int)
 
 class Application(tornado.web.Application):
     def __init__(self):
