@@ -79,7 +79,7 @@ class ProcessSecCamPics:
                     # shutil.rmtree(dd)
                 except sqlite3.IntegrityError:
                     print(p)
-                finally: pprint(y)
+                finally: pprint("boo")
 
 
     # if __name__ == '__main__' :
