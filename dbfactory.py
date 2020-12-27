@@ -54,4 +54,4 @@ class DbFactory:
 
 if __name__ == '__main__' :
     dbf = DbFactory()
-    dbf.main()
+    dbf.create()
