@@ -87,6 +87,7 @@ class picam2_todays_eventsHandler(tornado.web.RequestHandler):
         z = {
             "picam2": pl.picam2_todays_events()
         }
+        print(z)
         self.write(z)
 
 class picam1_last_moving_eventHandler(tornado.web.RequestHandler):
