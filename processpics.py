@@ -22,7 +22,8 @@ cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS TimeIndex ON Time''')
 class ProcessSecCamPics:
     def __init__(self):
         with open('secCam.yaml') as f:
-            conf = yaml.load(f, Loader=yaml.FullLoader)[0]
+            # conf = yaml.load(f, Loader=yaml.FullLoader)[0]
+            conf = yaml.load(f)[0]
         self.picdir = conf["image_dir"]
         self.dbdir = conf["db_dir"]
 
