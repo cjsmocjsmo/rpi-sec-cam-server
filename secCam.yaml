@@ -2,6 +2,7 @@
   imagehub_address: 192.168.0.26
   imagehub_port: 8090
   db_dir: /media/pi/IMAGEHUB/imagehub_data/db
+  image_dir: /media/pi/IMAGEHUB/imagehub_data/images
   log_file_path: /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log
   log_file_copy_path: /media/pi/IMAGEHUB/imagehub_data/logs/imagehub_log.copy"
 

@@ -30,6 +30,7 @@ import tornado.web
 from tornado.options import define, options, parse_command_line
 
 import parselogs
+import processpics
 
 with open('secCam.yaml') as f:
     conf = yaml.load(f, Loader=yaml.FullLoader)[0]
@@ -38,6 +39,7 @@ define('port', default=conf["imagehub_port"], help='run on the given port', type
 
 class Application(tornado.web.Application):
     def __init__(self):
+        processpics.ProcessSecCamPics().main()
 
         handlers = [
             (r"picam1_todays_events", picam1_todays_eventsHandler),
