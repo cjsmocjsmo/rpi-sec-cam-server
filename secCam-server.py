@@ -33,7 +33,7 @@ import parselogs
 import processpics
 
 with open('secCam.yaml') as f:
-    conf = yaml.load(f, Loader=yaml.FullLoader)[0]
+    conf = yaml.load(f)[0]
 
 define('port', default=conf["imagehub_port"], help='run on the given port', type=int)
 
