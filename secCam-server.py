@@ -37,7 +37,7 @@ with open('secCam.yaml') as f:
 
 print(conf["imagehub_port"])
 
-define('port', default=conf["imagehub_port"], help='run on the given port', type=int)
+# define('port', default=conf["imagehub_port"], help='run on the given port', type=int)
 
 processpics.ProcessSecCamPics().main()
 
@@ -65,6 +65,7 @@ class Application(tornado.web.Application):
             # (r"/Pictures/(.*)", tornado.web.StaticFileHandler, {'path': Pictures}),
         ]
         settings = dict(
+            port = conf["imagehub_port"],
             static_path = os.path.join(os.path.dirname(__file__), "static"),
             template_path = os.path.join(os.path.dirname(__file__), "templates"),
             debug = True,
