@@ -45,6 +45,7 @@ class Application(tornado.web.Application):
     def __init__(self):
         
         handlers = [
+            (r"Main", MainHandler),
             (r"picam1_todays_events", picam1_todays_eventsHandler),
             (r"picam2_todays_events", picam2_todays_eventsHandler),
 
@@ -70,9 +71,9 @@ class Application(tornado.web.Application):
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 
-# class MainHandler(tornado.web.RequestHandler):
-#     def get(self):
-#         self.render('secCam.html')
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('secCam.html')
 
 class picam1_todays_eventsHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
