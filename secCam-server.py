@@ -38,16 +38,13 @@ with open('secCam.yaml') as f:
 print(conf["imagehub_port"])
 
 define('port', default=conf["imagehub_port"], help='run on the given port', type=int)
-print(options.port)
-
-
 
 class Application(tornado.web.Application):
     def __init__(self):
         
         handlers = [
             (r"/Main", MainHandler),
-            # (r"/picam1_todays_events", picam1_todays_eventsHandler),
+            (r"/Picam1_todays_events", picam1_todays_eventsHandler),
             # (r"/picam2_todays_events", picam2_todays_eventsHandler),
 
             # (r"/picam1_last_moving_event", picam1_last_moving_eventHandler),
@@ -74,20 +71,21 @@ class Application(tornado.web.Application):
         tornado.web.Application.__init__(self, handlers, **settings)
 
 class MainHandler(tornado.web.RequestHandler):
+    @tornado.gen.coroutine
     def get(self):
         self.render('secCam.html')
 
-# class picam1_todays_eventsHandler(tornado.web.RequestHandler):
-#     @tornado.gen.coroutine
-#     def get(self):
-#         p = parselogs.ParseLogs()
-#         p.copy_log_file()
-#         p.parse_logs()
-#         z = {
-#             "picam1": p.picam1_todays_events(),
-#         }
-#         print(z)
-#         self.write(z)
+class picam1_todays_eventsHandler(tornado.web.RequestHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        p = parselogs.ParseLogs()
+        p.copy_log_file()
+        p.parse_logs()
+        z = {
+            "picam1": p.picam1_todays_events(),
+        }
+        print(z)
+        self.write(z)
 
 # class picam2_todays_eventsHandler(tornado.web.RequestHandler):
 #     @tornado.gen.coroutine
