@@ -23,7 +23,7 @@ class DbFactory:
     def current_db_name(self):
         s = self.dbdir + "/*.db"
         dbs = glob.glob(s)
-        if len(s) != 0:
+        if len(dbs) != 0:
             dbs.reverse()
             return dbs[0]
         else:
