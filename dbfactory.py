@@ -9,7 +9,7 @@ class DbFactory:
     def __init__(self):
         d1 = date.today()
         self.today = d1.strftime("%d-%m-%Y")
-        self.dbdir = "/media/pi/USB31FD/imagehub.db/db"
+        self.dbdir = "/media/pi/IMAGEHUB/imagehub_data/db"
 
         # Path('my_file.txt').touch()
 
