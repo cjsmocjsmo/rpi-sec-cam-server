@@ -201,8 +201,8 @@ class ParseLogs:
         self.copy_log_file()
         self.parse_logs()
         x = {
-            "picam1_todays_events": picam1_todays_events(),
-            "picam2_todays_events": picam2_todays_events(),
+            "picam1_todays_events": self.picam1_todays_events(),
+            "picam2_todays_events": self.picam2_todays_events(),
             "picam1_last_moving_event": self.piCam1_last_moving_event(),
             "picam2_last_moving_event": self.piCam2_last_moving_event(),
             "picam1_last_still_event": self.piCam1_last_still_event(),

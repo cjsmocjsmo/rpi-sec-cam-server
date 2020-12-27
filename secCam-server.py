@@ -48,13 +48,13 @@ class Application(tornado.web.Application):
             (r"picam1_last_moving_event", picam1_last_moving_eventHandler),
             (r"picam2_last_moving_event", picam2_last_moving_eventHandler),
 
-            (r"picam1_last_still_event", picam1_last_still_eventHandler),
-            (r"picam2_last_still_event", picam2_last_still_eventHandler),
+            # (r"picam1_last_still_event", picam1_last_still_eventHandler),
+            # (r"picam2_last_still_event", picam2_last_still_eventHandler),
 
-            (r"piCam1_last_ten_moving_event", piCam1_last_ten_moving_eventHandler),
-            (r"piCam2_last_ten_moving_event", piCam2_last_ten_moving_eventHandler),
+            # (r"piCam1_last_ten_moving_event", piCam1_last_ten_moving_eventHandler),
+            # (r"piCam2_last_ten_moving_event", piCam2_last_ten_moving_eventHandler),
  
-            (r"/last_health_event", last_health_eventHandler),
+            # (r"/last_health_event", last_health_eventHandler),
 
             # (r"/Movies/(.*)", tornado.web.StaticFileHandler, {'path': Movies}),
             # (r"/TVShows/(.*)", tornado.web.StaticFileHandler, {'path': TVShows}),
@@ -74,7 +74,7 @@ class Application(tornado.web.Application):
 class picam1_todays_eventsHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def get(self):
-        pl = parselogs.Parselogs().copy_log_file().parse_logs()
+        pl = parselogs.ParseLogs().copy_log_file().parse_logs()
         z = {
             "picam1": pl.picam1_todays_events(),
         }
@@ -83,7 +83,7 @@ class picam1_todays_eventsHandler(tornado.web.RequestHandler):
 class picam2_todays_eventsHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def get(self):
-        pl = parselogs.Parselogs().copy_log_file().parse_logs()
+        pl = parselogs.ParseLogs().copy_log_file().parse_logs()
         z = {
             "picam2": pl.picam2_todays_events()
         }
@@ -93,7 +93,7 @@ class picam2_todays_eventsHandler(tornado.web.RequestHandler):
 class picam1_last_moving_eventHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def get(self):
-        pl = parselogs.Parselogs().copy_log_file().parse_logs()
+        pl = parselogs.ParseLogs().copy_log_file().parse_logs()
         z = {
             "picam1": pl.picam1_last_moving_event()
         }
@@ -102,7 +102,7 @@ class picam1_last_moving_eventHandler(tornado.web.RequestHandler):
 class picam2_last_moving_eventHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def get(self):
-        pl = parselogs.Parselogs().copy_log_file().parse_logs()
+        pl = parselogs.ParseLogs().copy_log_file().parse_logs()
         z = {
             "picam2": pl.picam2_last_moving_event()
         }
