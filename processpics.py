@@ -17,7 +17,7 @@ cur = con.cursor()
 cur.execute('''CREATE TABLE IF NOT EXISTS SecCams (Dir text,
             Ext text, Prefix text, Name text, Camera text, Date integer,
             Time integer, B64Image text)''')
-cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS TimeIndex ON Time''')
+cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS TimeIndex ON SecCams (Time)''')
 
 class ProcessSecCamPics:
     def __init__(self):
