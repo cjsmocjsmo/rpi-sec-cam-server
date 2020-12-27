@@ -26,7 +26,7 @@ from datetime import date
 import filecmp
 
 with open('secCam.yaml') as f:
-    conf = yaml.load(f, Loader=yaml.FullLoader)[0]
+    conf = yaml.load(f)[0]
 
 class ParseLogs:
     def __init__(self):
