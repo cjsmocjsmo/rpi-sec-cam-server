@@ -72,14 +72,12 @@ class ProcessSecCamPics:
                 for p in picglob:
                     b64image = self.create_b64_image(p)
                     y.append(self.chop_name(p, b64image))
-                    # os.remove(p)
-                try:
-                    cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
-                    con.commit()
-                    # shutil.rmtree(dd)
-                except sqlite3.IntegrityError:
-                    print(p)
-                finally: pprint("boo")
+                    os.remove(p)
+
+                cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
+                con.commit()
+                shutil.rmtree(dd)
+
 
 
     # if __name__ == '__main__' :
