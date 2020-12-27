@@ -24,8 +24,8 @@ class DbFactory:
         s = self.dbdir + "/*.db"
         dbs = glob.glob(s)
         if len(s) != 0:
-            s.reverse()
-            return s[0]
+            dbs.reverse()
+            return dbs[0]
         else:
             return None
 
