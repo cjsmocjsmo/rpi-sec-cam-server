@@ -77,18 +77,21 @@ class Application(tornado.web.Application):
 class picam1_todays_eventsHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def get(self):
-        pl = parselogs.ParseLogs().copy_log_file().parse_logs()
+        p = parselogs.ParseLogs()
+        p.copy_log_file()
+        p.parse_logs()
         z = {
-            "picam1": pl.picam1_todays_events(),
+            "picam1": p.picam1_todays_events(),
         }
+        print(z)
         self.write(z)
 
 class picam2_todays_eventsHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def get(self):
-        pl = parselogs.ParseLogs().copy_log_file().parse_logs()
+        p = parselogs.ParseLogs().copy_log_file().parse_logs()
         z = {
-            "picam2": pl.picam2_todays_events()
+            "picam2": p.picam2_todays_events()
         }
         print(z)
         self.write(z)
@@ -115,10 +118,10 @@ class picam2_last_moving_eventHandler(tornado.web.RequestHandler):
 
 
 
-class WeeklyEventsHandler(tornado.web.RequestHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        print("o")
+# class WeeklyEventsHandler(tornado.web.RequestHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+#         print("o")
         # l = [sh for sh in db.movietime2DB.find({"Catagory":"Men In Black"}, {"_id":0})]
         # self.write(dict(IntMenInBlack=l))
 
@@ -127,16 +130,16 @@ class WeeklyEventsHandler(tornado.web.RequestHandler):
 #     def get(self):
 #         print("o")
 
-class TotalEventsHandler(tornado.web.RequestHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        print("o")
+# class TotalEventsHandler(tornado.web.RequestHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+#         print("o")
 
 
-class ClearEventsHandler(tornado.web.RequestHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        print("o")
+# class ClearEventsHandler(tornado.web.RequestHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+#         print("o")
 
 
 
