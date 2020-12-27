@@ -38,6 +38,7 @@ with open('secCam.yaml') as f:
 print(conf["imagehub_port"])
 
 define('port', default=conf["imagehub_port"], help='run on the given port', type=int)
+print(options.port)
 
 processpics.ProcessSecCamPics().main()
 
