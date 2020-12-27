@@ -9,6 +9,7 @@ import sqlite3
 import shutil
 from pprint import pprint
 import dbfactory
+import yaml
 
 dbname = dbfactory.DbFactory().create()
 con = sqlite3.connect(dbname)
