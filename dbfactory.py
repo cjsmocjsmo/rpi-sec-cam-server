@@ -8,7 +8,7 @@ from datetime import date
 class DbFactory:
     def __init__(self):
         d1 = date.today()
-        self.today = d1.strftime("%d-%m-%Y")
+        self.today = d1.strftime("%Y-%m-%d")
         self.dbdir = "/media/pi/IMAGEHUB/imagehub_data/db"
 
         # Path('my_file.txt').touch()
