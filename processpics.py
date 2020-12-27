@@ -77,7 +77,8 @@ class ProcessSecCamPics:
                     cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
                     con.commit()
                     # shutil.rmtree(dd)
-                except sqlite3.IntegrityError: pass
+                except sqlite3.IntegrityError:
+                    print(p)
                 finally: pprint(y)
 
 
