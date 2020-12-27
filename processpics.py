@@ -12,7 +12,13 @@ import dbfactory
 import yaml
 
 dbname = dbfactory.DbFactory().create()
-con = sqlite3.connect(dbname)
+with open('secCam.yaml') as f:
+    # conf = yaml.load(f, Loader=yaml.FullLoader)[0]
+    conf = yaml.load(f)[0]
+
+dbpath =  "/".join((conf["db_dir"], dbname))
+
+con = sqlite3.connect(dbpath)
 # con = sqlite3.connect("/media/pi/USB31FD/imagehub.db")
 cur = con.cursor()
 cur.execute('''CREATE TABLE IF NOT EXISTS SecCams (Dir text,
@@ -22,9 +28,7 @@ cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS TimeIndex ON SecCams (Time)''')
 
 class ProcessSecCamPics:
     def __init__(self):
-        with open('secCam.yaml') as f:
-            # conf = yaml.load(f, Loader=yaml.FullLoader)[0]
-            conf = yaml.load(f)[0]
+
         self.picdir = conf["image_dir"]
         self.dbdir = conf["db_dir"]
 
@@ -53,20 +57,18 @@ class ProcessSecCamPics:
         #     dirt, ext, prefix, name, camera,
         #     dAte, hr, min, sec, ms, b64image,
         # )
-        x  = (
-            dir, ext, prefix, name, camera,
-            dAte, timE, b64image,
+        return (
+            dir, ext, prefix, name, camera, dAte, timE, b64image,
         )
-        return x
 
     def main(self):
         while True:
             time.sleep(210) # 3.5 minutes
-            y = []
             dnames = self.get_dir_names()
             for dd in dnames:
                 newname = dd + "/*jpg"
                 picglob = glob.glob(newname)
+                y = []
                 for p in picglob:
                     b64image = self.create_b64_image(p)
                     y.append(self.chop_name(p, b64image))
