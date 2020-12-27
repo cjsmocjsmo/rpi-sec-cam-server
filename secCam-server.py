@@ -33,6 +33,7 @@ import parselogs
 
 with open('secCam.yaml') as f:
     conf = yaml.load(f, Loader=yaml.FullLoader)[0]
+
 define('port', default=conf["imagehub_port"], help='run on the given port', type=int)
 
 class Application(tornado.web.Application):
@@ -74,9 +75,39 @@ class picam1_todays_eventsHandler(tornado.web.RequestHandler):
         pl = parselogs.Parselogs().copy_log_file().parse_logs()
         z = {
             "picam1": pl.picam1_todays_events(),
+        }
+        self.write(z)
+
+class picam2_todays_eventsHandler(tornado.web.RequestHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        pl = parselogs.Parselogs().copy_log_file().parse_logs()
+        z = {
             "picam2": pl.picam2_todays_events()
         }
         self.write(z)
+
+class picam1_last_moving_eventHandler(tornado.web.RequestHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        pl = parselogs.Parselogs().copy_log_file().parse_logs()
+        z = {
+            "picam1": pl.picam1_last_moving_event()
+        }
+        self.write(z)
+
+class picam2_last_moving_eventHandler(tornado.web.RequestHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        pl = parselogs.Parselogs().copy_log_file().parse_logs()
+        z = {
+            "picam2": pl.picam2_last_moving_event()
+        }
+        self.write(z)
+
+
+
+
 
 class WeeklyEventsHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
