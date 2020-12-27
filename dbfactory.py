@@ -39,7 +39,7 @@ class DbFactory:
 
 
     def create(self):
-        if not check_for_dbdir():
+        if not self.check_for_dbdir():
             os.mkdir(self.dbdir)
         cur_db = current_db_name()
         if cur_db == None:
