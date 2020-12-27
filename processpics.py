@@ -21,8 +21,10 @@ cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS TimeIndex ON Time''')
 
 class ProcessSecCamPics:
     def __init__(self):
-        self.picdir = "/media/pi/IMAGEHUB/imagehub_data/images"
-        self.dbdir = "/media/pi/IMAGEHUB/imagehub_data/db"
+        with open('secCam.yaml') as f:
+            conf = yaml.load(f, Loader=yaml.FullLoader)[0]
+        self.picdir = conf["image_dir"]
+        self.dbdir = conf["db_dir"]
 
     def get_dir_names(self):
         pic_dir_glob_path = self.picdir + "/*"
@@ -55,24 +57,26 @@ class ProcessSecCamPics:
         return x
 
     def main(self):
-        y = []
-        dnames = self.get_dir_names()
-        for dd in dnames:
-            newname = dd + "/*jpg"
-            picglob = glob.glob(newname)
-            for p in picglob:
-                b64image = self.create_b64_image(p)
-                y.append(self.chop_name(p, b64image))
-                os.remove(p)
-            cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
-            con.commit()
-            pprint(y)
-            # shutil.rmtree(dd)
+        while True:
+            time.sleep(210) # 3.5 minutes
+            y = []
+            dnames = self.get_dir_names()
+            for dd in dnames:
+                newname = dd + "/*jpg"
+                picglob = glob.glob(newname)
+                for p in picglob:
+                    b64image = self.create_b64_image(p)
+                    y.append(self.chop_name(p, b64image))
+                    os.remove(p)
+                cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
+                con.commit()
+                pprint(y)
+                # shutil.rmtree(dd)
 
 
-if __name__ == '__main__' :
-    PSCP = ProcessSecCamPics()
-    while True:
-        time.sleep(300)
-        PSCP.main()
+    # if __name__ == '__main__' :
+#     PSCP = ProcessSecCamPics()
+#     while True:
+#         time.sleep(300)
+#         PSCP.main()
         
