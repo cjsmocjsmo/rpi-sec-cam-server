@@ -40,18 +40,18 @@ print(conf["imagehub_port"])
 define('port', default=conf["imagehub_port"], help='run on the given port', type=int)
 print(options.port)
 
-processpics.ProcessSecCamPics().main()
+
 
 class Application(tornado.web.Application):
     def __init__(self):
         
         handlers = [
             (r"/Main", MainHandler),
-            (r"/picam1_todays_events", picam1_todays_eventsHandler),
-            (r"/picam2_todays_events", picam2_todays_eventsHandler),
+            # (r"/picam1_todays_events", picam1_todays_eventsHandler),
+            # (r"/picam2_todays_events", picam2_todays_eventsHandler),
 
-            (r"/picam1_last_moving_event", picam1_last_moving_eventHandler),
-            (r"/picam2_last_moving_event", picam2_last_moving_eventHandler),
+            # (r"/picam1_last_moving_event", picam1_last_moving_eventHandler),
+            # (r"/picam2_last_moving_event", picam2_last_moving_eventHandler),
 
             # (r"picam1_last_still_event", picam1_last_still_eventHandler),
             # (r"picam2_last_still_event", picam2_last_still_eventHandler),
@@ -77,49 +77,45 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('secCam.html')
 
-class picam1_todays_eventsHandler(tornado.web.RequestHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        p = parselogs.ParseLogs()
-        p.copy_log_file()
-        p.parse_logs()
-        z = {
-            "picam1": p.picam1_todays_events(),
-        }
-        print(z)
-        self.write(z)
+# class picam1_todays_eventsHandler(tornado.web.RequestHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+#         p = parselogs.ParseLogs()
+#         p.copy_log_file()
+#         p.parse_logs()
+#         z = {
+#             "picam1": p.picam1_todays_events(),
+#         }
+#         print(z)
+#         self.write(z)
 
-class picam2_todays_eventsHandler(tornado.web.RequestHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        p = parselogs.ParseLogs().copy_log_file().parse_logs()
-        z = {
-            "picam2": p.picam2_todays_events()
-        }
-        print(z)
-        self.write(z)
+# class picam2_todays_eventsHandler(tornado.web.RequestHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+#         p = parselogs.ParseLogs().copy_log_file().parse_logs()
+#         z = {
+#             "picam2": p.picam2_todays_events()
+#         }
+#         print(z)
+#         self.write(z)
 
-class picam1_last_moving_eventHandler(tornado.web.RequestHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        pl = parselogs.ParseLogs().copy_log_file().parse_logs()
-        z = {
-            "picam1": pl.picam1_last_moving_event()
-        }
-        self.write(z)
+# class picam1_last_moving_eventHandler(tornado.web.RequestHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+#         pl = parselogs.ParseLogs().copy_log_file().parse_logs()
+#         z = {
+#             "picam1": pl.picam1_last_moving_event()
+#         }
+#         self.write(z)
 
-class picam2_last_moving_eventHandler(tornado.web.RequestHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        pl = parselogs.ParseLogs().copy_log_file().parse_logs()
-        z = {
-            "picam2": pl.picam2_last_moving_event()
-        }
-        self.write(z)
-
-
-
-
+# class picam2_last_moving_eventHandler(tornado.web.RequestHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+#         pl = parselogs.ParseLogs().copy_log_file().parse_logs()
+#         z = {
+#             "picam2": pl.picam2_last_moving_event()
+#         }
+#         self.write(z)
 
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
 #     @tornado.gen.coroutine
@@ -138,35 +134,28 @@ class picam2_last_moving_eventHandler(tornado.web.RequestHandler):
 #     def get(self):
 #         print("o")
 
-
 # class ClearEventsHandler(tornado.web.RequestHandler):
 #     @tornado.gen.coroutine
 #     def get(self):
 #         print("o")
 
+# class StopHandler(tornado.web.RequestHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+#         stop_cmd = ["bash", os.environ["MT_DBUSCONTROLPATH"], "stop"]
+#         subprocess.call(stop_cmd)
 
+# class NextHandler(tornado.web.RequestHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+#         next_seek_cmd = ["bash", os.environ["MT_DBUSCONTROLPATH"], "seek", "60000000"]
+#         subprocess.call(next_seek_cmd)
 
-
-
-
-
-class StopHandler(tornado.web.RequestHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        stop_cmd = ["bash", os.environ["MT_DBUSCONTROLPATH"], "stop"]
-        subprocess.call(stop_cmd)
-
-class NextHandler(tornado.web.RequestHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        next_seek_cmd = ["bash", os.environ["MT_DBUSCONTROLPATH"], "seek", "60000000"]
-        subprocess.call(next_seek_cmd)
-
-class PreviousHandler(tornado.web.RequestHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        previous_seek_cmd = ["bash", os.environ["MT_DBUSCONTROLPATH"], "seek", "-30000000"]
-        subprocess.call(previous_seek_cmd)
+# class PreviousHandler(tornado.web.RequestHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+#         previous_seek_cmd = ["bash", os.environ["MT_DBUSCONTROLPATH"], "seek", "-30000000"]
+#         subprocess.call(previous_seek_cmd)
 
 
 def main():
@@ -174,6 +163,7 @@ def main():
     http_server = tornado.httpserver.HTTPServer(Application())
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
+    processpics.ProcessSecCamPics().main()
 
 if __name__ == "__main__":
     main()
