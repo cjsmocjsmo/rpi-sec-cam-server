@@ -11,16 +11,14 @@ from pprint import pprint
 import dbfactory
 import yaml
 
-dbname = dbfactory.DbFactory().create()
+
 with open('secCam.yaml') as f:
     # conf = yaml.load(f, Loader=yaml.FullLoader)[0]
     conf = yaml.load(f)[0]
 
-dbpath =  "/".join((conf["db_dir"], dbname))
 
-print(dbpath)
-
-con = sqlite3.connect(dbpath)
+dbname = dbfactory.DbFactory().create()
+con = sqlite3.connect(dbname)
 # con = sqlite3.connect("/media/pi/USB31FD/imagehub.db")
 cur = con.cursor()
 cur.execute('''CREATE TABLE IF NOT EXISTS SecCams (Dir text,
