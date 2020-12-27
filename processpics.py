@@ -18,6 +18,8 @@ with open('secCam.yaml') as f:
 
 dbpath =  "/".join((conf["db_dir"], dbname))
 
+print(dbpath)
+
 con = sqlite3.connect(dbpath)
 # con = sqlite3.connect("/media/pi/USB31FD/imagehub.db")
 cur = con.cursor()
