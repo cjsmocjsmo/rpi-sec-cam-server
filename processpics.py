@@ -17,7 +17,7 @@ con = sqlite3.connect(dbname)
 cur = con.cursor()
 cur.execute('''CREATE TABLE IF NOT EXISTS SecCams (Dir text,
             Ext text, Prefix text, Name text, Camera text, Date integer,
-            Time integer, B64Image text)''')
+            Time text, B64Image text)''')
 cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS TimeIndex ON SecCams (Time)''')
 
 class ProcessSecCamPics:
@@ -47,6 +47,7 @@ class ProcessSecCamPics:
         prefix, name = os.path.split(dir)
         rawDate, rawTime = name.split("T", 1)
         camera, dAte = rawDate.split("-", 1)
+        timE = str(rawTime)
         # hr, min, sec, ms = rawTime.split(".", 3)
         # x  = (
         #     dirt, ext, prefix, name, camera,
@@ -54,7 +55,7 @@ class ProcessSecCamPics:
         # )
         x  = (
             dir, ext, prefix, name, camera,
-            dAte, rawTime, b64image,
+            dAte, timE, b64image,
         )
         return x
 
@@ -69,7 +70,7 @@ class ProcessSecCamPics:
                 for p in picglob:
                     b64image = self.create_b64_image(p)
                     y.append(self.chop_name(p, b64image))
-                    os.remove(p)
+                    # os.remove(p)
                 cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
                 con.commit()
                 pprint(y)
