@@ -46,7 +46,7 @@ class DbFactory:
             os.mkdir(self.dbdir)
         cur_db = self.current_db_name()
         if cur_db == None:
-            new_dbname = self.dbdir + self.today + ".db"
+            new_dbname = self.dbdir + "/" + self.today + ".db"
             return new_dbname
         else:
             return self.stale_db_check()
