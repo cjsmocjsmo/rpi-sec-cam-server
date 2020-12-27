@@ -63,7 +63,7 @@ class ProcessSecCamPics:
 
     def main(self):
         while True:
-            time.sleep(210) # 3.5 minutes
+            time.sleep(120) #210 3.5 minutes
             dnames = self.get_dir_names()
             for dd in dnames:
                 newname = dd + "/*jpg"
@@ -73,10 +73,12 @@ class ProcessSecCamPics:
                     b64image = self.create_b64_image(p)
                     y.append(self.chop_name(p, b64image))
                     # os.remove(p)
-                cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
-                con.commit()
-                pprint(y)
-                # shutil.rmtree(dd)
+                try:
+                    cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
+                    con.commit()
+                    # shutil.rmtree(dd)
+                except sqlite3.IntegrityError: pass
+                finally: pprint(y)
 
 
     # if __name__ == '__main__' :
