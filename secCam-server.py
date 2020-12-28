@@ -32,6 +32,8 @@ from tornado.options import define, options, parse_command_line
 import parselogs
 import processpics
 
+from pprint import pprint 
+
 with open('secCam.yaml') as f:
     conf = yaml.load(f)[0]
 
@@ -84,7 +86,7 @@ class picam1_todays_eventsHandler(tornado.web.RequestHandler):
         z = {
             "picam1": p.picam1_todays_events(),
         }
-        print(z)
+        pprint(z)
         self.write(z)
 
 class picam2_todays_eventsHandler(tornado.web.RequestHandler):
@@ -96,7 +98,7 @@ class picam2_todays_eventsHandler(tornado.web.RequestHandler):
         z = {
             "picam2": p.picam2_todays_events()
         }
-        print(z)
+        pprint(z)
         self.write(z)
 
 # class picam1_last_moving_eventHandler(tornado.web.RequestHandler):
