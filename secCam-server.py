@@ -90,7 +90,9 @@ class picam1_todays_eventsHandler(tornado.web.RequestHandler):
 class picam2_todays_eventsHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def get(self):
-        p = parselogs.ParseLogs().copy_log_file().parse_logs()
+        p = parselogs.ParseLogs()
+        p.copy_log_file()
+        p.parse_logs()
         z = {
             "picam2": p.picam2_todays_events()
         }
