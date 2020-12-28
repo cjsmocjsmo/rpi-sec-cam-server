@@ -4,7 +4,7 @@
   db_dir: /media/pi/IMAGEHUB/imagehub_data/db
   image_dir: /media/pi/IMAGEHUB/imagehub_data/images
   log_file_path: /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log
-  log_file_copy_path: /media/pi/IMAGEHUB/imagehub_data/logs/imagehub_log.copy"
+  log_file_copy_path: /media/pi/IMAGEHUB/imagehub_data/logs/imagehub_copy.log"
 
 
   # imagehub_address: 192.168.0.34
