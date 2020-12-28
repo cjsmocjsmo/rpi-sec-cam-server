@@ -52,9 +52,11 @@ class ParseLogs:
             if not comp:
                 print(self.log_file)
                 print(self.log_file_copy)
-                shutil.copy(self.log_file, self.log_file_copy)
+                # shutil.copy(self.log_file, self.log_file_copy)
         else:
-            shutil.copy(self.log_file, self.log_file_copy)
+            print(self.log_file)
+            print(self.log_file_copy)
+            # shutil.copy(self.log_file, self.log_file_copy)
 
 
     def parse_logs(self):
