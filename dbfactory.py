@@ -3,7 +3,7 @@
 import os
 import glob
 from datetime import date
-# from pathlib import Path
+from pathlib import Path
 
 class DbFactory:
     def __init__(self):
@@ -47,6 +47,7 @@ class DbFactory:
         cur_db = self.current_db_name()
         if cur_db == None:
             new_dbname = self.dbdir + "/" + self.today + ".db"
+            Path(new_dbname).touch()
             return new_dbname
         else:
             return self.stale_db_check()
