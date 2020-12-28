@@ -111,6 +111,7 @@ class picam1_last_moving_eventHandler(tornado.web.RequestHandler):
         z = {
             "picam1": p.piCam1_last_moving_event()
         }
+        print(z)
         self.write(z)
 
 class picam2_last_moving_eventHandler(tornado.web.RequestHandler):
@@ -122,6 +123,7 @@ class picam2_last_moving_eventHandler(tornado.web.RequestHandler):
         z = {
             "picam2": p.piCam2_last_moving_event()
         }
+        print(z)
         self.write(z)
 
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
