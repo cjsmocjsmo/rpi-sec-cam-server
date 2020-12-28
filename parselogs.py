@@ -32,6 +32,7 @@ class ParseLogs:
     def __init__(self):
         td = date.today()
         self.today = td.strftime("%Y-%m-%d")
+        self.todaySearch = re.compile(self.today)
         self.log_file = conf["log_file_path"]
         self.log_file_copy = conf["log_file_copy_path"]
         self.pc1 = re.compile("PiCam1")
@@ -53,7 +54,6 @@ class ParseLogs:
                 shutil.copy(self.log_file, self.log_file_copy)
         else:
             shutil.copy(self.log_file, self.log_file_copy)
-
 
     def parse_logs(self):
         with open(self.log_file_copy) as in_file:
@@ -98,14 +98,14 @@ class ParseLogs:
     def picam1_todays_events(self):
         todays_events = []
         for ev in self.allEvents:
-            if (self.pc1.search(ev)) and (self.today.search(ev)):
+            if (self.pc1.search(ev)) and (self.todaySearch.search(ev)):
                 todays_events.append(ev)
         return todays_events
 
     def picam2_todays_events(self):
         todays_events = []
         for ev in self.allEvents:
-            if (self.pc2.search(ev)) and (self.today.search(ev)):
+            if (self.pc2.search(ev)) and (self.todaySearch.search(ev)):
                 todays_events.append(ev)
         return todays_events
 
