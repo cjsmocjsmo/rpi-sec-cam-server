@@ -18,6 +18,7 @@ with open('secCam.yaml') as f:
 
 
 dbname = dbfactory.DbFactory().create()
+print(dbname)
 con = sqlite3.connect(dbname)
 # con = sqlite3.connect("/media/pi/USB31FD/imagehub.db")
 cur = con.cursor()
