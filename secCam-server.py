@@ -52,8 +52,8 @@ class Application(tornado.web.Application):
             (r"/Picam1_last_moving_event", picam1_last_moving_eventHandler),
             (r"/Picam2_last_moving_event", picam2_last_moving_eventHandler),
 
-            # (r"picam1_last_still_event", picam1_last_still_eventHandler),
-            # (r"picam2_last_still_event", picam2_last_still_eventHandler),
+            (r"/Picam1_last_still_event", picam1_last_still_eventHandler),
+            (r"/Picam2_last_still_event", picam2_last_still_eventHandler),
 
             # (r"piCam1_last_ten_moving_event", piCam1_last_ten_moving_eventHandler),
             # (r"piCam2_last_ten_moving_event", piCam2_last_ten_moving_eventHandler),
@@ -126,6 +126,32 @@ class picam2_last_moving_eventHandler(tornado.web.RequestHandler):
         print(z)
         self.write(z)
 
+class picam1_last_still_eventHandler(tornado.web.RequestHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        p = parselogs.ParseLogs()
+        p.copy_log_file()
+        p.parse_logs()
+        z = {
+            "picam1": p.piCam1_last_still_event()
+        }
+        print(z)
+        self.write(z)
+
+class picam2_last_still_eventHandler(tornado.web.RequestHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        p = parselogs.ParseLogs()
+        p.copy_log_file()
+        p.parse_logs()
+        z = {
+            "picam2": p.piCam2_last_still_event()
+        }
+        print(z)
+        self.write(z)
+
+
+
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
 #     @tornado.gen.coroutine
 #     def get(self):
@@ -148,23 +174,8 @@ class picam2_last_moving_eventHandler(tornado.web.RequestHandler):
 #     def get(self):
 #         print("o")
 
-# class StopHandler(tornado.web.RequestHandler):
-#     @tornado.gen.coroutine
-#     def get(self):
-#         stop_cmd = ["bash", os.environ["MT_DBUSCONTROLPATH"], "stop"]
-#         subprocess.call(stop_cmd)
 
-# class NextHandler(tornado.web.RequestHandler):
-#     @tornado.gen.coroutine
-#     def get(self):
-#         next_seek_cmd = ["bash", os.environ["MT_DBUSCONTROLPATH"], "seek", "60000000"]
-#         subprocess.call(next_seek_cmd)
 
-# class PreviousHandler(tornado.web.RequestHandler):
-#     @tornado.gen.coroutine
-#     def get(self):
-#         previous_seek_cmd = ["bash", os.environ["MT_DBUSCONTROLPATH"], "seek", "-30000000"]
-#         subprocess.call(previous_seek_cmd)
 
 
 def main():

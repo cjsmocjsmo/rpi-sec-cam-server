@@ -57,6 +57,7 @@ class ProcessSecCamPics:
         #     dirt, ext, prefix, name, camera,
         #     dAte, hr, min, sec, ms, b64image,
         # )
+        print(timE)
         return (
             dir, ext, prefix, name, camera, dAte, timE, b64image,
         )
@@ -66,6 +67,7 @@ class ProcessSecCamPics:
             time.sleep(120) #210 3.5 minutes
             dnames = self.get_dir_names()
             for dd in dnames:
+                print(dd)
                 newname = dd + "/*jpg"
                 picglob = glob.glob(newname)
                 y = []
