@@ -11,16 +11,11 @@ from pprint import pprint
 import dbfactory
 import yaml
 
-
 with open('secCam.yaml') as f:
-    # conf = yaml.load(f, Loader=yaml.FullLoader)[0]
     conf = yaml.load(f)[0]
 
-
 dbname = dbfactory.DbFactory().create()
-print(dbname)
 con = sqlite3.connect(dbname)
-# con = sqlite3.connect("/media/pi/USB31FD/imagehub.db")
 cur = con.cursor()
 cur.execute('''CREATE TABLE IF NOT EXISTS SecCams (Dir text,
             Ext text, Prefix text, Name text, Camera text, Date integer,
@@ -65,7 +60,7 @@ class ProcessSecCamPics:
 
     def main(self):
         while True:
-            time.sleep(120) #210 3.5 minutes
+            time.sleep(300) #210 3.5 minutes
             dnames = self.get_dir_names()
             for dd in dnames:
                 print(dd)
@@ -76,7 +71,6 @@ class ProcessSecCamPics:
                     b64image = self.create_b64_image(p)
                     y.append(self.chop_name(p, b64image))
                     os.remove(p)
-
                 cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
                 con.commit()
                 shutil.rmtree(dd)

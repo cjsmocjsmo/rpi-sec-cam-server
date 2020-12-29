@@ -11,8 +11,6 @@ class DbFactory:
         self.today = d1.strftime("%Y-%m-%d")
         self.dbdir = "/media/pi/IMAGEHUB/imagehub_data/db"
 
-        # Path('my_file.txt').touch()
-
     def check_for_dbdir(self):
         if os.path.isdir(self.dbdir):
             if os.path.exists(self.dbdir):
@@ -31,7 +29,6 @@ class DbFactory:
             dbs.reverse()
             return dbs[0]
 
-
     def stale_db_check(self):
         cdbn = self.current_db_name()
         todaydb = self.today + ".db"
@@ -43,21 +40,13 @@ class DbFactory:
         else:
             return cdbn
 
-
     def create(self):
         if not self.check_for_dbdir():
             os.mkdir(self.dbdir)
-        
         cur_db = self.stale_db_check()
-
-
         new_dbname = self.dbdir + "/" + cur_db
         Path(new_dbname).touch()
         return new_dbname
-
-
-
-
 
 if __name__ == '__main__' :
     dbf = DbFactory()
