@@ -45,12 +45,16 @@ class DbFactory:
         if not self.check_for_dbdir():
             os.mkdir(self.dbdir)
         cur_db = self.current_db_name()
+        print(cur_db)
+        boo = None
         if cur_db == None:
             new_dbname = self.dbdir + "/" + self.today + ".db"
             Path(new_dbname).touch()
-            return new_dbname
+            boo = new_dbname
         else:
-            return self.stale_db_check()
+            boo = self.stale_db_check()
+        print(boo)
+        return boo
 
 
 
