@@ -41,6 +41,8 @@ print(conf["imagehub_port"])
 
 define('port', default=conf["imagehub_port"], help='run on the given port', type=int)
 
+processpics.ProcessSecCamPics().main()
+
 class Application(tornado.web.Application):
     def __init__(self):
         
@@ -179,11 +181,12 @@ class picam2_last_still_eventHandler(tornado.web.RequestHandler):
 
 
 def main():
+    
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(Application())
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
-    processpics.ProcessSecCamPics().main()
+    
 
 if __name__ == "__main__":
     main()
