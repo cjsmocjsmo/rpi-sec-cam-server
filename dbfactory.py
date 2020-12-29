@@ -23,38 +23,37 @@ class DbFactory:
     def current_db_name(self):
         s = self.dbdir + "/*.db"
         dbs = glob.glob(s)
-        if len(dbs) != 0:
-            if len(dbs) > 1:
-                dbs.reverse()
-                return dbs[0]
-            else:
-                return dbs[0]
-        else:
+        if len(dbs) < 1:
             return None
+        elif len(dbs) == 1:
+            return dbs[0]
+        else:
+            dbs.reverse()
+            return dbs[0]
+
 
     def stale_db_check(self):
-        cdn = self.current_db_name()
-        if cdn != None:
-            if self.today != cdn:
-                return self.today + ".db"
-            else:
-                return cdn
+        cdbn = self.current_db_name()
+        todaydb = self.today + ".db"
+        if cdbn == None:
+            return todaydb
+        elif cdbn != None:
+            if todaydb != cdbn:
+                return todaydb
+        else:
+            return cdbn
 
 
     def create(self):
         if not self.check_for_dbdir():
             os.mkdir(self.dbdir)
-        cur_db = self.current_db_name()
-        print(cur_db)
-        boo = None
-        if cur_db == None:
-            new_dbname = self.dbdir + "/" + self.today + ".db"
-            Path(new_dbname).touch()
-            boo = new_dbname
-        else:
-            boo = self.stale_db_check()
-        print(boo)
-        return boo
+        
+        cur_db = self.stale_db_check()
+
+
+        new_dbname = self.dbdir + "/" + cur_db
+        Path(new_dbname).touch()
+        return new_dbname
 
 
 
