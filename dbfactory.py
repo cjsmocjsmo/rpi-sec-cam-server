@@ -32,6 +32,7 @@ class DbFactory:
     def dbsize(self):
         s = self.dbdir + "/*.db"
         dbs = glob.glob(s)
+        print(dbs)
         if len(dbs) < 1:
             return 0
         elif len(dbs) == 1:
