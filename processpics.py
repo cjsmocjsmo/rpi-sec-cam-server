@@ -77,9 +77,6 @@ class ProcessSecCamPics:
 
 
 
-    # if __name__ == '__main__' :
-#     PSCP = ProcessSecCamPics()
-#     while True:
-#         time.sleep(300)
-#         PSCP.main()
-        
+if __name__ == '__main__' :
+    PSCP = ProcessSecCamPics()
+    PSCP.main()
