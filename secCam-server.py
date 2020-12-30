@@ -176,14 +176,35 @@ class last_health_eventHandler(tornado.web.RequestHandler):
 
 class ping_picam1Handler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
-    def get(self):
-        pc1 = "192.168.0.31"
+    def pc1_ping(self):
+        pc1 = "192.168.0.61"
         cmd = "ping -c 5 {}".format(pc1)
         response = os.system(cmd)
         if response == 0:
-            self.write(dict(dbs='PiCam1 is up!'))
+            return 'PiCam1 is up!'
         else:
-            self.write(dict(dbs='PiCam1 is down!'))
+            return 'PiCam1 is down!'
+
+    @tornado.gen.coroutine
+    def pc2_ping(self):
+        pc2 = "192.168.0.31"
+        cmd = "ping -c 5 {}".format(pc2)
+        response = os.system(cmd)
+        if response == 0:
+            return 'PiCam2 is up!'
+        else:
+            return 'PiCam2 is down!'
+
+    @tornado.gen.coroutine
+    def get(self):
+        pc1 = yield self.pc1_ping()
+        pc2 = yield self.pc2_ping()
+        result = {
+            "pc1": pc1,
+            "pc2": pc2,
+        }
+
+        self.write(result)
 
 
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
