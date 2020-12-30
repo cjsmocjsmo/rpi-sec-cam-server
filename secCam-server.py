@@ -155,17 +155,22 @@ class picam2_last_still_eventHandler(tornado.web.RequestHandler):
         self.write(z)
 
 class dbsizeHandler(tornado.web.RequestHandler):
+    
+    
+    
     @tornado.gen.coroutine
     def get(self):
         dbf = dbfactory.DbFactory()
         cur_db = dbf.http_current_db_name()
-        print("this is cur_db")
-        print(cur_db)
-        c = "du -h {}".format(cur_db)
-        foo = os.system(c)
-        print("thisis foo")
-        print(foo)
-        self.write(dict(dbs=foo))
+        statinfo = os.stat(cur_db)
+        size = statinfo.st_size
+        # print("this is cur_db")
+        # print(cur_db)
+        # c = "du -h {}".format(cur_db)
+        # foo = os.system(c)
+        # print("thisis foo")
+        # print(foo)
+        self.write(dict(dbs=size))
 
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
 #     @tornado.gen.coroutine
