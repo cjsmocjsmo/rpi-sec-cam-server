@@ -29,6 +29,7 @@ import tornado.ioloop
 import tornado.web
 from tornado.options import define, options, parse_command_line
 
+import dbfactory
 import parselogs
 import processpics
 
@@ -152,7 +153,13 @@ class picam2_last_still_eventHandler(tornado.web.RequestHandler):
         print(z)
         self.write(z)
 
-
+class dbsize(tornado.web.RequestHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        dbf = dbfactory.DbFactory()
+        cur_db = dbf.http_current_db_name()
+        cmd = "du -h {}".format(cur_db)
+        self.write(dict(dbs=os.system(cmd)))
 
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
 #     @tornado.gen.coroutine
@@ -181,12 +188,10 @@ class picam2_last_still_eventHandler(tornado.web.RequestHandler):
 
 
 def main():
-    
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(Application())
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
-    
 
 if __name__ == "__main__":
     main()

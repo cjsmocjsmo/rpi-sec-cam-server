@@ -53,7 +53,6 @@ class ProcessSecCamPics:
         #     dirt, ext, prefix, name, camera,
         #     dAte, hr, min, sec, ms, b64image,
         # )
-        print(timE)
         return (
             dir, ext, prefix, name, camera, dAte, timE, b64image,
         )
@@ -74,6 +73,7 @@ class ProcessSecCamPics:
                 cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
                 con.commit()
                 shutil.rmtree(dd)
+            print("Db insertion complete")
 
 
 

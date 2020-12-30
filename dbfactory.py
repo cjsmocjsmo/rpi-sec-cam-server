@@ -29,6 +29,19 @@ class DbFactory:
             dbs.reverse()
             return dbs[0]
 
+    def http_current_db_name(self):
+        s = self.dbdir + "/*.db"
+        dbs = glob.glob(s)
+        if len(dbs) < 1:
+            return None
+        elif len(dbs) == 1:
+            nn = self.dbdir + "/" + dbs[0]
+            return nn
+        else:
+            dbs.reverse()
+            nn = self.dbdir + "/" + dbs[0]
+            return nn
+
     def stale_db_check(self):
         cdbn = self.current_db_name()
         todaydb = self.today + ".db"
