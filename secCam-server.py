@@ -158,7 +158,8 @@ class dbsizeHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def get(self):
         dbf = dbfactory.DbFactory()
-        self.write(dict(dbs=dbf.dbsize))
+        size = dbf.dbsize()
+        self.write(dict(dbs=size))
 
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
 #     @tornado.gen.coroutine
