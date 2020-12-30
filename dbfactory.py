@@ -46,8 +46,7 @@ class DbFactory:
             size_in_bytes = statinfo.st_size
             size = size_in_bytes/(1024*1024)
             size = str(size)
-            print(size[:4])
-            return "{}MB".format(size)
+            return "{}MB".format(size[:5])
 
     def stale_db_check(self):
         cdbn = self.current_db_name()
