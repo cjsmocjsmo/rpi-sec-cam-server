@@ -32,16 +32,17 @@ class DbFactory:
     def dbsize(self):
         s = self.dbdir + "/*.db"
         dbs = glob.glob(s)
-        print(dbs)
-        if len(dbs) < 1:
+        ldbs = len(dbs)
+        if ldbs < 1:
             return 0
-        elif len(dbs) == 1:
+        elif ldbs == 1:
             statinfo = os.stat(dbs[0])
             size = statinfo.st_size
             return size
         else:
-            dbs.reverse()
-            statinfo = os.stat(dbs[0])
+            i = ldbs - 1
+            cur_db = dbs[i:]
+            statinfo = os.stat(cur_db)
             size = statinfo.st_size
             return size
 
