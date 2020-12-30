@@ -161,7 +161,10 @@ class dbsizeHandler(tornado.web.RequestHandler):
         cur_db = dbf.http_current_db_name()
         print(cur_db)
         cmd = "du -h {}".format(cur_db)
-        self.write(dict(dbs=os.system(cmd)))
+        foo = os.system(cmd)
+        print("thisis foo")
+        print(foo)
+        self.write(dict(dbs=foo))
 
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
 #     @tornado.gen.coroutine
