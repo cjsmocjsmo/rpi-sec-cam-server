@@ -42,10 +42,10 @@ class DbFactory:
         else:
             i = ldbs - 1
             cur_db = dbs[i:]
-            print(cur_db)
             statinfo = os.stat(cur_db[0])
-            size = statinfo.st_size
-            return size
+            size_in_bytes = statinfo.st_size
+            size = size_in_bytes/(1024*1024)
+            return "{}MB".format(size)
 
     def stale_db_check(self):
         cdbn = self.current_db_name()
