@@ -42,6 +42,7 @@ class DbFactory:
         else:
             i = ldbs - 1
             cur_db = dbs[i:]
+            print(cur_db)
             statinfo = os.stat(cur_db)
             size = statinfo.st_size
             return size
