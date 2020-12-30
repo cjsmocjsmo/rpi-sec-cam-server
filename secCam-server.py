@@ -62,7 +62,7 @@ class Application(tornado.web.Application):
             # (r"piCam1_last_ten_moving_event", piCam1_last_ten_moving_eventHandler),
             # (r"piCam2_last_ten_moving_event", piCam2_last_ten_moving_eventHandler),
  
-            # (r"/last_health_event", last_health_eventHandler),
+            (r"/last_health_event", last_health_eventHandler),
 
             # (r"/Movies/(.*)", tornado.web.StaticFileHandler, {'path': Movies}),
             # (r"/TVShows/(.*)", tornado.web.StaticFileHandler, {'path': TVShows}),
@@ -160,6 +160,18 @@ class dbsizeHandler(tornado.web.RequestHandler):
         dbf = dbfactory.DbFactory()
         size = dbf.dbsize()
         self.write(dict(dbs=size))
+
+class last_health_eventHandler(tornado.web.RequestHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        p = parselogs.ParseLogs()
+        p.copy_log_file()
+        p.parse_logs()
+        z = {
+            "lasthealthevent": p.last_health_event()
+        }
+        print(z)
+        self.write(z)
 
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
 #     @tornado.gen.coroutine
