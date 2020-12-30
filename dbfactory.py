@@ -45,6 +45,7 @@ class DbFactory:
             statinfo = os.stat(cur_db[0])
             size_in_bytes = statinfo.st_size
             size = size_in_bytes/(1024*1024)
+            size = str(size)
             print(size[:4])
             return "{}MB".format(size)
 
