@@ -37,8 +37,10 @@ class DbFactory:
             return 0
         elif ldbs == 1:
             statinfo = os.stat(dbs[0])
-            size = statinfo.st_size
-            return size
+            size_in_bytes = statinfo.st_size
+            size = size_in_bytes/(1024*1024)
+            size = str(size)
+            return "{}MB".format(size[:5])
         else:
             i = ldbs - 1
             cur_db = dbs[i:]
