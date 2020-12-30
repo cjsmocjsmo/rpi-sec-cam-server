@@ -35,12 +35,10 @@ class DbFactory:
         if len(dbs) < 1:
             return None
         elif len(dbs) == 1:
-            nn = self.dbdir + "/" + dbs[0]
-            return nn
+            return dbs[0]
         else:
             dbs.reverse()
-            nn = self.dbdir + "/" + dbs[0]
-            return nn
+            return dbs[0]
 
     def stale_db_check(self):
         cdbn = self.current_db_name()
