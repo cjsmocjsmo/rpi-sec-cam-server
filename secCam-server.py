@@ -58,6 +58,7 @@ class Application(tornado.web.Application):
             (r"/Picam1_last_still_event", picam1_last_still_eventHandler),
             (r"/Picam2_last_still_event", picam2_last_still_eventHandler),
 
+            (r"/DBsize", dbsizeHandler),
             # (r"piCam1_last_ten_moving_event", piCam1_last_ten_moving_eventHandler),
             # (r"piCam2_last_ten_moving_event", piCam2_last_ten_moving_eventHandler),
  
@@ -153,7 +154,7 @@ class picam2_last_still_eventHandler(tornado.web.RequestHandler):
         print(z)
         self.write(z)
 
-class dbsize(tornado.web.RequestHandler):
+class dbsizeHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def get(self):
         dbf = dbfactory.DbFactory()
