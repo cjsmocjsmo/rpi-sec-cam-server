@@ -42,7 +42,7 @@ print(conf["imagehub_port"])
 
 define('port', default=conf["imagehub_port"], help='run on the given port', type=int)
 
-processpics.ProcessSecCamPics().main()
+# processpics.ProcessSecCamPics().main()
 
 class Application(tornado.web.Application):
     def __init__(self):
