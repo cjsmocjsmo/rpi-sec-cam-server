@@ -29,16 +29,20 @@ class DbFactory:
             dbs.reverse()
             return dbs[0]
 
-    def http_current_db_name(self):
+    def dbsize(self):
         s = self.dbdir + "/*.db"
         dbs = glob.glob(s)
         if len(dbs) < 1:
-            return None
+            return 0
         elif len(dbs) == 1:
-            return dbs[0]
+            statinfo = os.stat(dbs[0])
+            size = statinfo.st_size
+            return size
         else:
             dbs.reverse()
-            return dbs[0]
+            statinfo = os.stat(dbs[0])
+            size = statinfo.st_size
+            return size
 
     def stale_db_check(self):
         cdbn = self.current_db_name()
