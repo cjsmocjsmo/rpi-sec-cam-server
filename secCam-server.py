@@ -159,9 +159,10 @@ class dbsizeHandler(tornado.web.RequestHandler):
     def get(self):
         dbf = dbfactory.DbFactory()
         cur_db = dbf.http_current_db_name()
+        print("this is cur_db")
         print(cur_db)
-        cmd = "du -h {}".format(cur_db)
-        foo = os.system(cmd)
+        c = "du -h {}".format(cur_db)
+        foo = os.system(c)
         print("thisis foo")
         print(foo)
         self.write(dict(dbs=foo))
