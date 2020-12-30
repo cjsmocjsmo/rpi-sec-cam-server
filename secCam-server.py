@@ -58,13 +58,13 @@ class Application(tornado.web.Application):
             (r"/Picam1_last_still_event", picam1_last_still_eventHandler),
             (r"/Picam2_last_still_event", picam2_last_still_eventHandler),
 
-            (r"/DBsize", dbsizeHandler),
+            
             # (r"piCam1_last_ten_moving_event", piCam1_last_ten_moving_eventHandler),
             # (r"piCam2_last_ten_moving_event", piCam2_last_ten_moving_eventHandler),
  
             (r"/Last_health_event", last_health_eventHandler),
-            (r"/PingPiCam1", ping_picam1Handler),
-
+            (r"/PingPiCam", ping_picamsHandler),
+            (r"/DBsize", dbsizeHandler),
             # (r"/Movies/(.*)", tornado.web.StaticFileHandler, {'path': Movies}),
             # (r"/TVShows/(.*)", tornado.web.StaticFileHandler, {'path': TVShows}),
             # (r"/Pictures/(.*)", tornado.web.StaticFileHandler, {'path': Pictures}),
@@ -174,7 +174,7 @@ class last_health_eventHandler(tornado.web.RequestHandler):
         print(z)
         self.write(z)
 
-class ping_picam1Handler(tornado.web.RequestHandler):
+class ping_picamsHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def pc1_ping(self):
         pc1 = "192.168.0.61"
@@ -203,7 +203,6 @@ class ping_picam1Handler(tornado.web.RequestHandler):
             "pc1": pc1,
             "pc2": pc2,
         }
-
         self.write(result)
 
 
