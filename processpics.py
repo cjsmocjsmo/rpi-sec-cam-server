@@ -12,7 +12,7 @@ import dbfactory
 import yaml
 
 y = "/home/pi/imagehub_db_service/secCam.yaml"
-with open('secCam.yaml') as f:
+with open(y) as f:
     conf = yaml.load(f)[0]
 
 dbname = dbfactory.DbFactory().create()

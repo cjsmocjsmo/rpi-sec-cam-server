@@ -64,7 +64,9 @@ class Application(tornado.web.Application):
             # (r"piCam2_last_ten_moving_event", piCam2_last_ten_moving_eventHandler),
  
             (r"/Last_health_event", last_health_eventHandler),
-            (r"/PingPiCam", ping_picamsHandler),
+            (r"/PingPiCam1", ping_picams1Handler),
+            (r"/PingPiCam2", ping_picams2Handler),
+
             (r"/DBsize", dbsizeHandler),
             # (r"/Movies/(.*)", tornado.web.StaticFileHandler, {'path': Movies}),
             # (r"/TVShows/(.*)", tornado.web.StaticFileHandler, {'path': TVShows}),
@@ -247,7 +249,7 @@ class last_health_eventHandler(tornado.web.RequestHandler):
         print(z)
         self.write(z)
 
-class ping_picamsHandler(tornado.web.RequestHandler):
+class ping_picams1Handler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Headers", "*")
         self.set_header("Access-Control-Allow-Origin", "*")
@@ -267,6 +269,23 @@ class ping_picamsHandler(tornado.web.RequestHandler):
             return 'PiCam1 is down!'
 
     @tornado.gen.coroutine
+    def get(self):
+        pc1 = yield self.pc1_ping()
+        result = {
+            "pc1": pc1,
+        }
+        self.write(result)
+
+class ping_picams2Handler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Headers", "*")
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Content-Type", "application/json")
+        self.set_header("Cache-Control", "max-age=370739520, public")
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
+        self.set_header('Access-Control-Max-Age', 1000)
+
+    @tornado.gen.coroutine
     def pc2_ping(self):
         pc2 = "192.168.0.31"
         cmd = "ping -c 5 {}".format(pc2)
@@ -278,13 +297,17 @@ class ping_picamsHandler(tornado.web.RequestHandler):
 
     @tornado.gen.coroutine
     def get(self):
-        pc1 = yield self.pc1_ping()
         pc2 = yield self.pc2_ping()
         result = {
-            "pc1": pc1,
             "pc2": pc2,
         }
         self.write(result)
+
+
+
+
+
+# class last_(tornado.web.RequestHandler):
 
 
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
