@@ -25,7 +25,8 @@ import yaml
 from datetime import date
 import filecmp
 
-with open('secCam.yaml') as f:
+y = "/home/pi/rpi-sec-cam-server/secCam.yaml"
+with open(y) as f:
     conf = yaml.load(f)[0]
 
 class ParseLogs:

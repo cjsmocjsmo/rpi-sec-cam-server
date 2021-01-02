@@ -35,7 +35,8 @@ import processpics
 
 from pprint import pprint 
 
-with open('secCam.yaml') as f:
+y = "/home/pi/imagehub_db_service/secCam.yaml"
+with open(y) as f:
     conf = yaml.load(f)[0]
 
 print(conf["imagehub_port"])
