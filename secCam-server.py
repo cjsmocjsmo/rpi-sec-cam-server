@@ -223,14 +223,6 @@ class ping_picamsHandler(tornado.web.RequestHandler):
         self.write(result)
 
 
-# func setHeaders(w http.ResponseWriter) http.ResponseWriter {
-# 	w.Header().Set("Access-Control-Allow-Headers", "*")
-# 	w.Header().Set("Access-Control-Allow-Origin", "*")
-# 	w.Header().Set("Content-Type", "application/json")
-# 	w.Header().Set("Cache-Control", "max-age=370739520, public")
-# 	return w
-# }
-
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
 #     @tornado.gen.coroutine
 #     def get(self):
