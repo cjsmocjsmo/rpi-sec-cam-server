@@ -78,6 +78,14 @@ class Application(tornado.web.Application):
         tornado.web.Application.__init__(self, handlers, **settings)
 
 class MainHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Headers", "*")
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Content-Type", "application/json")
+        self.set_header("Cache-Control", "max-age=370739520, public")
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
+        self.set_header('Access-Control-Max-Age', 1000)
+
     @tornado.gen.coroutine
     def get(self):
         self.render('secCam.html')
@@ -156,6 +164,14 @@ class picam2_last_still_eventHandler(tornado.web.RequestHandler):
         self.write(z)
 
 class dbsizeHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Headers", "*")
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Content-Type", "application/json")
+        self.set_header("Cache-Control", "max-age=370739520, public")
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
+        self.set_header('Access-Control-Max-Age', 1000)
+
     @tornado.gen.coroutine
     def get(self):
         dbf = dbfactory.DbFactory()
@@ -205,6 +221,14 @@ class ping_picamsHandler(tornado.web.RequestHandler):
         }
         self.write(result)
 
+
+# func setHeaders(w http.ResponseWriter) http.ResponseWriter {
+# 	w.Header().Set("Access-Control-Allow-Headers", "*")
+# 	w.Header().Set("Access-Control-Allow-Origin", "*")
+# 	w.Header().Set("Content-Type", "application/json")
+# 	w.Header().Set("Cache-Control", "max-age=370739520, public")
+# 	return w
+# }
 
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
 #     @tornado.gen.coroutine
