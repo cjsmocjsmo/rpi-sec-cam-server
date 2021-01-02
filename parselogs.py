@@ -100,14 +100,16 @@ class ParseLogs:
         todays_events = []
         for ev in self.allEvents:
             if (self.pc1.search(ev)) and (self.todaySearch.search(ev)):
-                todays_events.append(ev)
+                ev_tup = self.split_string(ev)
+                todays_events.append(ev_tup)
         return todays_events
 
     def picam2_todays_events(self):
         todays_events = []
         for ev in self.allEvents:
             if (self.pc2.search(ev)) and (self.todaySearch.search(ev)):
-                todays_events.append(ev)
+                ev_tup = self.split_string(ev)
+                todays_events.append(ev_tup)
         return todays_events
 
     def piCam1_all_events(self):
