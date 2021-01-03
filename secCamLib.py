@@ -11,7 +11,8 @@ with open(y) as f:
 
 dbname = dbfactory.DbFactory().create()
 print(dbname)
-con = sqlite3.connect(dbname)
+boo = "/media/pi/IMAGEHUB/imagehub_data/db/2021-01-02.db"
+con = sqlite3.connect(boo)
 
 class SqlStuff:
     def get_ten_records(self):
