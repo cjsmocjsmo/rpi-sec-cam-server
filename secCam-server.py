@@ -80,28 +80,22 @@ class Application(tornado.web.Application):
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 
-class MainHandler(tornado.web.RequestHandler):
+
+class BaseHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Headers", "*")
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Content-Type", "application/json")
-        self.set_header("Cache-Control", "max-age=370739520, public")
+        # self.set_header("Cache-Control", "max-age=370739520, public")
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
         self.set_header('Access-Control-Max-Age', 1000)
 
+class MainHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def get(self):
         self.render('secCam.html')
 
-class picam1_todays_eventsHandler(tornado.web.RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-        self.set_header("Cache-Control", "max-age=370739520, public")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
-
+class picam1_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         p = parselogs.ParseLogs()
@@ -114,15 +108,7 @@ class picam1_todays_eventsHandler(tornado.web.RequestHandler):
         pprint(z)
         self.write(z)
 
-class picam2_todays_eventsHandler(tornado.web.RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-        self.set_header("Cache-Control", "max-age=370739520, public")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
-
+class picam2_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         p = parselogs.ParseLogs()
@@ -134,15 +120,7 @@ class picam2_todays_eventsHandler(tornado.web.RequestHandler):
         pprint(z)
         self.write(z)
 
-class picam1_last_moving_eventHandler(tornado.web.RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-        self.set_header("Cache-Control", "max-age=370739520, public")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
-
+class picam1_last_moving_eventHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         p = parselogs.ParseLogs()
@@ -154,15 +132,7 @@ class picam1_last_moving_eventHandler(tornado.web.RequestHandler):
         print(z)
         self.write(z)
 
-class picam2_last_moving_eventHandler(tornado.web.RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-        self.set_header("Cache-Control", "max-age=370739520, public")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
-
+class picam2_last_moving_eventHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         p = parselogs.ParseLogs()
@@ -174,15 +144,7 @@ class picam2_last_moving_eventHandler(tornado.web.RequestHandler):
         print(z)
         self.write(z)
 
-class picam1_last_still_eventHandler(tornado.web.RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-        self.set_header("Cache-Control", "max-age=370739520, public")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
-
+class picam1_last_still_eventHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         p = parselogs.ParseLogs()
@@ -194,15 +156,7 @@ class picam1_last_still_eventHandler(tornado.web.RequestHandler):
         print(z)
         self.write(z)
 
-class picam2_last_still_eventHandler(tornado.web.RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-        self.set_header("Cache-Control", "max-age=370739520, public")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
-
+class picam2_last_still_eventHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         p = parselogs.ParseLogs()
@@ -229,15 +183,7 @@ class dbsizeHandler(tornado.web.RequestHandler):
         size = dbf.dbsize()
         self.write(dict(dbs=size))
 
-class last_health_eventHandler(tornado.web.RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-        self.set_header("Cache-Control", "max-age=370739520, public")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
-
+class last_health_eventHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         p = parselogs.ParseLogs()
@@ -256,15 +202,7 @@ class last_health_eventHandler(tornado.web.RequestHandler):
         print(z)
         self.write(z)
 
-class ping_picams1Handler(tornado.web.RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-        self.set_header("Cache-Control", "max-age=370739520, public")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
-
+class ping_picams1Handler(BaseHandler):
     @tornado.gen.coroutine
     def pc1_ping(self):
         pc1 = "192.168.0.61"
@@ -283,15 +221,7 @@ class ping_picams1Handler(tornado.web.RequestHandler):
         }
         self.write(result)
 
-class ping_picams2Handler(tornado.web.RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-        self.set_header("Cache-Control", "max-age=370739520, public")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
-
+class ping_picams2Handler(BaseHandler):
     @tornado.gen.coroutine
     def pc2_ping(self):
         pc2 = "192.168.0.31"
