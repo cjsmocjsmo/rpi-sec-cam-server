@@ -243,8 +243,15 @@ class last_health_eventHandler(tornado.web.RequestHandler):
         p = parselogs.ParseLogs()
         p.copy_log_file()
         p.parse_logs()
+        lhe = p.last_health_event()
+        result = ""
+        if len(lhe != 0):
+            result = lhe
+        else:
+            result = "None noted"
+
         z = {
-            "lasthealthevent": p.last_health_event()
+            "lasthealthevent": result
         }
         print(z)
         self.write(z)
