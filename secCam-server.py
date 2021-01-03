@@ -248,7 +248,7 @@ class last_health_eventHandler(tornado.web.RequestHandler):
         if len(lhe != 0):
             result = lhe
         else:
-            result = "None noted"
+            result = ["None noted"]
 
         z = {
             "lasthealthevent": result
