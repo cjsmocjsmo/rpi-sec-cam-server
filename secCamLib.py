@@ -10,6 +10,7 @@ with open(y) as f:
     conf = yaml.load(f)[0]
 
 dbname = dbfactory.DbFactory().create()
+print(dbname)
 con = sqlite3.connect(dbname)
 
 class SqlStuff:
