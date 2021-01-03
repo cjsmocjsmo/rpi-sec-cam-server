@@ -47,8 +47,9 @@ define('port', default=conf["imagehub_port"], help='run on the given port', type
 
 class Application(tornado.web.Application):
     def __init__(self):
-        
+        mpath = "/media/pi/IMAGEHUB/imagehub_data/images"
         handlers = [
+            (r"/CamShots/(.*)", tornado.web.StaticFileHandler, {'path': mpath}),
             (r"/Main", MainHandler),
             (r"/Picam1_todays_events", picam1_todays_eventsHandler),
             (r"/Picam2_todays_events", picam2_todays_eventsHandler),

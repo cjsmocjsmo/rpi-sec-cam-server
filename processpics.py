@@ -70,10 +70,10 @@ class ProcessSecCamPics:
                 for p in picglob:
                     b64image = self.create_b64_image(p)
                     y.append(self.chop_name(p, b64image))
-                    os.remove(p)
+                    # os.remove(p)
                 cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
                 con.commit()
-                shutil.rmtree(dd)
+                # shutil.rmtree(dd)
             # print("Db insertion complete")
 
 
