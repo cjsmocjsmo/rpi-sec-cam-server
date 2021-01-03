@@ -245,7 +245,7 @@ class last_health_eventHandler(tornado.web.RequestHandler):
         p.parse_logs()
         lhe = p.last_health_event()
         result = ""
-        if len(lhe) != 0:
+        if lhe != None:
             result = lhe
         else:
             result = ["None noted"]
