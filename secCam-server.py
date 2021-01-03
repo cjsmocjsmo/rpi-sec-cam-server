@@ -49,7 +49,7 @@ class Application(tornado.web.Application):
     def __init__(self):
         mpath = "/media/pi/IMAGEHUB/imagehub_data/images/"
         handlers = [
-            (r"/static/(.*)", tornado.web.StaticFileHandler, {'path': mpath}),
+            (r"/CamShots/(.*)", tornado.web.StaticFileHandler, {'path': mpath}),
             (r"/Main", MainHandler),
             (r"/Picam1_todays_events", picam1_todays_eventsHandler),
             (r"/Picam2_todays_events", picam2_todays_eventsHandler),
@@ -75,7 +75,7 @@ class Application(tornado.web.Application):
         ]
         settings = dict(
             # port = conf["imagehub_port"],
-            static_path = "/usr/share/Ampnado/static",
+            static_path = "/home/pi/rpi-sec-cam-server/static",
             # static_path = os.path.join(os.path.dirname(__file__), "static"),
             template_path = os.path.join(os.path.dirname(__file__), "templates"),
             debug = True,
