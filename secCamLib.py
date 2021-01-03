@@ -17,7 +17,7 @@ con = sqlite3.connect(boo)
 class SqlStuff:
     def get_ten_records(self):
         cur = con.cursor()
-        cur.execute("SELECT Date Time FROM SecCams")
+        cur.execute("SELECT Date, Time FROM SecCams")
         zoo = cur.fetchall()
         for z in zoo:
             print(z)
