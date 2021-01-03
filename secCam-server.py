@@ -75,7 +75,8 @@ class Application(tornado.web.Application):
         ]
         settings = dict(
             # port = conf["imagehub_port"],
-            static_path = os.path.join(os.path.dirname(__file__), "static"),
+            static_path = mpath,
+            # static_path = os.path.join(os.path.dirname(__file__), "static"),
             template_path = os.path.join(os.path.dirname(__file__), "templates"),
             debug = True,
         )
