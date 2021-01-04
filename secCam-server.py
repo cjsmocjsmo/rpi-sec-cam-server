@@ -265,12 +265,13 @@ class last_fifty_picsHandler(BaseHandler):
         picdir = yield self.get_today()
         globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
         picglob = glob.glob(globdir)
-        picglob.sort()
-        l = len(picglob)
+        pcg = [os.path.split(p)[1] for p in picglob]
+        pcg.sort()
+        l = len(pcg)
         if l > 50:
-            return picglob[50:]
+            return pcg[50:]
         else:
-            return picglob
+            return pcg
 
     @tornado.gen.coroutine
     def get(self):
