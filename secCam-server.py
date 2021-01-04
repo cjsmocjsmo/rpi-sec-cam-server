@@ -313,7 +313,7 @@ class pc2_last_fifty_picsHandler(BaseHandler):
         lenpicglob = len(picglob)
         if lenpicglob != 0:
             pc2list = []
-            pc2 = re.compile("PiCam1") #CHANGE THIS TO PICAM2
+            pc2 = re.compile("PiCam2") #CHANGE THIS TO PICAM2
             [pc2list.append(p) for p in picglob if re.search(pc2, p)]
             pcg = [os.path.split(p)[1] for p in pc2list]
             pcg.sort(reverse=True)
