@@ -16,6 +16,7 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
+import re
 from datetime import date
 import yaml
 import glob
@@ -70,7 +71,7 @@ class Application(tornado.web.Application):
             (r"/PingPiCam1", ping_picams1Handler),
             (r"/PingPiCam2", ping_picams2Handler),
 
-            (r"/Last_fifty_pics", last_fifty_picsHandler),
+            (r"/Pc1_last_fifty_pics", pc1_last_fifty_picsHandler),
 
             (r"/DBsize", dbsizeHandler),
             # (r"/Movies/(.*)", tornado.web.StaticFileHandler, {'path': Movies}),
@@ -247,7 +248,7 @@ class ping_picams2Handler(BaseHandler):
         }
         self.write(result)
 
-class last_fifty_picsHandler(BaseHandler):
+class pc1_last_fifty_picsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get_today(self):
         d1 = date.today()
@@ -265,20 +266,30 @@ class last_fifty_picsHandler(BaseHandler):
         picdir = yield self.get_today()
         globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
         picglob = glob.glob(globdir)
-        pcg = [os.path.split(p)[1] for p in picglob]
-        pcg.sort()
-        l = len(pcg)
-        if l > 50:
-            return pcg[50:]
+        lenpicglob = len(picglob)
+        if lenpicglob != 0:
+            pc1list = []
+            pc1 = re.compile("PiCam1")
+            [pc1list.append(p) for p in picglob if re.search(pc1, p)]
+            pcg = [os.path.split(p)[1] for p in pc1list]
+            pcg.sort()
+            if len(pcg) > 50:
+                return pcg[50:]
+            else:
+                return pcg
         else:
-            return pcg
+            return None
 
     @tornado.gen.coroutine
     def get(self):
         prefix = yield self.get_prefix()
         picglob = yield self.glob_pic_dir()
-        plist = ["/".join((prefix, p)) for p in picglob]
-        self.write(dict(plist=plist))
+        if picglob != None:
+            plist = ["/".join((prefix, p)) for p in picglob]
+            self.write(dict(plist=plist))
+        else:
+            plist= ["No PiCam1 pics found"]
+            self.write(dict(plist=plist))
 
 
 # class last_(tornado.web.RequestHandler):
