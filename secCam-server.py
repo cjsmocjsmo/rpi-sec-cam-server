@@ -63,7 +63,6 @@ class Application(tornado.web.Application):
             (r"/Picam1_last_still_event", picam1_last_still_eventHandler),
             (r"/Picam2_last_still_event", picam2_last_still_eventHandler),
 
-            
             # (r"piCam1_last_ten_moving_event", piCam1_last_ten_moving_eventHandler),
             # (r"piCam2_last_ten_moving_event", piCam2_last_ten_moving_eventHandler),
  
@@ -80,10 +79,7 @@ class Application(tornado.web.Application):
             # (r"/Pictures/(.*)", tornado.web.StaticFileHandler, {'path': Pictures}),
         ]
         settings = dict(
- 
-            static_path = "./static",
-            # static_path = "/home/pi/rpi-sec-cam-server/static",
-            # static_path = os.path.join(os.path.dirname(__file__), "static"),
+            static_path = os.path.join(os.path.dirname(__file__), "static"),
             template_path = os.path.join(os.path.dirname(__file__), "templates"),
             debug = True,
         )
@@ -274,8 +270,8 @@ class pc1_last_fifty_picsHandler(BaseHandler):
             [pc1list.append(p) for p in picglob if re.search(pc1, p)]
             pcg = [os.path.split(p)[1] for p in pc1list]
             pcg.sort(reverse=True)
-            if len(pcg) > 50:
-                return pcg[50:]
+            if len(pcg) > 25:
+                return pcg[25:]
             else:
                 return pcg
         else:
@@ -317,8 +313,8 @@ class pc2_last_fifty_picsHandler(BaseHandler):
             [pc2list.append(p) for p in picglob if re.search(pc2, p)]
             pcg = [os.path.split(p)[1] for p in pc2list]
             pcg.sort(reverse=True)
-            if len(pcg) > 50:
-                return pcg[50:]
+            if len(pcg) > 25:
+                return pcg[25:]
             else:
                 return pcg
         else:
@@ -334,7 +330,10 @@ class pc2_last_fifty_picsHandler(BaseHandler):
         else:
             plist= ["No PiCam1 pics found"]
             self.write(dict(plist=plist))
-# class last_(tornado.web.RequestHandler):
+
+
+
+
 
 
 # class WeeklyEventsHandler(tornado.web.RequestHandler):
