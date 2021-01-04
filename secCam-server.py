@@ -272,7 +272,7 @@ class pc1_last_fifty_picsHandler(BaseHandler):
             pcg.sort(reverse=True)
             print("this is lenpcg {}".format(len(pcg)))
             if len(pcg) > 25:
-                x = pcg[25:]
+                x = pcg[:25]
                 print("this should be 25 {}".format(len(x)))
                 return x
             else:
@@ -320,7 +320,7 @@ class pc2_last_fifty_picsHandler(BaseHandler):
             pcg.sort(reverse=True)
             print("this is lenpcg {}".format(len(pcg)))
             if len(pcg) > 25:
-                x = pcg[25:]
+                x = pcg[:25]
                 print("this should be 25 {}".format(len(x)))
                 return x
             else:
