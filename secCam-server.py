@@ -287,6 +287,7 @@ class pc1_last_fifty_picsHandler(BaseHandler):
         if picglob != None:
             plist = ["/".join((prefix, p)) for p in picglob]
             # self.write(dict(plist=plist))
+            print("this is len plist {}".format(len(plist)))
             self.write(dict(plist=[]))
         else:
             plist= ["No PiCam1 pics found"]
@@ -333,6 +334,7 @@ class pc2_last_fifty_picsHandler(BaseHandler):
         picglob = yield self.glob_pic_dir()
         if picglob != None:
             plist = ["/".join((prefix, p)) for p in picglob]
+            print("this is len plist {}".format(len(plist)))
             self.write(dict(plist=[]))
         else:
             plist= ["No PiCam1 pics found"]
