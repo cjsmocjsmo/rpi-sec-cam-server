@@ -72,7 +72,8 @@ class Application(tornado.web.Application):
             (r"/PingPiCam2", ping_picams2Handler),
 
             (r"/Pc1_last_fifty_pics", pc1_last_fifty_picsHandler),
-
+            (r"/Pc2_last_fifty_pics", pc2_last_fifty_picsHandler),
+            
             (r"/DBsize", dbsizeHandler),
             # (r"/Movies/(.*)", tornado.web.StaticFileHandler, {'path': Movies}),
             # (r"/TVShows/(.*)", tornado.web.StaticFileHandler, {'path': TVShows}),
@@ -272,7 +273,7 @@ class pc1_last_fifty_picsHandler(BaseHandler):
             pc1 = re.compile("PiCam1")
             [pc1list.append(p) for p in picglob if re.search(pc1, p)]
             pcg = [os.path.split(p)[1] for p in pc1list]
-            pcg.sort()
+            pcg.sort(reverse=True)
             if len(pcg) > 50:
                 return pcg[50:]
             else:
@@ -291,7 +292,48 @@ class pc1_last_fifty_picsHandler(BaseHandler):
             plist= ["No PiCam1 pics found"]
             self.write(dict(plist=plist))
 
+class pc2_last_fifty_picsHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get_today(self):
+        d1 = date.today()
+        today = d1.strftime("%Y-%m-%d")
+        return today
 
+    @tornado.gen.coroutine
+    def get_prefix(self):
+        today = yield self.get_today()
+        prefix = "http://192.168.0.26:8090/CamShots/" + today
+        return prefix
+
+    @tornado.gen.coroutine
+    def glob_pic_dir(self):
+        picdir = yield self.get_today()
+        globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
+        picglob = glob.glob(globdir)
+        lenpicglob = len(picglob)
+        if lenpicglob != 0:
+            pc2list = []
+            pc2 = re.compile("PiCam1") #CHANGE THIS TO PICAM2
+            [pc2list.append(p) for p in picglob if re.search(pc2, p)]
+            pcg = [os.path.split(p)[1] for p in pc2list]
+            pcg.sort(reverse=True)
+            if len(pcg) > 50:
+                return pcg[50:]
+            else:
+                return pcg
+        else:
+            return None
+
+    @tornado.gen.coroutine
+    def get(self):
+        prefix = yield self.get_prefix()
+        picglob = yield self.glob_pic_dir()
+        if picglob != None:
+            plist = ["/".join((prefix, p)) for p in picglob]
+            self.write(dict(plist=plist))
+        else:
+            plist= ["No PiCam1 pics found"]
+            self.write(dict(plist=plist))
 # class last_(tornado.web.RequestHandler):
 
 
