@@ -270,8 +270,10 @@ class pc1_last_fifty_picsHandler(BaseHandler):
             [pc1list.append(p) for p in picglob if re.search(pc1, p)]
             pcg = [os.path.split(p)[1] for p in pc1list]
             pcg.sort(reverse=True)
+            print(len(pcg))
             if len(pcg) > 25:
-                return pcg[25:]
+                x = pcg[25:]
+                return x
             else:
                 return pcg
         else:
