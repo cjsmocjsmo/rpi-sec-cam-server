@@ -16,7 +16,9 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
+from datetime import date
 import yaml
+import glob
 import sqlite3
 
 import subprocess
@@ -243,8 +245,37 @@ class ping_picams2Handler(BaseHandler):
         }
         self.write(result)
 
+class last_fifty_picsHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get_today(self):
+        d1 = date.today()
+        today = d1.strftime("%Y-%m-%d")
+        return today
 
+    @tornado.gen.coroutine
+    def get_prefix(self):
+        today = yield self.get_today()
+        prefix = "http://192.168.0.26:8090/CamShots/" + today
+        return prefix
 
+    @tornado.gen.coroutine
+    def glob_pic_dir(self):
+        picdir = yield self.get_today()
+        globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
+        picglob = glob.glob(globdir)
+        picglob.sort()
+        l = len(picglob)
+        if l > 50:
+            return picglob[50:]
+        else:
+            return picglob
+
+    @tornado.gen.coroutine
+    def get(self):
+        prefix = yield self.get_prefix()
+        picglob = yield self.glob_pic_dir()
+        plist = ["/".join((prefix, p)) for p in picglob]
+        self.write(dict(plist=plist))
 
 
 # class last_(tornado.web.RequestHandler):
