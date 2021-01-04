@@ -270,9 +270,10 @@ class pc1_last_fifty_picsHandler(BaseHandler):
             [pc1list.append(p) for p in picglob if re.search(pc1, p)]
             pcg = [os.path.split(p)[1] for p in pc1list]
             pcg.sort(reverse=True)
-            print(len(pcg))
+            print("this is lenpcg {}".format(len(pcg)))
             if len(pcg) > 25:
                 x = pcg[25:]
+                print("this should be 25 {}".format(len(x)))
                 return x
             else:
                 return pcg
@@ -285,7 +286,8 @@ class pc1_last_fifty_picsHandler(BaseHandler):
         picglob = yield self.glob_pic_dir()
         if picglob != None:
             plist = ["/".join((prefix, p)) for p in picglob]
-            self.write(dict(plist=plist))
+            # self.write(dict(plist=plist))
+            self.write(dict(plist=[]))
         else:
             plist= ["No PiCam1 pics found"]
             self.write(dict(plist=plist))
@@ -315,8 +317,11 @@ class pc2_last_fifty_picsHandler(BaseHandler):
             [pc2list.append(p) for p in picglob if re.search(pc2, p)]
             pcg = [os.path.split(p)[1] for p in pc2list]
             pcg.sort(reverse=True)
+            print("this is lenpcg {}".format(len(pcg)))
             if len(pcg) > 25:
-                return pcg[25:]
+                x = pcg[25:]
+                print("this should be 25 {}".format(len(x)))
+                return x
             else:
                 return pcg
         else:
@@ -331,7 +336,7 @@ class pc2_last_fifty_picsHandler(BaseHandler):
             self.write(dict(plist=plist))
         else:
             plist= ["No PiCam1 pics found"]
-            self.write(dict(plist=plist))
+            # self.write(dict(plist=plist))
 
 
 
