@@ -70,6 +70,8 @@ class Application(tornado.web.Application):
             (r"/PingPiCam1", ping_picams1Handler),
             (r"/PingPiCam2", ping_picams2Handler),
 
+            (r"/Last_fifty_pics", last_fifty_picsHandler),
+
             (r"/DBsize", dbsizeHandler),
             # (r"/Movies/(.*)", tornado.web.StaticFileHandler, {'path': Movies}),
             # (r"/TVShows/(.*)", tornado.web.StaticFileHandler, {'path': TVShows}),
