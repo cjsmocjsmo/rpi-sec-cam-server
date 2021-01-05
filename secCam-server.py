@@ -152,6 +152,9 @@ class statsHandler(BaseHandler):
             "picam2LS": p.piCam2_last_still_event(),
             "dbsize": dbSize,
             "health": result,
+            "picam1EventTotal": p.piCam1_all_events(),
+            "picam2EventTotal": p.piCam2_all_events(),
+            "totalEvents": p.total_number_of_events(),
         }
         print(z)
         self.write(z)

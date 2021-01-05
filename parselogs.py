@@ -115,18 +115,15 @@ class ParseLogs:
     def piCam1_all_events(self):
         pc1ae = []
         [pc1ae.append(ev) for ev in self.allEvents if (self.pc1.search(ev))]
-        # for ev in self.allEvents:
-        #     if (self.pc1.search(ev)):
-        #         pc1ae.append(ev)
         return pc1ae
 
     def piCam2_all_events(self):
         pc2ae = []
         [pc2ae.append(ev) for ev in self.allEvents if (self.pc2.search(ev))]
-        # for ev in self.allEvents:
-        #     if (self.pc2.search(ev)):
-        #         pc2ae.append(ev)
         return pc2ae
+
+    def total_number_of_events(self):
+        return len(self.allEvents)
 
     def piCam1_last_moving_event(self):
         elen = len(self.pc1_moving_events)
