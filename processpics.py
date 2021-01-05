@@ -60,7 +60,6 @@ class ProcessSecCamPics:
 
     def main(self):
         while True:
-            time.sleep(300) #210 3.5 minutes
             dnames = self.get_dir_names()
             for dd in dnames:
                 print(dd)
@@ -73,9 +72,9 @@ class ProcessSecCamPics:
                     # os.remove(p)
                 cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
                 con.commit()
-                # shutil.rmtree(dd)
+                shutil.rmtree(dd)
             # print("Db insertion complete")
-
+            time.sleep(3600) # runs initially then sleeps for an hour
 
 
 if __name__ == '__main__' :
