@@ -57,23 +57,23 @@ class Application(tornado.web.Application):
             (r"/Picam1_todays_events", picam1_todays_eventsHandler),
             (r"/Picam2_todays_events", picam2_todays_eventsHandler),
 
-            (r"/Picam1_last_moving_event", picam1_last_moving_eventHandler),
-            (r"/Picam2_last_moving_event", picam2_last_moving_eventHandler),
+            (r"/Stats", statsHandler),
+            # (r"/Picam2_last_moving_event", picam2_last_moving_eventHandler),
 
-            (r"/Picam1_last_still_event", picam1_last_still_eventHandler),
-            (r"/Picam2_last_still_event", picam2_last_still_eventHandler),
+            # (r"/Picam1_last_still_event", picam1_last_still_eventHandler),
+            # (r"/Picam2_last_still_event", picam2_last_still_eventHandler),
 
             # (r"piCam1_last_ten_moving_event", piCam1_last_ten_moving_eventHandler),
             # (r"piCam2_last_ten_moving_event", piCam2_last_ten_moving_eventHandler),
  
-            (r"/Last_health_event", last_health_eventHandler),
+            # (r"/Last_health_event", last_health_eventHandler),
             (r"/PingPiCam1", ping_picams1Handler),
             (r"/PingPiCam2", ping_picams2Handler),
 
             (r"/Pc1_last_fifty_pics", pc1_last_fifty_picsHandler),
             (r"/Pc2_last_fifty_pics", pc2_last_fifty_picsHandler),
             
-            (r"/DBsize", dbsizeHandler),
+            # (r"/DBsize", dbsizeHandler),
             # (r"/Movies/(.*)", tornado.web.StaticFileHandler, {'path': Movies}),
             # (r"/TVShows/(.*)", tornado.web.StaticFileHandler, {'path': TVShows}),
             # (r"/Pictures/(.*)", tornado.web.StaticFileHandler, {'path': Pictures}),
@@ -125,75 +125,19 @@ class picam2_todays_eventsHandler(BaseHandler):
         pprint(z)
         self.write(z)
 
-class picam1_last_moving_eventHandler(BaseHandler):
+class statsHandler(BaseHandler):
     @tornado.gen.coroutine
-    def get(self):
-        p = parselogs.ParseLogs()
-        p.copy_log_file()
-        p.parse_logs()
-        z = {
-            "picam1": p.piCam1_last_moving_event()
-        }
-        print(z)
-        self.write(z)
-
-class picam2_last_moving_eventHandler(BaseHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        p = parselogs.ParseLogs()
-        p.copy_log_file()
-        p.parse_logs()
-        z = {
-            "picam2": p.piCam2_last_moving_event()
-        }
-        print(z)
-        self.write(z)
-
-class picam1_last_still_eventHandler(BaseHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        p = parselogs.ParseLogs()
-        p.copy_log_file()
-        p.parse_logs()
-        z = {
-            "picam1": p.piCam1_last_still_event()
-        }
-        print(z)
-        self.write(z)
-
-class picam2_last_still_eventHandler(BaseHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        p = parselogs.ParseLogs()
-        p.copy_log_file()
-        p.parse_logs()
-        z = {
-            "picam2": p.piCam2_last_still_event()
-        }
-        print(z)
-        self.write(z)
-
-class dbsizeHandler(tornado.web.RequestHandler):
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "application/json")
-        self.set_header("Cache-Control", "max-age=370739520, public")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
-
-    @tornado.gen.coroutine
-    def get(self):
+    def dbsize(self):
         dbf = dbfactory.DbFactory()
         size = dbf.dbsize()
-        self.write(dict(dbs=size))
+        return size
 
-class last_health_eventHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         p = parselogs.ParseLogs()
         p.copy_log_file()
         p.parse_logs()
+        dbSize = yield self.dbsize()
         lhe = p.last_health_event()
         result = ""
         if lhe != None:
@@ -202,10 +146,17 @@ class last_health_eventHandler(BaseHandler):
             result = ["None noted"]
 
         z = {
-            "lasthealthevent": result
+            "picam1LM": p.piCam1_last_moving_event(),
+            "picam2LM": p.piCam2_last_moving_event(),
+            "picam1LS": p.piCam1_last_still_event(),
+            "picam2LS": p.piCam2_last_still_event(),
+            "dbsize": dbSize,
+            "health": result,
         }
         print(z)
         self.write(z)
+
+
 
 class ping_picams1Handler(BaseHandler):
     @tornado.gen.coroutine
@@ -271,8 +222,8 @@ class pc1_last_fifty_picsHandler(BaseHandler):
             pcg = [os.path.split(p)[1] for p in pc1list]
             pcg.sort(reverse=True)
             print("this is lenpcg {}".format(len(pcg)))
-            if len(pcg) > 25:
-                x = pcg[:25]
+            if len(pcg) > 26:
+                x = pcg[:26]
                 print("this should be 25 {}".format(len(x)))
                 return x
             else:
@@ -319,8 +270,8 @@ class pc2_last_fifty_picsHandler(BaseHandler):
             pcg = [os.path.split(p)[1] for p in pc2list]
             pcg.sort(reverse=True)
             print("this is lenpcg {}".format(len(pcg)))
-            if len(pcg) > 25:
-                x = pcg[:25]
+            if len(pcg) > 26:
+                x = pcg[:26]
                 print("this should be 25 {}".format(len(x)))
                 return x
             else:
