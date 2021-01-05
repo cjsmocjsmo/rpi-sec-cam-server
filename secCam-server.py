@@ -162,12 +162,12 @@ class ping_picams1Handler(BaseHandler):
     @tornado.gen.coroutine
     def pc1_ping(self):
         pc1 = "192.168.0.61"
-        cmd = "ping -c 5 {}".format(pc1)
+        cmd = "ping -c 2 {}".format(pc1)
         response = os.system(cmd)
         if response == 0:
-            return 'PiCam1 is up!'
+            return 'Up!'
         else:
-            return 'PiCam1 is down!'
+            return 'DOWN!'
 
     @tornado.gen.coroutine
     def get(self):
@@ -181,12 +181,12 @@ class ping_picams2Handler(BaseHandler):
     @tornado.gen.coroutine
     def pc2_ping(self):
         pc2 = "192.168.0.31"
-        cmd = "ping -c 5 {}".format(pc2)
+        cmd = "ping -c 2 {}".format(pc2)
         response = os.system(cmd)
         if response == 0:
-            return 'PiCam2 is up!'
+            return 'Up!'
         else:
-            return 'PiCam2 is down!'
+            return 'DOWN!'
 
     @tornado.gen.coroutine
     def get(self):
