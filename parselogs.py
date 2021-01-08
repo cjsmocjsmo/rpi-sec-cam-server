@@ -41,12 +41,16 @@ class ParseLogs:
         self.moving = re.compile("moving")
         self.still = re.compile("still")
         self.health = re.compile("No messages received for 60 minutes")
+
         self.pc1_moving_events = []
         self.pc1_still_events = []
         self.pc2_moving_events = []
         self.pc2_still_events = []
         self.healthEvents = []
+
         self.allEvents = []
+        self.allPc1MoveEventsTup = []
+        self.allPc1StillEventsTup = []
 
     def copy_log_file(self):
         if os.path.isfile(self.log_file_copy):
@@ -56,17 +60,39 @@ class ParseLogs:
         else:
             shutil.copy(self.log_file, self.log_file_copy)
 
+    # def find_pic_range(self):
+    #     #a list of tuples
+
+
+
     def parse_logs(self):
+        linecount = 0
         with open(self.log_file_copy) as in_file:
             for line in in_file:
+                linecount += 1
                 self.allEvents.append(line)
+
+
                 if (self.pc1.search(line)):
                     if (self.moving.search(line)):
                         far = line.replace("\n", "")
                         self.pc1_moving_events.append(far)
+                        
+                        enumTup = (linecount, line)
+                        self.allPc1MoveEventsTup.append(enumTup)
+
+
+
                     elif (self.still.search(line)):
                         bar = line.replace("\n", "")
                         self.pc1_still_events.append(bar)
+
+                        enumTup = (linecount, line)
+                        self.allPc1MoveEventsTup.append(enumTup)
+
+
+
+                        
                     else:
                         print("boo")
                 elif (self.pc2.search(line)):

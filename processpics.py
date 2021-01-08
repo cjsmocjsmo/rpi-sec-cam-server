@@ -10,6 +10,10 @@ import shutil
 from pprint import pprint
 import dbfactory
 import yaml
+import dropbox
+import datetime
+from pyimagesearch.tempimage import TempImage
+
 
 y = "/home/pi/imagehub_db_service/secCam.yaml"
 with open(y) as f:
@@ -22,6 +26,7 @@ cur.execute('''CREATE TABLE IF NOT EXISTS SecCams (Dir text,
             Ext text, Prefix text, Name text, Camera text, Date integer,
             Time text, B64Image text)''')
 cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS TimeIndex ON SecCams (Time)''')
+client = None
 
 class ProcessSecCamPics:
     def __init__(self):
@@ -58,7 +63,31 @@ class ProcessSecCamPics:
             dir, ext, prefix, name, camera, dAte, timE, b64image,
         )
 
+    def send_to_dropbox(self, pic):
+        
+        if conf["use_dropbox"]:
+            #connect to dropbox and start the session authorization process
+            client = dropbox.Dropbox(conf["dropbox_access_token"])
+            print("[SUCCESS] dropbox account linked")
+
+            timestamp = datetime.datetime.now()
+            ts = timestamp.strftime("%A %d %B %Y %I:%M:%S%p")
+            t = TempImage()
+            with open(pic, "rb") as f:
+                f.write(t.path, pic)
+
+ 
+            
+            path = "/{base_path}/{timestamp}.jpg".format(
+                base_path=conf["dropbox_base_path"], timestamp=ts)
+            client.files_upload(open(t.path, "rb").read(), path)
+
+
     def main(self):
+        
+
+
+
         while True:
             dnames = self.get_dir_names()
             for dd in dnames:
@@ -67,6 +96,7 @@ class ProcessSecCamPics:
                 picglob = glob.glob(newname)
                 y = []
                 for p in picglob:
+                    self.send_to_dropbox(p)
                     b64image = self.create_b64_image(p)
                     y.append(self.chop_name(p, b64image))
                     # os.remove(p)
