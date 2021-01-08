@@ -66,10 +66,10 @@ class ParseLogs:
 
 
     def parse_logs(self):
-        linecount = 0
+        # linecount = 0
         with open(self.log_file_copy) as in_file:
             for line in in_file:
-                linecount += 1
+                # linecount += 1
                 self.allEvents.append(line)
 
 
@@ -78,8 +78,8 @@ class ParseLogs:
                         far = line.replace("\n", "")
                         self.pc1_moving_events.append(far)
                         
-                        enumTup = (linecount, line)
-                        self.allPc1MoveEventsTup.append(enumTup)
+                        # enumTup = (linecount, line)
+                        # self.allPc1MoveEventsTup.append(enumTup)
 
 
 
@@ -87,8 +87,8 @@ class ParseLogs:
                         bar = line.replace("\n", "")
                         self.pc1_still_events.append(bar)
 
-                        enumTup = (linecount, line)
-                        self.allPc1MoveEventsTup.append(enumTup)
+                        # enumTup = (linecount, line)
+                        # self.allPc1MoveEventsTup.append(enumTup)
 
 
 
