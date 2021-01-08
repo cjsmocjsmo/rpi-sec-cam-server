@@ -216,9 +216,9 @@ class pc1_last_fifty_picsHandler(BaseHandler):
     def glob_pic_dir(self):
         picdir = yield self.get_today()
         globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
-        print(globdir)
+
         picglob = glob.glob(globdir)
-        print(picglob)
+
         lenpicglob = len(picglob)
         if lenpicglob != 0:
             pc1list = []
@@ -226,10 +226,8 @@ class pc1_last_fifty_picsHandler(BaseHandler):
             [pc1list.append(p) for p in picglob if re.search(pc1, p)]
             pcg = [os.path.split(p)[1] for p in pc1list]
             pcg.sort(reverse=True)
-            print("this is lenpcg {}".format(len(pcg)))
             if len(pcg) > 26:
                 x = pcg[:26]
-                print("this should be 25 {}".format(len(x)))
                 return x
             else:
                 return pcg
@@ -240,7 +238,6 @@ class pc1_last_fifty_picsHandler(BaseHandler):
     def get(self):
         prefix = yield self.get_prefix()
         picglob = yield self.glob_pic_dir()
-        print(picglob)
         if picglob != None:
             plist = ["/".join((prefix, p)) for p in picglob]
             # self.write(dict(plist=plist))
