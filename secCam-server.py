@@ -238,6 +238,7 @@ class pc1_last_fifty_picsHandler(BaseHandler):
     def get(self):
         prefix = yield self.get_prefix()
         picglob = yield self.glob_pic_dir()
+        
         if picglob != None:
             plist = ["/".join((prefix, p)) for p in picglob]
             # self.write(dict(plist=plist))
