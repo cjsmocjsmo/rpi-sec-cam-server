@@ -217,6 +217,7 @@ class pc1_last_fifty_picsHandler(BaseHandler):
         picdir = yield self.get_today()
         globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
         picglob = glob.glob(globdir)
+        print(picglob)
         lenpicglob = len(picglob)
         if lenpicglob != 0:
             pc1list = []
