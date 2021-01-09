@@ -87,22 +87,20 @@ class ProcessSecCamPics:
 
     def main(self, fname, data):
 
-        while True:
+        # while True:
             # dnames = self.get_dir_names()
             # for dd in dnames:
             #     print(dd)
             #     newname = dd + "/*jpg"
             #     picglob = glob.glob(newname)
-            y = []
+        y = []
             #     for p in picglob:
-            self.send_to_dropbox(fname, data)
-
-
-            # b64image = self.create_b64_image(p)
-            y.append(self.chop_name(fname, data))
-            # os.remove(p)
-            cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
-            con.commit()
+        self.send_to_dropbox(fname, data)
+        # b64image = self.create_b64_image(p)
+        y.append(self.chop_name(fname, data))
+        # os.remove(p)
+        cur.executemany('''INSERT INTO SecCams VALUES (?,?,?,?,?,?,?,?)''', y)
+        con.commit()
                 # shutil.rmtree(dd)
             # print("Db insertion complete")
             # time.sleep(3600) # runs initially then sleeps for an hour
