@@ -8,9 +8,8 @@ import string
 import sqlite3
 import shutil
 from pprint import pprint
-import dbfactory
+import dbfactory as dbfactory
 import yaml
-import dropbox
 import datetime
 from pyimagesearch.tempimage import TempImage
 
@@ -36,7 +35,11 @@ cur.execute('''CREATE UNIQUE INDEX IF NOT EXISTS TimeIndex ON SecCams (Time)''')
 client = None
 
 class ProcessSecCamPics:
-    # def __init__(self):
+    def __init__(self):
+        if conf["use_dropbox"]:
+            #connect to dropbox and start the session authorization process
+            self.client = dropbox.Dropbox(conf["dropbox_access_token"])
+            print("[SUCCESS] dropbox account linked")
 
         # self.picdir = conf["image_dir"]
         # self.dbdir = conf["db_dir"]
@@ -67,24 +70,24 @@ class ProcessSecCamPics:
 
     def send_to_dropbox(self, picname, picdata):
         
-        if conf["use_dropbox"]:
-            #connect to dropbox and start the session authorization process
-            client = dropbox.Dropbox(conf["dropbox_access_token"])
-            print("[SUCCESS] dropbox account linked")
+        # if conf["use_dropbox"]:
+        #     #connect to dropbox and start the session authorization process
+        #     client = dropbox.Dropbox(conf["dropbox_access_token"])
+        #     print("[SUCCESS] dropbox account linked")
 
-            timestamp = datetime.datetime.now()
-            ts = timestamp.strftime("%A %d %B %Y %I:%M:%S%p")
-            t = TempImage()
-            with open(picname, "rb") as f:
-                f.write(t.path, picdata)
+        timestamp = datetime.datetime.now()
+        ts = timestamp.strftime("%A %d %B %Y %I:%M:%S%p")
+        # t = TempImage()
+        # with open(picname, "rb") as f:
+        #     f.write(t.path, picdata)
 
- 
-            
-            path = "/{base_path}/{timestamp}.jpg".format(
-                base_path=conf["dropbox_base_path"], timestamp=ts)
-            client.files_upload(open(t.path, "rb").read(), path)
+        
+        path = "/{base_path}/{timestamp}.jpg".format(
+            base_path=conf["dropbox_base_path"], timestamp=ts)
+        # client.files_upload(open(t.path, "rb").read(), path)
 
 
+        client.files_upload(open(picdata, "rb").read(), path)
     def main(self, fname, data):
 
         # while True:

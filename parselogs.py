@@ -34,23 +34,27 @@ class ParseLogs:
         td = date.today()
         self.today = td.strftime("%Y-%m-%d")
         self.todaySearch = re.compile(self.today)
+
         self.log_file = conf["log_file_path"]
         self.log_file_copy = conf["log_file_copy_path"]
+
         self.pc1 = re.compile("PiCam1")
         self.pc2 = re.compile("PiCam2")
         self.moving = re.compile("moving")
         self.still = re.compile("still")
         self.health = re.compile("No messages received for 60 minutes")
+        self.upload = re.compile("Request to files/upload")
 
         self.pc1_moving_events = []
         self.pc1_still_events = []
         self.pc2_moving_events = []
         self.pc2_still_events = []
         self.healthEvents = []
+        self.uploadEvents = []
 
         self.allEvents = []
-        self.allPc1MoveEventsTup = []
-        self.allPc1StillEventsTup = []
+        # self.allPc1MoveEventsTup = []
+        # self.allPc1StillEventsTup = []
 
     def copy_log_file(self):
         if os.path.isfile(self.log_file_copy):
@@ -60,39 +64,17 @@ class ParseLogs:
         else:
             shutil.copy(self.log_file, self.log_file_copy)
 
-    # def find_pic_range(self):
-    #     #a list of tuples
-
-
-
     def parse_logs(self):
-        # linecount = 0
         with open(self.log_file_copy) as in_file:
             for line in in_file:
-                # linecount += 1
                 self.allEvents.append(line)
-
-
                 if (self.pc1.search(line)):
                     if (self.moving.search(line)):
                         far = line.replace("\n", "")
                         self.pc1_moving_events.append(far)
-                        
-                        # enumTup = (linecount, line)
-                        # self.allPc1MoveEventsTup.append(enumTup)
-
-
-
                     elif (self.still.search(line)):
                         bar = line.replace("\n", "")
                         self.pc1_still_events.append(bar)
-
-                        # enumTup = (linecount, line)
-                        # self.allPc1MoveEventsTup.append(enumTup)
-
-
-
-                        
                     else:
                         print("boo")
                 elif (self.pc2.search(line)):
@@ -107,6 +89,9 @@ class ParseLogs:
                 elif (self.health.search(line)):
                     dude = line.replace("\n", "")
                     self.healthEvents.append(dude)
+                elif (self.uploadEvents):
+                    dude = line.replace("\n", "")
+                    self.uploadEvents.append(dude)
                 else:
                     pass
 
@@ -222,6 +207,8 @@ class ParseLogs:
         else:
             return None
 
+    def all_upload_events(self):
+        return len(self.uploadEvents)
 
     def main(self):
         self.copy_log_file()
@@ -236,6 +223,7 @@ class ParseLogs:
             "piCam1_last_ten_moving_event": self.piCam1_last_ten_moving_event(),
             "piCam2_last_ten_moving_event": self.piCam2_last_ten_moving_event(),
             "last_health_event": self.last_health_event(),
+            "all_upload_events": self.all_upload_events,
         }
         pprint(x)
         # os.remove(self.log_file_copy)

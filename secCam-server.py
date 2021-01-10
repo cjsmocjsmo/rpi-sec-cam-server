@@ -127,6 +127,13 @@ class picam2_todays_eventsHandler(BaseHandler):
 
 class statsHandler(BaseHandler):
     @tornado.gen.coroutine
+    def pic_dir_size(self):
+        path = '/media/pi/IMAGEHUB/imagehub_data/images'
+        size = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8')
+        s = "Directory size: {}".format(size)
+        self.write(dict(size=s))
+
+    @tornado.gen.coroutine
     def dbsize(self):
         dbf = dbfactory.DbFactory()
         size = dbf.dbsize()
@@ -134,23 +141,23 @@ class statsHandler(BaseHandler):
 
     @tornado.gen.coroutine
     def get(self):
+        picDirSize = yield self.pic_dir_size()
         p = parselogs.ParseLogs()
         p.copy_log_file()
         p.parse_logs()
-        dbSize = yield self.dbsize()
         lhe = p.last_health_event()
         result = ""
         if lhe != None:
             result = lhe
         else:
             result = ["None noted"]
-
+        
         z = {
             "picam1LM": p.piCam1_last_moving_event(),
             "picam2LM": p.piCam2_last_moving_event(),
             "picam1LS": p.piCam1_last_still_event(),
             "picam2LS": p.piCam2_last_still_event(),
-            "dbsize": dbSize,
+            "picDirSize": picDirSize,
             "health": result,
             "picam1EventTotal": p.piCam1_all_events(),
             "picam2EventTotal": p.piCam2_all_events(),
@@ -293,7 +300,6 @@ class pc2_last_fifty_picsHandler(BaseHandler):
         else:
             plist= ["No PiCam1 pics found"]
             # self.write(dict(plist=plist))
-
 
 
 
