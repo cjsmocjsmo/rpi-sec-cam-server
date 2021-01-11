@@ -130,8 +130,8 @@ class statsHandler(BaseHandler):
     def pic_dir_size(self):
         path = '/media/pi/IMAGEHUB/imagehub_data/images'
         size = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8')
-        s = "Directory size: {}".format(size)
-        self.write(dict(size=s))
+        return "Directory size: {}".format(size)
+        # self.write(dict(size=s))
 
     # @tornado.gen.coroutine
     # def dbsize(self):
