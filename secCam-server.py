@@ -133,11 +133,11 @@ class statsHandler(BaseHandler):
         s = "Directory size: {}".format(size)
         self.write(dict(size=s))
 
-    @tornado.gen.coroutine
-    def dbsize(self):
-        dbf = dbfactory.DbFactory()
-        size = dbf.dbsize()
-        return size
+    # @tornado.gen.coroutine
+    # def dbsize(self):
+    #     dbf = dbfactory.DbFactory()
+    #     size = dbf.dbsize()
+    #     return size
 
     @tornado.gen.coroutine
     def get(self):
