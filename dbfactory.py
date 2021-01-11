@@ -62,8 +62,8 @@ class DbFactory:
             return cdbn
 
     def create(self):
-        # if not self.check_for_dbdir():
-        #     os.mkdir(self.dbdir)
+        if not self.check_for_dbdir():
+            os.mkdir(self.dbdir)
         cur_db = self.stale_db_check()
         new_dbname = self.dbdir + "/" + cur_db
         Path(new_dbname).touch()
