@@ -91,7 +91,6 @@ class BaseHandler(tornado.web.RequestHandler):
         self.set_header("Access-Control-Allow-Headers", "*")
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Content-Type", "application/json")
-        # self.set_header("Cache-Control", "max-age=370739520, public")
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
         self.set_header('Access-Control-Max-Age', 1000)
 
@@ -130,14 +129,7 @@ class statsHandler(BaseHandler):
     def pic_dir_size(self):
         path = '/media/pi/IMAGEHUB/imagehub_data/images'
         size = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8')
-        return "Directory size: {}".format(size)
-        # self.write(dict(size=s))
-
-    # @tornado.gen.coroutine
-    # def dbsize(self):
-    #     dbf = dbfactory.DbFactory()
-    #     size = dbf.dbsize()
-    #     return size
+        return size
 
     @tornado.gen.coroutine
     def get(self):
@@ -165,8 +157,6 @@ class statsHandler(BaseHandler):
         }
         print(z)
         self.write(z)
-
-
 
 class ping_picams1Handler(BaseHandler):
     @tornado.gen.coroutine
@@ -300,36 +290,6 @@ class pc2_last_fifty_picsHandler(BaseHandler):
         else:
             plist= ["No PiCam1 pics found"]
             # self.write(dict(plist=plist))
-
-
-
-
-
-# class WeeklyEventsHandler(tornado.web.RequestHandler):
-#     @tornado.gen.coroutine
-#     def get(self):
-#         print("o")
-        # l = [sh for sh in db.movietime2DB.find({"Catagory":"Men In Black"}, {"_id":0})]
-        # self.write(dict(IntMenInBlack=l))
-
-# class MonthlyEventsHandler(tornado.web.RequestHandler):
-#     @tornado.gen.coroutine
-#     def get(self):
-#         print("o")
-
-# class TotalEventsHandler(tornado.web.RequestHandler):
-#     @tornado.gen.coroutine
-#     def get(self):
-#         print("o")
-
-# class ClearEventsHandler(tornado.web.RequestHandler):
-#     @tornado.gen.coroutine
-#     def get(self):
-#         print("o")
-
-
-
-
 
 def main():
     tornado.options.parse_command_line()
