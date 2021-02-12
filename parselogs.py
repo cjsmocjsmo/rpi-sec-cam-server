@@ -64,32 +64,38 @@ class ParseLogs:
         else:
             shutil.copy(self.log_file, self.log_file_copy)
 
+    def parse_pc1(self, aline):
+        if (self.moving.search(aline)):
+            far = aline.replace("\n", "")
+            self.pc1_moving_events.append(far)
+        elif (self.still.search(aline)):
+            bar = aline.replace("\n", "")
+            self.pc1_still_events.append(bar)
+        else:
+            print("boo")
+
+    def parse_pc2(self, aline):
+        if (self.moving.search(aline)):
+            out = aline.replace("\n", "")
+            self.pc2_moving_events.append(out)
+        elif (self.still.search(aline)):
+            bar = aline.replace("\n", "")
+            self.pc2_still_events.append(bar)
+        else:
+            print("moo")
+
     def parse_logs(self):
         with open(self.log_file_copy) as in_file:
             for line in in_file:
                 self.allEvents.append(line)
                 if (self.pc1.search(line)):
-                    if (self.moving.search(line)):
-                        far = line.replace("\n", "")
-                        self.pc1_moving_events.append(far)
-                    elif (self.still.search(line)):
-                        bar = line.replace("\n", "")
-                        self.pc1_still_events.append(bar)
-                    else:
-                        print("boo")
+                    self.parse_pc1(line)
                 elif (self.pc2.search(line)):
-                    if (self.moving.search(line)):
-                        out = line.replace("\n", "")
-                        self.pc2_moving_events.append(out)
-                    elif (self.still.search(line)):
-                        bar = line.replace("\n", "")
-                        self.pc2_still_events.append(bar)
-                    else:
-                        print("moo")
+                    self.parse_pc2(line)
                 elif (self.health.search(line)):
                     dude = line.replace("\n", "")
                     self.healthEvents.append(dude)
-                elif (self.uploadEvents):
+                elif (self.upload.search(line)):
                     dude = line.replace("\n", "")
                     self.uploadEvents.append(dude)
                 else:
@@ -99,13 +105,16 @@ class ParseLogs:
         date2, stat = astr.split(" ~ ")
         date1 = date2[:-4]
         datE, timE = date1.split(" ", 1)
-        if not self.health.search(astr):
+        if self.health.search(astr):
+            return (datE, timE, stat)
+        elif not self.health.search(astr):
             stat2 = stat.split("|", 2)
             camera = stat2[0]
             status = stat2[2]
             return (camera, status, datE, timE)
         else:
-            return (datE, timE, stat)
+            print("fuck split string")
+            
 
     def picam1_todays_events(self):
         todays_events = []
@@ -144,7 +153,7 @@ class ParseLogs:
         elif elen == 1:
             return [self.split_string(a) for a in self.pc1_moving_events][0]
         else:
-            return None
+            return ("None", "None", "None")
 
     def piCam1_last_ten_moving_event(self):
         elen = len(self.pc1_moving_events)
@@ -165,7 +174,7 @@ class ParseLogs:
         elif elen == 1:
             return [self.split_string(a) for a in self.pc1_still_events][0]
         else:
-            return None
+            return ("None", "None", "None")
 
     def piCam2_last_moving_event(self):
         elen = len(self.pc2_moving_events)
@@ -216,12 +225,16 @@ class ParseLogs:
         x = {
             "picam1_todays_events": self.picam1_todays_events(),
             "picam2_todays_events": self.picam2_todays_events(),
+
             "picam1_last_moving_event": self.piCam1_last_moving_event(),
             "picam2_last_moving_event": self.piCam2_last_moving_event(),
+
             "picam1_last_still_event": self.piCam1_last_still_event(),
             "picam2_last_still_event": self.piCam2_last_still_event(),
+
             "piCam1_last_ten_moving_event": self.piCam1_last_ten_moving_event(),
             "piCam2_last_ten_moving_event": self.piCam2_last_ten_moving_event(),
+
             "last_health_event": self.last_health_event(),
             "all_upload_events": self.all_upload_events,
         }
