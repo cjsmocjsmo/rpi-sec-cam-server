@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #    SecCam
 #    Copyright (C) 2020  Charlie J Smotherman
 #
@@ -17,25 +17,17 @@
 
 import os
 import re
-from datetime import date
 import yaml
 import glob
 import sqlite3
-
-import subprocess
-from urllib.parse import urlparse, parse_qs
-# from PIL import Image
-
-# import tornado.auth
-import tornado.httpserver
-import tornado.ioloop
-import tornado.web
-from tornado.options import define, options, parse_command_line
-
-import dbfactory
 import parselogs
-import processpics
-
+import subprocess
+import tornado.web
+import tornado.ioloop
+import tornado.httpserver
+from datetime import date
+from urllib.parse import urlparse, parse_qs
+from tornado.options import define, options, parse_command_line
 from pprint import pprint 
 
 y = "/home/pi/imagehub_db_service/secCam.yaml"
@@ -45,8 +37,6 @@ with open(y) as f:
 print(conf["imagehub_port"])
 
 define('port', default=conf["imagehub_port"], help='run on the given port', type=int)
-
-# processpics.ProcessSecCamPics().main()
 
 class Application(tornado.web.Application):
     def __init__(self):
