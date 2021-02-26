@@ -30,13 +30,13 @@ from urllib.parse import urlparse, parse_qs
 from tornado.options import define, options, parse_command_line
 from pprint import pprint 
 
-y = "/home/pi/imagehub_db_service/secCam.yaml"
-with open(y) as f:
-    conf = yaml.load(f)[0]
+# y = "/home/pi/imagehub_db_service/secCam.yaml"
+# with open(y) as f:
+#     conf = yaml.load(f)[0]
 
-print(conf["imagehub_port"])
+# print(conf["imagehub_port"])
 
-define('port', default=conf["imagehub_port"], help='run on the given port', type=int)
+define('port', default=4590, help='run on the given port', type=int)
 
 class Application(tornado.web.Application):
     def __init__(self):
