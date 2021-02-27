@@ -60,7 +60,7 @@ class Pc1Sql:
 
     def pc1_log_last_still(self):
         cur = con.cursor()
-        cur.execute("""SELECT Tail FROM SecCamLogs WHERE Body='PiCam1' Tail='still' ORDER BY FullDate ASC LIMIT 1;""")
+        cur.execute("""SELECT Tail FROM SecCamLogs WHERE Body='PiCam1' AND Tail='still' ORDER BY FullDate ASC LIMIT 1;""")
         x = cur.fetchone()
         cur.close()
         return x
