@@ -21,6 +21,8 @@ import yaml
 import glob
 import sqlite3
 import parselogs
+import dbdata
+import dbfactory
 import subprocess
 import tornado.web
 import tornado.ioloop
@@ -48,15 +50,8 @@ class Application(tornado.web.Application):
             (r"/Picam2_todays_events", picam2_todays_eventsHandler),
 
             (r"/Stats", statsHandler),
-            # (r"/Picam2_last_moving_event", picam2_last_moving_eventHandler),
-
-            # (r"/Picam1_last_still_event", picam1_last_still_eventHandler),
-            # (r"/Picam2_last_still_event", picam2_last_still_eventHandler),
-
-            # (r"piCam1_last_ten_moving_event", piCam1_last_ten_moving_eventHandler),
-            # (r"piCam2_last_ten_moving_event", piCam2_last_ten_moving_eventHandler),
- 
-            # (r"/Last_health_event", last_health_eventHandler),
+            (r"/Stats2", stats2Handler),
+            
             (r"/PingPiCam1", ping_picams1Handler),
             (r"/PingPiCam2", ping_picams2Handler),
 
@@ -113,6 +108,24 @@ class picam2_todays_eventsHandler(BaseHandler):
         }
         pprint(z)
         self.write(z)
+
+
+class stats2Handler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        x = {
+            'total_log_events' : dbdata.SecCamSql().total_log_events(),
+            'total_pc1_events': dbdata.SecCamSql().total_pc1_events(),
+            'total_pc2_events' : dbdata.SecCamSql().total_pc2_events(),
+            'total_health_checks' : dbdata.SecCamSql().total_health_checks(),
+            'pc1_log_last_moving' : dbdata.Pc1Sql().pc1_log_last_moving(),
+            'pc2_log_last_moving' : dbdata.Pc2Sql().pc2_log_last_moving(),
+            'pc1_log_last_still' : dbdata.Pc1Sql().pc1_log_last_still(),
+            'pc2_log_last_still' : dbdata.Pc2Sql().pc2_log_last_still(),
+        }
+        self.write(x)
+
+
 
 class statsHandler(BaseHandler):
     @tornado.gen.coroutine

@@ -57,7 +57,7 @@ class ParseLogs:
 
     def copy_log_file(self):
         if os.path.isfile(self.log_file_copy):
-            comp = filecmp.cmp(self.log_file, self.log_file_copy, shallow = False)
+            comp = filecmp.cmp(self.log_file, self.log_file_copy, shallow= False)
             if not comp:
                 shutil.copy(self.log_file, self.log_file_copy)
         else:
