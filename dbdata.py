@@ -35,14 +35,14 @@ class SecCamSql:
 
     def total_pc2_events(self):
         cur = con.cursor()
-        cur.execute("SELECT * FROM SecCamLogs WHERE Body='PiCam2';")
+        cur.execute("""SELECT * FROM SecCamLogs WHERE Body='PiCam2';""")
         c = cur.fetchall()
         cur.close()
         return len(c)
 
     def total_health_checks(self):
         cur = con.cursor()
-        cur.execute("SELECT * FROM SecCamLogs WHERE Message='No messages received for 60 minutes';")
+        cur.execute("""SELECT * FROM SecCamLogs WHERE Message='No messages received for 60 minutes';""")
         health_checks = cur.fetchall()
         cur.close()
         return health_checks
@@ -53,14 +53,14 @@ class SecCamSql:
 class Pc1Sql:
     def pc1_log_last_moving(self):
         cur = con.cursor()
-        cur.execute("SELECT Tail FROM SecCamLogs WHERE Body='PiCam1' AND Tail='moving' ORDER BY FullDate ASC LIMIT 1;")
+        cur.execute("""SELECT Tail FROM SecCamLogs WHERE Body='PiCam1' AND Tail='moving' ORDER BY FullDate ASC LIMIT 1;""")
         z = cur.fetchone()
         cur.close()
         return z
 
     def pc1_log_last_still(self):
         cur = con.cursor()
-        cur.execute("SELECT Tail FROM SecCamLogs WHERE Body='PiCam1' Tail='still' ORDER BY FullDate ASC LIMIT 1;")
+        cur.execute("""SELECT Tail FROM SecCamLogs WHERE Body='PiCam1' Tail='still' ORDER BY FullDate ASC LIMIT 1;""")
         x = cur.fetchone()
         cur.close()
         return x
@@ -77,7 +77,7 @@ class Pc1Sql:
         else:
             new_pic_list = []
             cur = con.cursor()
-            cur.execute("SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;")
+            cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
             event_list = cur.fetchall()
             for event in event_list:
                 tmp_file_name = ".".join((uuid.uuid4().hex, "jpg"))
@@ -93,14 +93,14 @@ class Pc1Sql:
 class Pc2Sql:
     def pc2_log_last_moving(self):
         cur = con.cursor()
-        cur.execute("SELECT Tail FROM SecCamLogs WHERE Body='PiCam2' AND Tail='moving' ORDER BY FullDate ASC LIMIT 1;")
+        cur.execute("""SELECT Tail FROM SecCamLogs WHERE Body='PiCam2' AND Tail='moving' ORDER BY FullDate ASC LIMIT 1;""")
         # cur.execute("SELECT Tail FROM SecCamLogs WHERE Tail='moving' LIMIT 24")
         z = cur.fetchone()
         return z
 
     def pc2_log_last_still(self):
         cur = con.cursor()
-        cur.execute("SELECT Tail FROM SecCamLogs WHERE Body='PiCam2' Tail='still' ORDER BY FullDate ASC LIMIT 1;")
+        cur.execute("""SELECT Tail FROM SecCamLogs WHERE Body='PiCam2' Tail='still' ORDER BY FullDate ASC LIMIT 1;""")
         x = cur.fetchone()
         return x
 
