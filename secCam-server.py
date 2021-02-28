@@ -131,7 +131,7 @@ class pc1_last25_picsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         pic_list = dbdata.Pc1Sql().pc1_last25_pics()
-        self.write(pic_list)
+        self.write(dict(ace=pic_list))
 
 class statsHandler(BaseHandler):
     @tornado.gen.coroutine
