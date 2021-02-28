@@ -98,7 +98,7 @@ class Pc1Sql:
     def pc1_last25_pics(self):
         self.clean_tmp_dir()
         g_glob = glob.glob(self.tmp_dir_glob)
-        print(g_glob)
+        print("this is g_glob {}".format(g_glob))
 
         new_pic_list = []
         if len(g_glob) == 0:
@@ -108,7 +108,7 @@ class Pc1Sql:
             cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
             event_list = cur.fetchall()
             for event in event_list:
-                print(event)
+                print("this is event{}".format(event))
                 tmp_file_name = ".".join((uuid.uuid4().hex, "jpg"))
                 tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
                 with Image.open(tmp_full_path, "w+") as pc1_file:
