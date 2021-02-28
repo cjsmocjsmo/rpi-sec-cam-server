@@ -101,22 +101,21 @@ class Pc1Sql:
         print("this is g_glob {}".format(g_glob))
 
         new_pic_list = []
-        if len(g_glob) == 0:
+        # if len(g_glob) == 0:
         #     return new_pic_list
         # else:
-            cur = con.cursor()
-            cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
-            event_list = cur.fetchall()
-            for event in event_list:
-                print("this is event{}".format(event))
-                tmp_file_name = ".".join((uuid.uuid4().hex, "jpg"))
-                tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
-                with Image.open(tmp_full_path, "w+") as pc1_file:
-                    pc1_file.write(event.Picture)
-                    new_pic_list.append(pc1_file)
-            cur.close()
-            return new_pic_list
-
+        cur = con.cursor()
+        cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
+        event_list = cur.fetchall()
+        for event in event_list:
+            print("this is event{}".format(event))
+            tmp_file_name = ".".join((uuid.uuid4().hex, "jpg"))
+            tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
+            with Image.open(tmp_full_path, "w+") as pc1_file:
+                pc1_file.write(event.Picture)
+                new_pic_list.append(pc1_file)
+        cur.close()
+        return new_pic_list
 
 
 class Pc2Sql:
