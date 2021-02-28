@@ -69,7 +69,7 @@ class Pc1Sql:
             cur.close()
             return z[0]
         except TypeError:
-            return "No last_moving present"
+            return "No pc1 last_moving present"
 
     def pc1_log_last_still(self):
         cur = con.cursor()
@@ -108,12 +108,15 @@ class Pc1Sql:
 
 class Pc2Sql:
     def pc2_log_last_moving(self):
-        cur = con.cursor()
-        cur.execute("""SELECT Tail FROM SecCamLogs WHERE Body='PiCam2' AND Tail='moving' ORDER BY FullDate ASC LIMIT 1;""")
-        # cur.execute("SELECT Tail FROM SecCamLogs WHERE Tail='moving' LIMIT 24")
-        z = cur.fetchone()
-        cur.close()
-        return z[0]
+        try:
+            cur = con.cursor()
+            cur.execute("""SELECT Tail FROM SecCamLogs WHERE Body='PiCam2' AND Tail='moving' ORDER BY FullDate ASC LIMIT 1;""")
+            # cur.execute("SELECT Tail FROM SecCamLogs WHERE Tail='moving' LIMIT 24")
+            z = cur.fetchone()
+            cur.close()
+            return z[0]
+        except TypeError:
+            return "No pc2 last moving"
 
     def pc2_log_last_still(self):
         cur = con.cursor()
