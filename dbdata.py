@@ -101,8 +101,8 @@ class Pc1Sql:
 
         new_pic_list = []
         if len(g_glob) == 0:
-            return new_pic_list
-        else:
+        #     return new_pic_list
+        # else:
             cur = con.cursor()
             cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
             event_list = cur.fetchall()
