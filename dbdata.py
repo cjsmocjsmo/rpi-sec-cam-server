@@ -23,14 +23,14 @@ class SecCamSql:
         cur = con.cursor()
         cur.execute("SELECT COUNT(*) FROM SecCamLogs;")
         a = cur.fetchone()
-        cur.close()
+        #cur.close()
         return a[0]
 
     def total_pc1_events(self):
         cur = con.cursor()
         cur.execute("SELECT * FROM SecCamLogs WHERE Body='PiCam1';")
         b = cur.fetchall()
-        cur.close()
+        #cur.close()
         return len(b)
 
 
@@ -38,14 +38,14 @@ class SecCamSql:
         cur = con.cursor()
         cur.execute("""SELECT * FROM SecCamLogs WHERE Body='PiCam2';""")
         c = cur.fetchall()
-        cur.close()
+        #cur.close()
         return len(c)
 
     def total_health_checks(self):
         cur = con.cursor()
         cur.execute("""SELECT * FROM SecCamLogs WHERE Message='No messages received for 60 minutes';""")
         health_checks = cur.fetchall()
-        cur.close()
+        #cur.close()
         if len(health_checks) == 0:
             return "None"
         else:
@@ -67,7 +67,7 @@ class Pc1Sql:
             cur = con.cursor()
             cur.execute("""SELECT FullDate FROM SecCamLogs WHERE Body='PiCam1' AND Tail='moving' ORDER BY FullDate ASC LIMIT 1;""")
             z = cur.fetchone()
-            cur.close()
+            #cur.close()
             return z[0]
         except TypeError:
             return "No pc1 last_moving present"
@@ -77,7 +77,7 @@ class Pc1Sql:
             cur = con.cursor()
             cur.execute("""SELECT FullDate FROM SecCamLogs WHERE Body='PiCam1' AND Tail='still' ORDER BY FullDate ASC LIMIT 1;""")
             x = cur.fetchone()
-            cur.close()
+            #cur.close()
             return x[0]
         except TypeError:
             return "No pc2 last_still"
@@ -115,7 +115,7 @@ class Pc1Sql:
             with Image.open(tmp_full_path, "w+") as pc1_file:
                 pc1_file.write(event.Picture)
                 new_pic_list.append(pc1_file)
-        cur.close()
+        #cur.close()
         return new_pic_list
 
 
@@ -126,7 +126,7 @@ class Pc2Sql:
             cur.execute("""SELECT Tail FROM SecCamLogs WHERE Body='PiCam2' AND Tail='moving' ORDER BY FullDate ASC LIMIT 1;""")
             # cur.execute("SELECT Tail FROM SecCamLogs WHERE Tail='moving' LIMIT 24")
             z = cur.fetchone()
-            cur.close()
+            #cur.close()
             return z[0]
         except TypeError:
             return "No pc2 last moving"
@@ -136,7 +136,7 @@ class Pc2Sql:
             cur = con.cursor()
             cur.execute("""SELECT Tail FROM SecCamLogs WHERE Body='PiCam2' AND Tail='still' ORDER BY FullDate ASC LIMIT 1;""")
             x = cur.fetchone()
-            cur.close()
+            #cur.close()
             return x[0]
         except TypeError:
             return "No pc2 last_still"
