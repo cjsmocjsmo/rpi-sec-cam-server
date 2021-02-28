@@ -85,7 +85,10 @@ class Pc1Sql:
         if not os.path.isdir:
             os.mkdir(self.tmp_dir)
         else:
-            shutil.rmtree(self.tmp_dir)
+            try:
+                shutil.rmtree(self.tmp_dir)
+            except FileNotFoundError:
+                pass
 
     def pc1_last25_pics(self):
         self.clean_tmp_dir()
