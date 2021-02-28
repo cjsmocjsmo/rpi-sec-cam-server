@@ -4,6 +4,7 @@ import os
 import yaml
 import uuid
 import glob
+from pathlib import Path
 import sqlite3
 import shutil
 import dbfactory
@@ -82,13 +83,17 @@ class Pc1Sql:
             return "No pc2 last_still"
 
     def clean_tmp_dir(self):
-        if not os.path.isdir:
-            os.mkdir(self.tmp_dir)
+        pa = Path(self.tmp_dir)
+        if pa.is_dir():
+            if pa.exists():
+                try:
+                    shutil.rmtree(self.tmp_dir)
+                except FileNotFoundError:
+                    pass
         else:
-            try:
-                shutil.rmtree(self.tmp_dir)
-            except FileNotFoundError:
-                pass
+            os.mkdir(self.tmp_dir)
+
+            
 
     def pc1_last25_pics(self):
         self.clean_tmp_dir()
