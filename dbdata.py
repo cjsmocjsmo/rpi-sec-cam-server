@@ -72,11 +72,14 @@ class Pc1Sql:
             return "No pc1 last_moving present"
 
     def pc1_log_last_still(self):
-        cur = con.cursor()
-        cur.execute("""SELECT FullDate FROM SecCamLogs WHERE Body='PiCam1' AND Tail='still' ORDER BY FullDate ASC LIMIT 1;""")
-        x = cur.fetchone()
-        cur.close()
-        return x[0]
+        try:
+            cur = con.cursor()
+            cur.execute("""SELECT FullDate FROM SecCamLogs WHERE Body='PiCam1' AND Tail='still' ORDER BY FullDate ASC LIMIT 1;""")
+            x = cur.fetchone()
+            cur.close()
+            return x[0]
+        except TypeError:
+            return "No pc2 last_still"
 
     def clean_tmp_dir(self):
         if not os.path.isdir:
@@ -119,11 +122,14 @@ class Pc2Sql:
             return "No pc2 last moving"
 
     def pc2_log_last_still(self):
-        cur = con.cursor()
-        cur.execute("""SELECT Tail FROM SecCamLogs WHERE Body='PiCam2' AND Tail='still' ORDER BY FullDate ASC LIMIT 1;""")
-        x = cur.fetchone()
-        cur.close()
-        return x[0]
+        try:
+            cur = con.cursor()
+            cur.execute("""SELECT Tail FROM SecCamLogs WHERE Body='PiCam2' AND Tail='still' ORDER BY FullDate ASC LIMIT 1;""")
+            x = cur.fetchone()
+            cur.close()
+            return x[0]
+        except TypeError:
+            return "No pc2 last_still"
 
 
 
