@@ -113,7 +113,7 @@ class Pc1Sql:
             print("this is event{}".format(event))
             tmp_file_name = ".".join((uuid.uuid4().hex, "jpg"))
             tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
-            with Image.open(tmp_full_path, "w+") as pc1_file:
+            with Image.open(tmp_full_path, "w") as pc1_file:
                 pc1_file.write(event.Picture)
                 new_pic_list.append(pc1_file)
         #cur.close()
