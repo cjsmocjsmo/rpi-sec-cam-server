@@ -57,6 +57,8 @@ class Application(tornado.web.Application):
 
             (r"/Pc1_last_fifty_pics", pc1_last_fifty_picsHandler),
             (r"/Pc2_last_fifty_pics", pc2_last_fifty_picsHandler),
+
+            (r"/Pc1_last25_pics", pc1_last25_picsHandler)
             
             # (r"/DBsize", dbsizeHandler),
             # (r"/Movies/(.*)", tornado.web.StaticFileHandler, {'path': Movies}),
@@ -125,7 +127,11 @@ class stats2Handler(BaseHandler):
         }
         self.write(x)
 
-
+class pc1_last25_picsHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        pic_list = dbdata.Pc1Sql().pc1_last25_pics()
+        self.write(pic_list)
 
 class statsHandler(BaseHandler):
     @tornado.gen.coroutine
