@@ -62,14 +62,14 @@ class Pc1Sql:
         self.tmp_dir_glob = "/tmp/SecCams/*.jpg"
 
     def pc1_log_last_moving(self):
-        cur = con.cursor()
-        cur.execute("""SELECT FullDate FROM SecCamLogs WHERE Body='PiCam1' AND Tail='moving' ORDER BY FullDate ASC LIMIT 1;""")
-        z = cur.fetchone()
-        cur.close()
-        if len(z) != 0:
+        try:
+            cur = con.cursor()
+            cur.execute("""SELECT FullDate FROM SecCamLogs WHERE Body='PiCam1' AND Tail='moving' ORDER BY FullDate ASC LIMIT 1;""")
+            z = cur.fetchone()
+            cur.close()
             return z[0]
-        else:
-            return z
+        except TypeError:
+            return "No last_moving present"
 
     def pc1_log_last_still(self):
         cur = con.cursor()
