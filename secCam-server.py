@@ -61,6 +61,8 @@ class Application(tornado.web.Application):
 
             (r"/Pc1_last25_pics", pc1_last25_picsHandler),
             (r"/Count", countHandler),
+            (r"/DBCount", totalPicDBHandler),
+
             
             # (r"/DBsize", dbsizeHandler),
             # (r"/SecCams/(.*)", tornado.web.StaticFileHandler, {'path': seccams}),
@@ -128,6 +130,12 @@ class stats2Handler(BaseHandler):
             'pc2_log_last_still' : dbdata.Pc2Sql().pc2_log_last_still(),
         }
         self.write(x)
+
+class totalPicDBHandler(self):
+    @tornado.gen.coroutine
+    def get(self):
+        dbcount = dbdata.SecCamSql().total_pics_db()
+        self.write(dict(bar=dbcount))
 
 class countHandler(BaseHandler):
     @tornado.gen.coroutine

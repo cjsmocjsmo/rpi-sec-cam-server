@@ -52,7 +52,9 @@ class SecCamSql:
         else:
             return health_checks[0]
 
-        
+    def total_pics_db(self):
+        cur = con.cursor()
+        cur.execute("""SELECT COUNT(*) FROM SecCams;""")
         
 
 
