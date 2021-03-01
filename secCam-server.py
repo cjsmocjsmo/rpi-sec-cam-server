@@ -43,7 +43,7 @@ define('port', default=8090, help='run on the given port', type=int)
 class Application(tornado.web.Application):
     def __init__(self):
         mpath = "/media/pi/IMAGEHUB/imagehub_data/images/"
-        seccams = "/tmp/secCams/"
+        seccams = "/tmp/secCams/SEC/"
         handlers = [
             (r"/CamShots/(.*)", tornado.web.StaticFileHandler, {'path': mpath}),
             (r"/Main", MainHandler),

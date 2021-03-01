@@ -60,8 +60,8 @@ class SecCamSql:
 
 class Pc1Sql:
     def __init__(self):
-        self.tmp_dir = "/tmp/SecCams"
-        self.tmp_dir_glob = "/tmp/SecCams/*.jpg"
+        self.tmp_dir = "/tmp/SecCams/SEC"
+        self.tmp_dir_glob = "/tmp/SecCams/SEC/*.jpg"
 
         # mpath = "/media/pi/IMAGEHUB/imagehub_data/images/"
 
