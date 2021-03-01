@@ -137,7 +137,7 @@ class pc1_last25_picsHandler(BaseHandler):
 class statsHandler(BaseHandler):
     @tornado.gen.coroutine
     def pic_dir_size(self):
-        path = '/media/pi/IMAGEHUB/imagehub_data/images'
+        path = '/media/pi/IMAGEHUB/imagehub_data'
         size = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8')
         return size
 

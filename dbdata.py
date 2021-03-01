@@ -106,7 +106,7 @@ class Pc1Sql:
         print("this is event_list {}".format(event_list))
         for event in event_list:
 
-            print("this is event{}".format(event))
+            print("this is event{}".format(event[0]))
             td = date.today()
             today = td.strftime("%Y-%m-%d")
             tmp_file_n = ".".join((uuid.uuid4().hex, "jpg"))
