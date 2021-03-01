@@ -131,7 +131,7 @@ class stats2Handler(BaseHandler):
         }
         self.write(x)
 
-class totalPicDBHandler(self):
+class totalPicDBHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         dbcount = dbdata.SecCamSql().total_pics_db()
