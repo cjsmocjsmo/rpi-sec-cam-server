@@ -60,12 +60,9 @@ class SecCamSql:
 
 class Pc1Sql:
     def __init__(self):
-        # self.tmp_dir = "/tmp/SecCams/SEC"
-        # self.tmp_dir_glob = "/tmp/SecCams/SEC/*.jpg"
-
         self.tmp_dir = "/media/pi/IMAGEHUB/imagehub_data/images/tmp"
         self.tmp_dir_glob = "/media/pi/IMAGEHUB/imagehub_data/images/tmp/*.jpg"
-        # mpath = "/media/pi/IMAGEHUB/imagehub_data/images/"
+        self.http_addr = "http://192.168.0.26:8090/CamShots/tmp"
 
     def pc1_log_last_moving(self):
         try:
@@ -115,7 +112,7 @@ class Pc1Sql:
             tmp_file_n = ".".join((uuid.uuid4().hex, "jpg"))
             tmp_file_name = "-".join((today, tmp_file_n))
             tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
-            http_path = "http://192.168.0.26:8090/CamShots/tmp/" + tmp_file_name
+            http_path = "/".join((self.http_addr, tmp_file_name))
             with open(tmp_full_path, "wb") as outfile:
                 outfile.write(event[13])
             
