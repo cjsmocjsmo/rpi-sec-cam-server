@@ -102,19 +102,10 @@ class Pc1Sql:
 
     def pc1_last25_pics(self):
         self.clean_tmp_dir()
-        # g_glob = glob.glob(self.tmp_dir_glob)
-        # print("this is g_glob {}".format(g_glob))
-
         new_pic_list = []
-        # if len(g_glob) == 0:
-        #     return new_pic_list
-        # else:
         cur = con.cursor()
-        # cur.execute("""SELECT * FROM SecCams LIMIT 25;""")
         cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
         event_list = cur.fetchall()
-
-
         print("this is event_list {}".format(event_list))
         for event in event_list:
 
@@ -124,10 +115,11 @@ class Pc1Sql:
             tmp_file_n = ".".join((uuid.uuid4().hex, "jpg"))
             tmp_file_name = "-".join((today, tmp_file_n))
             tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
+            http_path = "http://192.168.0.26:8090/CamShots/tmp/" + tmp_file_name
             with open(tmp_full_path, "wb") as outfile:
                 outfile.write(event[13])
             
-            new_pic_list.append(tmp_full_path)
+            new_pic_list.append(http_path)
         cur.close()
         return new_pic_list
 
