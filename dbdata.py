@@ -99,7 +99,7 @@ class Pc1Sql:
     def pc1_last25_pics(self):
         self.clean_tmp_dir()
         g_glob = glob.glob(self.tmp_dir_glob)
-        print("this is g_glob {}".format(g_glob))
+        # print("this is g_glob {}".format(g_glob))
 
         new_pic_list = []
         # if len(g_glob) == 0:
@@ -118,7 +118,7 @@ class Pc1Sql:
             tmp_file_name = ".".join((uuid.uuid4().hex, "jpg"))
             tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
             with open(tmp_full_path, "wb") as outfile:
-                outfile.write(event[12])
+                outfile.write(event[14])
             # tmp_full_path = io.StringIO(event[12])
             new_pic_list.append(tmp_full_path)
         #cur.close()
