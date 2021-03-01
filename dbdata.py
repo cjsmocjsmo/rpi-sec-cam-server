@@ -55,7 +55,9 @@ class SecCamSql:
     def total_pics_db(self):
         cur = con.cursor()
         cur.execute("""SELECT COUNT(*) FROM SecCams;""")
-        
+        d = cur.fetchall()
+        cur.close()
+        return d        
 
 
 #         self.upload = re.compile("Request to files/upload")
