@@ -101,12 +101,13 @@ class Pc1Sql:
         self.clean_tmp_dir()
         new_pic_list = []
         cur = con.cursor()
-        cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
+        # cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
+        cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1';""")
         event_list = cur.fetchall()
         # print("this is event_list {}".format(event_list))
         for event in event_list:
 
-            print("this is event{}".format(event[0]))
+            print("this is event {}".format(event[0]))
             td = date.today()
             today = td.strftime("%Y-%m-%d")
             tmp_file_n = ".".join((uuid.uuid4().hex, "jpg"))
