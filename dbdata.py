@@ -118,7 +118,7 @@ class Pc1Sql:
             tmp_file_name = ".".join((uuid.uuid4().hex, "jpg"))
             tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
             tmp_full_path = io.StringIO(event[12])
-            new_pic_list.append(tmp_full_path)
+            new_pic_list.append(list(tmp_full_path))
         #cur.close()
         return new_pic_list
 
