@@ -60,9 +60,11 @@ class SecCamSql:
 
 class Pc1Sql:
     def __init__(self):
-        self.tmp_dir = "/tmp/SecCams/SEC"
-        self.tmp_dir_glob = "/tmp/SecCams/SEC/*.jpg"
+        # self.tmp_dir = "/tmp/SecCams/SEC"
+        # self.tmp_dir_glob = "/tmp/SecCams/SEC/*.jpg"
 
+        self.tmp_dir = "/media/pi/IMAGEHUB/imagehub_data/images/tmp/"
+        self.tmp_dir = "/media/pi/IMAGEHUB/imagehub_data/images/tmp/*.jpg"
         # mpath = "/media/pi/IMAGEHUB/imagehub_data/images/"
 
     def pc1_log_last_moving(self):
