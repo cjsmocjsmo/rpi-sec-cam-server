@@ -103,7 +103,7 @@ class Pc1Sql:
         cur = con.cursor()
         cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
         event_list = cur.fetchall()
-        print("this is event_list {}".format(event_list))
+        # print("this is event_list {}".format(event_list))
         for event in event_list:
 
             print("this is event{}".format(event[0]))
