@@ -5,7 +5,7 @@ import yaml
 import uuid
 import glob
 from pathlib import Path
-import StringIO
+import io
 import sqlite3
 import shutil
 import dbfactory
@@ -117,7 +117,7 @@ class Pc1Sql:
             print("this is event{}".format(event))
             tmp_file_name = ".".join((uuid.uuid4().hex, "jpg"))
             tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
-            tmp_full_path = StringIO.StringIO(event.Picture)
+            tmp_full_path = io.StringIO(event.Picture)
             new_pic_list.append(tmp_full_path)
         #cur.close()
         return new_pic_list
