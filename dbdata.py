@@ -91,6 +91,7 @@ class Pc1Sql:
                     shutil.rmtree(self.tmp_dir)
                 except FileNotFoundError:
                     pass
+                os.mkdir(self.tmp_dir)
         else:
             os.mkdir(self.tmp_dir)
 
@@ -98,7 +99,7 @@ class Pc1Sql:
 
     def pc1_last25_pics(self):
         self.clean_tmp_dir()
-        g_glob = glob.glob(self.tmp_dir_glob)
+        # g_glob = glob.glob(self.tmp_dir_glob)
         # print("this is g_glob {}".format(g_glob))
 
         new_pic_list = []
