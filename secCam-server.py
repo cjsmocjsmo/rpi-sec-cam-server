@@ -43,7 +43,7 @@ define('port', default=8090, help='run on the given port', type=int)
 class Application(tornado.web.Application):
     def __init__(self):
         mpath = "/media/pi/IMAGEHUB/imagehub_data/images/"
-        seccams = "/tmp/secCams/SEC/"
+        # seccams = "/tmp/secCams/SEC/"
         handlers = [
             (r"/CamShots/(.*)", tornado.web.StaticFileHandler, {'path': mpath}),
             (r"/Main", MainHandler),
@@ -60,9 +60,10 @@ class Application(tornado.web.Application):
             (r"/Pc2_last_fifty_pics", pc2_last_fifty_picsHandler),
 
             (r"/Pc1_last25_pics", pc1_last25_picsHandler),
+            (r"/Count", countHandler),
             
             # (r"/DBsize", dbsizeHandler),
-            (r"/SecCams/(.*)", tornado.web.StaticFileHandler, {'path': seccams}),
+            # (r"/SecCams/(.*)", tornado.web.StaticFileHandler, {'path': seccams}),
             # (r"/TVShows/(.*)", tornado.web.StaticFileHandler, {'path': TVShows}),
             # (r"/Pictures/(.*)", tornado.web.StaticFileHandler, {'path': Pictures}),
         ]
@@ -127,6 +128,12 @@ class stats2Handler(BaseHandler):
             'pc2_log_last_still' : dbdata.Pc2Sql().pc2_log_last_still(),
         }
         self.write(x)
+
+class countHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        count = dbdata.SecCamSql().total_log_events()
+        self.write(dict(foo=count))
 
 class pc1_last25_picsHandler(BaseHandler):
     @tornado.gen.coroutine
