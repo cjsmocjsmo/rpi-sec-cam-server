@@ -7,7 +7,7 @@ import glob
 from pathlib import Path
 import io
 import sqlite3
-import shutil
+# import shutil
 import dbfactory
 from PIL import Image
 from datetime import date
@@ -89,11 +89,10 @@ class Pc1Sql:
         pa = Path(self.tmp_dir)
         if pa.is_dir():
             if pa.exists():
-                try:
-                    shutil.rmtree(self.tmp_dir)
-                except FileNotFoundError:
-                    pass
-                os.mkdir(self.tmp_dir)
+                tmp_dir_glob_path = "/".join((self.tmp_dir, '*.jpg'))
+                tmp_dir_glob = glob.glob(tmp_dir_glob_path)
+                for tmp_file in tmp_dir_glob:
+                    os.remove(tmp_file)
         else:
             os.mkdir(self.tmp_dir)
 
@@ -109,8 +108,8 @@ class Pc1Sql:
         #     return new_pic_list
         # else:
         cur = con.cursor()
-        cur.execute("""SELECT * FROM SecCams LIMIT 25;""")
-        # cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
+        # cur.execute("""SELECT * FROM SecCams LIMIT 25;""")
+        cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
         event_list = cur.fetchall()
 
 
