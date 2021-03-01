@@ -117,8 +117,10 @@ class Pc1Sql:
             print("this is event{}".format(event))
             tmp_file_name = ".".join((uuid.uuid4().hex, "jpg"))
             tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
-            tmp_full_path = io.StringIO(event[12])
-            new_pic_list.append(list(tmp_full_path))
+            with open(tmp_full_path, "wb") as outfile:
+                outfile.write(event[12])
+            # tmp_full_path = io.StringIO(event[12])
+            new_pic_list.append(tmp_full_path)
         #cur.close()
         return new_pic_list
 
