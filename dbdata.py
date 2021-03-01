@@ -5,6 +5,7 @@ import yaml
 import uuid
 import glob
 from pathlib import Path
+import StringIO
 import sqlite3
 import shutil
 import dbfactory
@@ -108,14 +109,16 @@ class Pc1Sql:
         cur.execute("""SELECT * FROM SecCams LIMIT 25;""")
         # cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
         event_list = cur.fetchall()
+
+
         print("this is event_list {}".format(event_list))
         for event in event_list:
+
             print("this is event{}".format(event))
             tmp_file_name = ".".join((uuid.uuid4().hex, "jpg"))
             tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
-            with Image.open(tmp_full_path, "r") as pc1_file:
-                pc1_file.write(event.Picture)
-                new_pic_list.append(pc1_file)
+            tmp_full_path = StringIO.StringIO(event.Picture)
+            new_pic_list.append(tmp_full_path)
         #cur.close()
         return new_pic_list
 
