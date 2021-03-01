@@ -63,7 +63,7 @@ class Pc1Sql:
         # self.tmp_dir = "/tmp/SecCams/SEC"
         # self.tmp_dir_glob = "/tmp/SecCams/SEC/*.jpg"
 
-        self.tmp_dir = "/media/pi/IMAGEHUB/imagehub_data/images/tmp/"
+        self.tmp_dir = "/media/pi/IMAGEHUB/imagehub_data/images/tmp"
         self.tmp_dir_glob = "/media/pi/IMAGEHUB/imagehub_data/images/tmp/*.jpg"
         # mpath = "/media/pi/IMAGEHUB/imagehub_data/images/"
 
