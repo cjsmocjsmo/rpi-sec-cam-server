@@ -57,7 +57,7 @@ class SecCamSql:
         cur.execute("""SELECT COUNT(*) FROM SecCams;""")
         d = cur.fetchall()
         cur.close()
-        return d        
+        return d[0]      
 
 
 #         self.upload = re.compile("Request to files/upload")
@@ -119,7 +119,7 @@ class Pc1Sql:
             tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
             http_path = "/".join((self.http_addr, tmp_file_name))
             with open(tmp_full_path, "wb") as outfile:
-                outfile.write(event[13])
+                outfile.write(event[16])
             
             new_pic_list.append(http_path)
         cur.close()
