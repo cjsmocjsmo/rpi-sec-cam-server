@@ -99,18 +99,14 @@ class Pc1Sql:
         else:
             os.mkdir(self.tmp_dir)
 
-            
-
     def pc1_last25_pics(self):
         self.clean_tmp_dir()
         new_pic_list = []
         cur = con.cursor()
-        # cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
-        cur.execute("""SELECT * FROM SecCams;""")
+        cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam1' LIMIT 25;""")
+        # cur.execute("""SELECT * FROM SecCams;""")
         event_list = cur.fetchall()
-        # print("this is event_list {}".format(event_list))
         for event in event_list:
-
             print("this is event {}".format(event[0]))
             td = date.today()
             today = td.strftime("%Y-%m-%d")
@@ -127,6 +123,44 @@ class Pc1Sql:
 
 
 class Pc2Sql:
+    def __init__(self):
+        self.tmp_dir = "/media/pi/IMAGEHUB/imagehub_data/images/tmp"
+        self.tmp_dir_glob = "/media/pi/IMAGEHUB/imagehub_data/images/tmp/*.jpg"
+        self.http_addr = "http://192.168.0.26:8090/CamShots/tmp"
+
+    def clean_tmp_dir(self):
+        pa = Path(self.tmp_dir)
+        if pa.is_dir():
+            if pa.exists():
+                tmp_dir_glob_path = "/".join((self.tmp_dir, '*.jpg'))
+                tmp_dir_glob = glob.glob(tmp_dir_glob_path)
+                for tmp_file in tmp_dir_glob:
+                    os.remove(tmp_file)
+        else:
+            os.mkdir(self.tmp_dir)
+
+    def pc2_last25_pics(self):
+        self.clean_tmp_dir()
+        new_pic_list = []
+        cur = con.cursor()
+        cur.execute("""SELECT * FROM SecCams WHERE Camera='PiCam2' LIMIT 25;""")
+        # cur.execute("""SELECT * FROM SecCams;""")
+        event_list = cur.fetchall()
+        for event in event_list:
+            print("this is event {}".format(event[0]))
+            td = date.today()
+            today = td.strftime("%Y-%m-%d")
+            tmp_file_n = ".".join((uuid.uuid4().hex, "jpg"))
+            tmp_file_name = "-".join((today, tmp_file_n))
+            tmp_full_path = "/".join((self.tmp_dir, tmp_file_name))
+            http_path = "/".join((self.http_addr, tmp_file_name))
+            with open(tmp_full_path, "wb") as outfile:
+                outfile.write(event[16])
+            
+            new_pic_list.append(http_path)
+        cur.close()
+        return new_pic_list
+
     def pc2_log_last_moving(self):
         try:
             cur = con.cursor()
@@ -146,12 +180,6 @@ class Pc2Sql:
             return x[0]
         except TypeError:
             return "No pc2 last_still"
-
-
-
-
-
-
 
     # def pc1_all_date(self):
     #     cur = con.cursor()

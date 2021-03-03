@@ -60,6 +60,8 @@ class Application(tornado.web.Application):
             (r"/Pc2_last_fifty_pics", pc2_last_fifty_picsHandler),
 
             (r"/Pc1_last25_pics", pc1_last25_picsHandler),
+            (r"/Pc2_last25_pics", pc2_last25_picsHandler),
+            
             (r"/Count", countHandler),
             (r"/DBCount", totalPicDBHandler),
 
@@ -148,6 +150,13 @@ class pc1_last25_picsHandler(BaseHandler):
     def get(self):
         pic_list = dbdata.Pc1Sql().pc1_last25_pics()
         self.write(dict(ace=pic_list))
+
+class pc2_last25_picsHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        pic_list = dbdata.Pc2Sql().pc2_last25_pics()
+        self.write(dict(ace=pic_list))
+
 
 class statsHandler(BaseHandler):
     @tornado.gen.coroutine
