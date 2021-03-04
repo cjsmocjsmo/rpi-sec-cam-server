@@ -64,7 +64,7 @@ class SecCamSql:
         cur.execute("""SELECT GDStatus, GDProb, GMStatus, GMProb, PEPStatus, PEPProb from secCams LIMIT 1;""")   
         e = cur.fetchone()
         cur.close()
-        return e[0]
+        return e
 
 #         self.upload = re.compile("Request to files/upload")
 
