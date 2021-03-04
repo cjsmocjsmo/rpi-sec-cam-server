@@ -130,7 +130,8 @@ class stats2Handler(BaseHandler):
             'pc2_log_last_moving' : dbdata.Pc2Sql().pc2_log_last_moving(),
             'pc1_log_last_still' : dbdata.Pc1Sql().pc1_log_last_still(),
             'pc2_log_last_still' : dbdata.Pc2Sql().pc2_log_last_still(),
-        }
+            'statuscheck' : dbdata.SecCamSql().status_check()
+,        }
         self.write(x)
 
 class totalPicDBHandler(BaseHandler):

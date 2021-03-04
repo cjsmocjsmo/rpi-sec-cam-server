@@ -57,8 +57,14 @@ class SecCamSql:
         cur.execute("""SELECT COUNT(*) FROM SecCams;""")
         d = cur.fetchall()
         cur.close()
-        return d[0]      
+        return d[0] 
 
+    def status_check(self):
+        cur = con.cursor()
+        cur.execute("""SELECT GDStatus, GDProb, GMStatus, GMProb, PEPStatus, PEPProb from secCams LIMIT 1;""")   
+        e = cur.fetchone()
+        cur.close()
+        return e[0]
 
 #         self.upload = re.compile("Request to files/upload")
 
