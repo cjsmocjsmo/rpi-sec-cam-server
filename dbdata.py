@@ -69,6 +69,7 @@ class SecCamSql:
         # print("this is prob2 {}, {}%".format(e[10], e[11]))
         # print("this is prob3 {}, {}%".format(e[13], e[14]))
         # return e[7], e[8], e[10], e[11], e[14], e[15]
+        print(e)
         return e
 #         self.upload = re.compile("Request to files/upload")
 
