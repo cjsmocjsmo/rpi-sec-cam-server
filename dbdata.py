@@ -61,9 +61,13 @@ class SecCamSql:
 
     def status_check(self):
         cur = con.cursor()
-        cur.execute("""SELECT GDStatus, GDProb, GMStatus, GMProb, PEPStatus, PEPProb from secCams LIMIT 1;""")   
+        # cur.execute("""SELECT GDStatus, GDProb, GMStatus, GMProb, PEPStatus, PEPProb from SecCams ORDER BY FullDate ASC LIMIT 1;""")   
+        cur.execute("""SELECT * from SecCams ORDER BY FullDate ASC LIMIT 1;""")   
         e = cur.fetchone()
         cur.close()
+        print("thi is prob 1 {}, {}%".format(e[7], e[8]))
+        print("this is prob2 {}, {}%".format(e[10], e[11]))
+        print("this is prob3 {}, {}%".format(e[13], e[14]))
         return e
 
 #         self.upload = re.compile("Request to files/upload")
