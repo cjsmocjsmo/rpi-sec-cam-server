@@ -17,7 +17,7 @@ from datetime import date
 
 dbname = dbfactory.DbFactory().create()
 print(dbname)
-con = sqlite3.connect(dbname[0])
+con = sqlite3.connect(dbname)
 
 class SecCamSql:
     def total_log_events(self):
