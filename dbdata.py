@@ -61,7 +61,7 @@ class SecCamSql:
 
     def status_check(self):
         cur = con.cursor()
-        cur.execute("""SELECT GDStatus, GDProb, GMStatus, GMProb, PEPStatus, PEPProb from SecCams ORDER BY Time DESC LIMIT 1;""")   
+        cur.execute("""SELECT GDStatus, GDProb, GMStatus, GMProb, PEPStatus, PEPProb from PiCam2DB ORDER BY Time DESC LIMIT 1;""")   
         # cur.execute("""SELECT * from SecCams ORDER BY Time ASC LIMIT 1;""")   
         e = cur.fetchone()
         cur.close()
