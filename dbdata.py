@@ -22,7 +22,7 @@ con = sqlite3.connect(dbname)
 class SecCamSql:
     def total_log_events(self):
         cur = con.cursor()
-        cur.execute("SELECT COUNT(*) FROM PiCam1DB;")
+        cur.execute("SELECT COUNT(*) FROM PiCam2DB;")
         a = cur.fetchone()
         cur.close()
         return a[0]
