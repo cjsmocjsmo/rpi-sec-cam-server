@@ -23,28 +23,28 @@ class DbData:
         self.y, self.m, self.d = self.today.split("-", 2)
 
     def piCam1_last_moving_event(self):
-        b1 = {"Year":self.y, "Month":self.m, "Day":self.d, "Body":"PiCam1", "Tail":"moving"}
-        b2 = {"_id":0}
-        results = PiCamLogs.find_one(b1, b2)
-        return results
+        b1 = {"Body":"PiCam1", "Tail":"moving"}
+        b2 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
+        results = PiCamLogs.find(b1, b2).sort("DateTime", -1)
+        return results[0]
 
     def piCam2_last_moving_event(self):
-        b1 = {"Year":self.y, "Month":self.m, "Day":self.d, "Body":"PiCam2", "Tail":"moving"}
-        b2 = {"_id":0}
-        results = PiCamLogs.find_one(b1, b2)
-        return results
+        b1 = {"Body":"PiCam2", "Tail":"moving"}
+        b2 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
+        results = PiCamLogs.find(b1, b2).sort("DateTime", -1)
+        return results[0]
 
     def piCam1_last_still_event(self):
-        b1 = {"Year":self.y, "Month":self.m, "Day":self.d, "Body":"PiCam1", "Tail":"moving"}
-        b2 = {"_id":0}
-        results = PiCamLogs.find_one(b1, b2)
-        return results
+        b1 = {"Body":"PiCam1", "Tail":"still"}
+        b2 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
+        results = PiCamLogs.find(b1, b2).sort("DateTime", -1)
+        return results[0]
 
     def piCam2_last_still_event(self):
-        b1 = {"Year":self.y, "Month":self.m, "Day":self.d, "Body":"PiCam2", "Tail":"moving"}
-        b2 = {"_id":0}
-        results = PiCamLogs.find_one(b1, b2)
-        return results
+        b1 = {"Body":"PiCam2", "Tail":"still"}
+        b2 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
+        results = PiCamLogs.find(b1, b2).sort("DateTime", -1)
+        return results[0]
  
     def piCam1_all_today_events(self):
         b1 = {"Year":self.y, "Month":self.m, "Day":self.d, "Body":"PiCam1"}
