@@ -158,8 +158,7 @@ class ParseLogs:
         elen = len(self.pc1_moving_events)
         if elen > 9:
             last = elen - 10
-            foo = [self.split_string(a) for a in self.pc1_moving_events[last:]]
-            return foo
+            return [self.split_string(a) for a in self.pc1_moving_events[last:]]
         elif elen < 10:
             return [self.split_string(a) for a in self.pc1_moving_events]
         else:

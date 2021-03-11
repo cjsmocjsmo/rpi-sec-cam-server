@@ -6,7 +6,7 @@
   log_file_path: /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log
   log_file_copy_path: /media/pi/IMAGEHUB/imagehub_data/logs/imagehub_copy.log
   use_dropbox: true
-  dropbox_base_path: ppcam
+  dropbox_base_path: BarPiCam
   # imagehub_address: 192.168.0.34
   # db_path: /home/teresa/Desktop/imagehub.db
   # log_file_path: /home/teresa/Desktop/imagehub.log
