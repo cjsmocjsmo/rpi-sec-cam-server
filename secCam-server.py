@@ -53,16 +53,11 @@ class Application(tornado.web.Application):
             (r"/total_size_on_disk", total_size_on_diskHandler),
             (r"/pingpc1", ping_pc1Handler),
             (r"/pingpc2", ping_pc2Handler),
-            # (r"/dbsize", db_folder_sizeHandler),
             (r"/stats", statsHandler),
             (r"/picam1_todays_events", picam1_todays_eventsHandler),
             (r"/picam2_todays_events", picam2_todays_eventsHandler),
-            
-            (r"/pc1_last_fifty_pics", pc1_last_fifty_picsHandler),
-            (r"/pc2_last_fifty_pics", pc2_last_fifty_picsHandler),
-            # (r"/Stats2", stats2Handler),
-            # (r"/Pc1_last25_pics", pc1_last25_picsHandler),
-            # (r"/Pc2_last25_pics", pc2_last25_picsHandler),
+            (r"/pc1_last25_pics", pc1_last25_picsHandler),
+            (r"/pc2_last25_pics", pc2_last25_picsHandler),
             # (r"/Count", countHandler),
             # (r"/DBCount", totalPicDBHandler),
             # (r"/SecCams/(.*)", tornado.web.StaticFileHandler, {'path': seccams}),
@@ -110,20 +105,20 @@ class db_folder_sizeHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         db_file_size = yield self.db_stats()
-        self.write(dict(zoo=db_file_size))
+        self.write(dict(db_file_size=db_file_size))
 
 class image_folder_sizeHander(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         path = '/'.join((PATH, 'images'))
         size = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8')
-        self.write(dict(size=size))
+        self.write(dict(image_folder_size=size))
 
 class total_size_on_diskHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         size = subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8')
-        self.write(dict(tsize=size))
+        self.write(dict(total_size_on_disk=size))
 
 class statsHandler(BaseHandler):
 
@@ -131,12 +126,6 @@ class statsHandler(BaseHandler):
     def pic_dir_size(self):
         path = "/".join((PATH, "images"))
         return subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8')
-
-    # @tornado.gen.coroutine
-    # def db_dir_size(self):
-    #     path = 'var/lib/mongodb'
-    #     size = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8')
-    #     return size
 
     @tornado.gen.coroutine
     def total_disk_size(self):
@@ -177,7 +166,6 @@ class statsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         picDirSize = yield self.pic_dir_size()
-        # dbDirSize = yield self.db_dir_size()
         totalDiskSize = yield self.total_disk_size()
         last_health_event = yield self.last_health()
         piCam1_last_moving_event = yield self.piCam1_last_moving()
@@ -189,7 +177,6 @@ class statsHandler(BaseHandler):
         all_events = yield self.all_Events()
 
         z = {
-            # "dbDirSize": dbDirSize,
             "picDirSize": picDirSize,
             "totalDiskSize": totalDiskSize,
             "health": last_health_event,
@@ -201,7 +188,7 @@ class statsHandler(BaseHandler):
             "picam2AllToday": piCam2_all_today,
             "totalEvents": all_events,
         }
-        pprint(z)
+        # pprint(z)
         self.write(z)
 
 class ping_pc1Handler(BaseHandler):
@@ -242,96 +229,17 @@ class ping_pc2Handler(BaseHandler):
         }
         self.write(result)
 
-class pc1_last_fifty_picsHandler(BaseHandler):
-    @tornado.gen.coroutine
-    def get_today(self):
-        d1 = date.today()
-        return d1.strftime("%Y-%m-%d")
-
-    @tornado.gen.coroutine
-    def get_prefix(self):
-        today = yield self.get_today()
-        prefix = "http://192.168.0.26:8090/CamShots/" + today
-        return prefix
-
-    @tornado.gen.coroutine
-    def glob_pic_dir(self):
-        picdir = yield self.get_today()
-        globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
-        picglob = glob.glob(globdir)
-        lenpicglob = len(picglob)
-        if lenpicglob != 0:
-            pc1list = []
-            pc1 = re.compile("PiCam1")
-            [pc1list.append(p) for p in picglob if re.search(pc1, p)]
-            pcg = [os.path.split(p)[1] for p in pc1list]
-            pcg.sort(reverse=True)
-            if len(pcg) > 26:
-                return pcg[:26]
-            else:
-                return pcg
-        else:
-            return None
-
+class pc1_last25_picsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        prefix = yield self.get_prefix()
-        picglob = yield self.glob_pic_dir()
-        if picglob != None:
-            plist = ["/".join((prefix, p)) for p in picglob]
-            # self.write(dict(plist=plist))
-            print("this is len plist {}".format(len(plist)))
-            self.write(dict(plist=plist))
-        else:
-            plist= ["No PiCam1 pics found"]
-            self.write(dict(plist=plist))
+        last25 = data.DbData().piCam1_last25_images()
+        self.write(dict(last25=last25))
 
-class pc2_last_fifty_picsHandler(BaseHandler):
-    @tornado.gen.coroutine
-    def get_today(self):
-        d1 = date.today()
-        today = d1.strftime("%Y-%m-%d")
-        return today
-
-    @tornado.gen.coroutine
-    def get_prefix(self):
-        today = yield self.get_today()
-        prefix = "http://192.168.0.26:8090/CamShots/" + today
-        return prefix
-
-    @tornado.gen.coroutine
-    def glob_pic_dir(self):
-        picdir = yield self.get_today()
-        globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
-        picglob = glob.glob(globdir)
-        lenpicglob = len(picglob)
-        if lenpicglob != 0:
-            pc2list = []
-            pc2 = re.compile("PiCam2") #CHANGE THIS TO PICAM2
-            [pc2list.append(p) for p in picglob if re.search(pc2, p)]
-            pcg = [os.path.split(p)[1] for p in pc2list]
-            pcg.sort(reverse=True)
-            print("this is lenpcg {}".format(len(pcg)))
-            if len(pcg) > 26:
-                x = pcg[:26]
-                print("this should be 25 {}".format(len(x)))
-                return x
-            else:
-                return pcg
-        else:
-            return None
-
+class pc2_last25_picsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        prefix = yield self.get_prefix()
-        picglob = yield self.glob_pic_dir()
-        if picglob != None:
-            plist = ["/".join((prefix, p)) for p in picglob]
-            print("this is len plist {}".format(len(plist)))
-            self.write(dict(plist=plist))
-        else:
-            plist= ["No PiCam1 pics found"]
-            # self.write(dict(plist=plist))
+        last25 = data.DbData().piCam2_last25_images()
+        self.write(dict(last25=last25))
 
 class picam1_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine

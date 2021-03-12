@@ -71,17 +71,49 @@ class DbData:
         results = PiCamLogs.count()
         return results
 
+
+
+
+    def piCam1_last25_images(self):
+        b1 = {"Camera":"PiCam1", "Date":self.today}
+        b2 = {"_id":0}
+        results = PiCam1.find(b1,b2).sort("Date", -1).limit(25)
+        http_path_list = []
+        for r in results:
+            _, file_path = r['Filename'].split('images/', 1)
+            http = "http://192.168.0.26:8090/CamShots"
+            http_path = "/".join((http, file_path))
+            http_path_list.append(http_path)
+        #/media/pi/IMAGEHUB/imagehub_data/images
+        #http://192.168.0.26:8090/CamShots/2021-03-12/PiCam1-2021-03-12T02.40.18.490727.jpg
+        return http_path_list
+
+    def piCam2_last25_images(self):
+        b1 = {"Camera":"PiCam2", "Date":self.today}
+        b2 = {"_id":0}
+        results = PiCam2.find(b1,b2).sort("Date", -1).limit(25)
+        http_path_list = []
+        for r in results:
+            _, file_path = r['Filename'].split('images/', 1)
+            http = "http://192.168.0.26:8090/CamShots"
+            http_path = "/".join((http, file_path))
+            http_path_list.append(http_path)
+        return http_path_list
+
+    # def picam1_
 if __name__ == '__main__' :
     db = DbData()
-    print(db.all_events())
-    print(db.all_health_checks())
-    print(db.piCam2_all_today_events())
-    print(db.piCam1_all_today_events())
+    print(db.piCam1_last25_images())
+    print(db.piCam2_last25_images())
+#     print(db.all_events())
+#     print(db.all_health_checks())
+#     print(db.piCam2_all_today_events())
+#     print(db.piCam1_all_today_events())
 
-    # print(db.piCam2_last_still_event())
-    # print(db.piCam1_last_still_event())
+#     # print(db.piCam2_last_still_event())
+#     # print(db.piCam1_last_still_event())
     
-    # print(db.piCam2_last_moving_event())
-    print(db.piCam1_last_moving_event())
+#     # print(db.piCam2_last_moving_event())
+#     print(db.piCam1_last_moving_event())
     
    
