@@ -58,6 +58,7 @@ class Application(tornado.web.Application):
             (r"/picam2_todays_events", picam2_todays_eventsHandler),
             (r"/pc1_last25_pics", pc1_last25_picsHandler),
             (r"/pc2_last25_pics", pc2_last25_picsHandler),
+            (r"/gd_gm_pep_status", gd_gm_pep_statusHandler)
             # (r"/Count", countHandler),
             # (r"/DBCount", totalPicDBHandler),
             # (r"/SecCams/(.*)", tornado.web.StaticFileHandler, {'path': seccams}),
@@ -240,6 +241,13 @@ class pc2_last25_picsHandler(BaseHandler):
     def get(self):
         last25 = data.DbData().piCam2_last25_images()
         self.write(dict(last25=last25))
+
+class gd_gm_pep_statusHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        status = data.DbData().gd_gm_pep_status()
+
+        self.write(dict(status=status))
 
 class picam1_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
