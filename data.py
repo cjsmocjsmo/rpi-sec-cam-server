@@ -123,17 +123,31 @@ class DbData:
         # b1 = {"Camera":"PiCam2", "GDStat":"open", "Date":self.today}
         b1 = {"Camera":"PiCam2", "GDStat":"open"}
         b2 = {"_id":0}
-        results = PiCam2.find(b1,b2).sort("Time", -1).limit(1)
-        z = results['GDStat'], results['Date'], results['Time'][:-7]
-        return z
-
+        try:
+            results = PiCam2.find(b1,b2).sort("Time", -1).limit(1)
+            return results[0]['GDStat'], results[0]['Date'], results[0]['Time'][:-7]
+        except IndexError:
+            return ""
+        
+    def last_gm(self):
+        # b1 = {"Camera":"PiCam2", "GDStat":"open", "Date":self.today}
+        b1 = {"Camera":"PiCam2", "GMStat":"home"}
+        b2 = {"_id":0}
+        try:
+            results = PiCam2.find(b1,b2).sort("Time", -1).limit(1)
+            return results[0]['GMStat'], results[0]['Date'], results[0]['Time'][:-7]
+        except IndexError:
+            return ""
 
     def last_pep(self):
         b1 = {"Camera":"PiCam2", "PEPStat":"people"}
         b2 = {"_id":0}
-        results = PiCam2.find(b1,b2).sort("Time", -1).limit(1)
-        z = results[0]['PEPStat'], results[0]['Date'], results[0]['Time'][:-7]
-        return z
+        try:
+            results = PiCam2.find(b1,b2).sort("Time", -1).limit(1)
+            return results[0]['PEPStat'], results[0]['Date'], results[0]['Time'][:-7]
+        except IndexError:
+            return ""
+
 
 
 # if __name__ == '__main__' :
