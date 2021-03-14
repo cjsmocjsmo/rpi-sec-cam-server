@@ -61,7 +61,8 @@ class Application(tornado.web.Application):
             (r"/gd_gm_pep_status", gd_gm_pep_statusHandler),
             (r"/pc1_last_fifty_pics", pc1_last_fifty_picsHandler),
             (r"/last_gd", last_gdHandler),
-            (r"/last_peep", last_pepHandler),
+            (r"/last_gm", last_gmHandler),
+            (r"/last_pep", last_pepHandler),
 
             # (r"/Count", countHandler),
             # (r"/DBCount", totalPicDBHandler),
@@ -327,11 +328,17 @@ class last_gdHandler(BaseHandler):
         lastgd = data.DbData().last_gd()
         self.write(dict(lastgd=lastgd))
 
+class last_gmHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        lastgm = data.DbData().last_gm()
+        self.write(dict(lastgm=lastgm))
+
 class last_pepHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         lastpep = data.DbData().last_pep()
-        self.write(dict(lastpep))
+        self.write(dict(lastpep=lastpep))
 
 
 class picam1_todays_eventsHandler(BaseHandler):
