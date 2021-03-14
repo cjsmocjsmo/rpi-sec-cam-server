@@ -74,7 +74,7 @@ class DbData:
     def piCam1_last25_images(self):
         b1 = {"Camera":"PiCam1", "Date":self.today}
         b2 = {"_id":0}
-        results = PiCam1.find(b1,b2).sort("Date", -1).limit(25)
+        results = PiCam1.find(b1,b2).sort("Time", -1).limit(25)
         http_path_list = []
         for r in results:
             _, file_path = r['Filename'].split('images/', 1)
@@ -87,7 +87,7 @@ class DbData:
     def piCam2_last25_images(self):
         b1 = {"Camera":"PiCam2", "Date":self.today}
         b2 = {"_id":0}
-        results = PiCam2.find(b1,b2).sort("Date", -1).limit(25)
+        results = PiCam2.find(b1,b2).sort("Time", -1).limit(25)
         http_path_list = []
         for r in results:
             _, file_path = r['Filename'].split('images/', 1)
@@ -100,7 +100,7 @@ class DbData:
     def gd_gm_pep_status(self):
         b1 = {"Camera":"PiCam2", "Date":self.today}
         b2 = {"_id":0}
-        results = PiCam2.find(b1,b2).sort("Time", -1).limit(10)
+        results = PiCam2.find(b1,b2).sort("Time", -1).limit(1)
         gdstat = ''
         gdprob = ''
         gmstat = ''
@@ -119,11 +119,28 @@ class DbData:
         return gdstat, gdprob, gmstat, gmprob, pepstat, pepprob
 
 
+    def last_gd(self):
+        # b1 = {"Camera":"PiCam2", "GDStat":"open", "Date":self.today}
+        b1 = {"Camera":"PiCam2", "GDStat":"open"}
+        b2 = {"_id":0}
+        results = PiCam2.find(b1,b2).sort("Time", -1).limit(1)
+        z = results['GDStat'], results['Date'], results['Time'][:-7]
+        return z
 
 
-if __name__ == '__main__' :
-    db = DbData()
-    print(db.gd_gm_pep_status())
+    def last_pep(self):
+        b1 = {"Camera":"PiCam2", "PEPStat":"people"}
+        b2 = {"_id":0}
+        results = PiCam2.find(b1,b2).sort("Time", -1).limit(1)
+        z = results[0]['PEPStat'], results[0]['Date'], results[0]['Time'][:-7]
+        return z
+
+
+# if __name__ == '__main__' :
+    # db = DbData()
+    # # print(db.gd_gm_pep_status())
+    # print(db.last_gd())
+    # print(db.last_pep())
     # print(db.piCam2_last25_images())
 #     print(db.all_events())
 #     print(db.all_health_checks())

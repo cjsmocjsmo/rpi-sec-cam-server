@@ -58,7 +58,11 @@ class Application(tornado.web.Application):
             (r"/picam2_todays_events", picam2_todays_eventsHandler),
             (r"/pc1_last25_pics", pc1_last25_picsHandler),
             (r"/pc2_last25_pics", pc2_last25_picsHandler),
-            (r"/gd_gm_pep_status", gd_gm_pep_statusHandler)
+            (r"/gd_gm_pep_status", gd_gm_pep_statusHandler),
+            (r"/pc1_last_fifty_pics", pc1_last_fifty_picsHandler),
+            (r"/last_gd", last_gdHandler),
+            (r"/last_peep", last_pepHandler),
+
             # (r"/Count", countHandler),
             # (r"/DBCount", totalPicDBHandler),
             # (r"/SecCams/(.*)", tornado.web.StaticFileHandler, {'path': seccams}),
@@ -248,6 +252,87 @@ class gd_gm_pep_statusHandler(BaseHandler):
         status = data.DbData().gd_gm_pep_status()
 
         self.write(dict(status=status))
+
+class pc1_last_fifty_picsHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get_today(self):
+        d1 = date.today()
+        return d1.strftime("%Y-%m-%d")
+
+    @tornado.gen.coroutine
+    def get_prefix(self):
+        today = yield self.get_today()
+        prefix = "http://192.168.0.26:8090/CamShots/" + today
+        return prefix
+
+    @tornado.gen.coroutine
+    def glob_pic_dir(self):
+        picdir = yield self.get_today()
+        globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
+        picglob = glob.glob(globdir)
+        lenpicglob = len(picglob)
+        if lenpicglob != 0:
+            pc1list = []
+            pc1 = re.compile("PiCam1")
+            [pc1list.append(p) for p in picglob if re.search(pc1, p)]
+            pcg = [os.path.split(p)[1] for p in pc1list]
+            pcg.sort(reverse=True)
+            if len(pcg) > 26:
+                return pcg[:26]
+            else:
+                return pcg
+        else:
+            return None
+            
+    @tornado.gen.coroutine
+    def get(self):
+        prefix = yield self.get_prefix()
+        picglob = yield self.glob_pic_dir()
+        plist = ["/".join((prefix, p)) for p in picglob]
+        self.write(dict(plist=plist))
+    # class pc1_last_fifty_picsHandler(BaseHandler):
+    #     @tornado.gen.coroutine
+    #     def get_today(self):
+    #         d1 = date.today()
+    #         return d1.strftime("%Y-%m-%d")
+
+    #     @tornado.gen.coroutine
+    #     def get_prefix(self):
+    #         today = yield self.get_today()
+    #         prefix = "http://192.168.0.26:8090/CamShots/" + today
+    #         return prefix
+
+    #     @tornado.gen.coroutine
+    #     def glob_pic_dir(self):
+    #         picdir = yield self.get_today()
+    #         globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
+    #         picglob = glob.glob(globdir)
+    #         lenpicglob = len(picglob)
+    #         if lenpicglob != 0:
+    #             pc1list = []
+    #             pc1 = re.compile("PiCam1")
+    #             [pc1list.append(p) for p in picglob if re.search(pc1, p)]
+    #             pcg = [os.path.split(p)[1] for p in pc1list]
+    #             pcg.sort(reverse=True)
+    #             if len(pcg) > 26:
+    #                 return pcg[:26]
+    #             else:
+    #                 return pcg
+    #         else:
+    #             return None
+
+class last_gdHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        lastgd = data.DbData().last_gd()
+        self.write(dict(lastgd=lastgd))
+
+class last_pepHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        lastpep = data.DbData().last_pep()
+        self.write(dict(lastpep))
+
 
 class picam1_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
