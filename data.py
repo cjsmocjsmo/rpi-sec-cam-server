@@ -124,7 +124,8 @@ class DbData:
 
         try:
             closed_results = self.PiCam2.find(b2,b3).sort("Time", -1).limit(10)
-            pprint(closed_results)
+            for closed in closed_results:
+                print(closed)
             last_closed_results = closed_results[0]['GDStat'], closed_results[0]['Date'], closed_results[0]['Time'][:-7]
         except IndexError:
             last_closed_results = "None", "None", "None", "None"
