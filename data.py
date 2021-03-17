@@ -6,75 +6,79 @@ from datetime import date
 from pymongo import MongoClient
 from pprint import pprint
 
-con = MongoClient()
-
-db = con['SecCam']
-PiCam1 = db['picam1']
-PiCam2 = db['picam2']
-
-con = MongoClient()
-db2 = con['SCL']
-PiCamLogs = db2['pclogs']
-
 class DbData:
     def __init__(self):
-        d1 = date.today()
-        self.today = d1.strftime("%Y-%m-%d")
+        self.con = MongoClient()
+        self.db = self.con['SecCam']
+        self.PiCam1 = self.db['picam1']
+        self.PiCam2 = self.db['picam2']
+        self.db2 = self.con['SCL']
+        self.PiCamLogs = self.db2['pclogs']
+        self.d1 = date.today()
+        self.today = self.d1.strftime("%Y-%m-%d")
         self.y, self.m, self.d = self.today.split("-", 2)
 
     def piCam1_last_moving_event(self):
         b1 = {"Body":"PiCam1", "Tail":"moving"}
         b2 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
-        results = PiCamLogs.find(b1, b2).sort("DateTime", -1)
+        results = self.PiCamLogs.find(b1, b2).sort("DateTime", -1)
+        self.con.close()
         return results[0]
 
     def piCam2_last_moving_event(self):
         b1 = {"Body":"PiCam2", "Tail":"moving"}
         b2 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
-        results = PiCamLogs.find(b1, b2).sort("DateTime", -1)
+        results = self.PiCamLogs.find(b1, b2).sort("DateTime", -1)
+        self.con.close()
         return results[0]
 
     def piCam1_last_still_event(self):
         b1 = {"Body":"PiCam1", "Tail":"still"}
         b2 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
-        results = PiCamLogs.find(b1, b2).sort("DateTime", -1)
+        results = self.PiCamLogs.find(b1, b2).sort("DateTime", -1)
+        self.con.close()
         return results[0]
 
     def piCam2_last_still_event(self):
         b1 = {"Body":"PiCam2", "Tail":"still"}
         b2 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
-        results = PiCamLogs.find(b1, b2).sort("DateTime", -1)
+        results = self.PiCamLogs.find(b1, b2).sort("DateTime", -1)
+        self.con.close()
         return results[0]
  
     def piCam1_all_today_events(self):
         b1 = {"Year":self.y, "Month":self.m, "Day":self.d, "Body":"PiCam1"}
         b2 = {"_id":0}
-        search = PiCamLogs.find(b1, b2)
+        search = self.PiCamLogs.find(b1, b2)
         results = [s for s in search]
+        self.con.close()
         return len(results)
         
     def piCam2_all_today_events(self):
         b1 = {"Year":self.y, "Month":self.m, "Day":self.d, "Body":"PiCam2"}
         b2 = {"_id":0}
-        search = PiCamLogs.find(b1, b2)
+        search = self.PiCamLogs.find(b1, b2)
         results = [s for s in search]
+        self.con.close()
         return len(results)
 
     def all_health_checks(self):
         b1 = {"Year":self.y, "Month":self.m, "Day":self.d, "Message":"No messages received for 60 minutes"}
         b2 = {"_id":0}
-        search = PiCamLogs.find(b1,b2)
+        search = self.PiCamLogs.find(b1,b2)
         results = [s for s in search]
+        self.con.close()
         return len(results)
 
     def all_events(self):
-        results = PiCamLogs.count()
+        results = self.PiCamLogs.count()
+        self.con.close()
         return results
 
     def piCam1_last25_images(self):
         b1 = {"Camera":"PiCam1", "Date":self.today}
         b2 = {"_id":0}
-        results = PiCam1.find(b1,b2).sort("Time", -1).limit(25)
+        results = self.PiCam1.find(b1,b2).sort("Time", -1).limit(25)
         http_path_list = []
         for r in results:
             _, file_path = r['Filename'].split('images/', 1)
@@ -82,12 +86,13 @@ class DbData:
             http_path = "/".join((http, file_path))
             http_path_list.append(http_path)
         http_path_list.sort(reverse=True)
+        self.con.close()
         return http_path_list
 
     def piCam2_last25_images(self):
         b1 = {"Camera":"PiCam2", "Date":self.today}
         b2 = {"_id":0}
-        results = PiCam2.find(b1,b2).sort("Time", -1).limit(25)
+        results = self.PiCam2.find(b1,b2).sort("Time", -1).limit(25)
         http_path_list = []
         for r in results:
             _, file_path = r['Filename'].split('images/', 1)
@@ -95,76 +100,76 @@ class DbData:
             http_path = "/".join((http, file_path))
             http_path_list.append(http_path)
         http_path_list.sort(reverse=True)
+        self.con.close()
         return http_path_list
 
-    def gd_gm_pep_status(self):
+    def gd_gm_pep_current_status(self):
         b1 = {"Camera":"PiCam2", "Date":self.today}
         b2 = {"_id":0}
-        results = PiCam2.find(b1,b2).sort("Time", -1).limit(1)
-        gdstat = ''
-        gdprob = ''
-        gmstat = ''
-        gmprob = ''
-        pepstat = ''
-        pepprob = ''
-        # results.sort("Time", -1)
+        results = self.PiCam2.find(b1,b2).sort("Time", -1).limit(1)
+        self.con.close()
         for r in results:
-            pprint(r)
-            gdstat = r["GDStat"]
-            gdprob = r['GDProb']
-            gmstat = r['GMStat']
-            gmprob = r['GMProb']
-            pepstat = r['PEPStat']
-            pepprob = r['PEPProb']
-        return gdstat, gdprob, gmstat, gmprob, pepstat, pepprob
-
+            return r["GDStat"], r['GDProb'], r['GMStat'], r['GMProb'], r['PEPStat'], r['PEPProb']
 
     def last_gd(self):
-        # b1 = {"Camera":"PiCam2", "GDStat":"open", "Date":self.today}
         b1 = {"Camera":"PiCam2", "GDStat":"open"}
-        b2 = {"_id":0}
+        b2 = {"Camera":"PiCam2", "GDStat":"closed"}
+        b3 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
+        
         try:
-            results = PiCam2.find(b1,b2).sort("Time", -1).limit(1)
-            return results[0]['GDStat'], results[0]['Date'], results[0]['Time'][:-7]
+            open_results = self.PiCam2.find(b1,b3).sort("Time", -1).limit(1)
+            last_open_results = open_results[0]['GDStat'], open_results[0]['Date'], open_results[0]['Time'][:-7]
         except IndexError:
-            return ""
+            last_open_results = "None", "None", "None", "None"
+
+        try:
+            closed_results = self.PiCam2.find(b2,b3).sort("Time", -1).limit(1)
+            last_closed_results = closed_results[0]['GDStat'], closed_results[0]['Date'], closed_results[0]['Time'][:-7]
+        except IndexError:
+            last_closed_results = "None", "None", "None", "None"
+        self.con.close()
+        return last_open_results, last_closed_results
         
     def last_gm(self):
-        # b1 = {"Camera":"PiCam2", "GDStat":"open", "Date":self.today}
         b1 = {"Camera":"PiCam2", "GMStat":"home"}
-        b2 = {"_id":0}
+        b2 = {"Camera":"PiCam2", "GMStat":"nothome"}
+        b3 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
+        
         try:
-            results = PiCam2.find(b1,b2).sort("Time", -1).limit(1)
-            return results[0]['GMStat'], results[0]['Date'], results[0]['Time'][:-7]
+            home_results = self.PiCam2.find(b1,b3).sort("Time", -1).limit(1)
+            last_home_results = home_results[0]['GMStat'], home_results[0]['Date'], home_results[0]['Time'][:-7]
         except IndexError:
-            return ""
+            last_home_results = "None", "None", "None", "None"
+        
+        try:
+            nothome_results = self.PiCam2.find(b2,b3).sort("Time", -1).limit(1)
+            last_nothome_results = nothome_results[0]['GMStat'], nothome_results[0]['Date'], nothome_results[0]['Time'][:-7]
+        except IndexError:
+            last_nothome_results = "None", "None", "None", "None"
+        self.con.close()
+        return last_home_results, last_nothome_results
 
     def last_pep(self):
         b1 = {"Camera":"PiCam2", "PEPStat":"people"}
-        b2 = {"_id":0}
+        b2 = {"Camera":"PiCam2", "PEPStat":"notpeople"}
+        b3 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
+        
         try:
-            results = PiCam2.find(b1,b2).sort("Time", -1).limit(1)
-            return results[0]['PEPStat'], results[0]['Date'], results[0]['Time'][:-7]
+            pep_results = self.PiCam2.find(b1,b3).sort("Time", -1).limit(1)
+            last_pep_results = pep_results[0]['PEPStat'], pep_results[0]['Date'], pep_results[0]['Time'][:-7]
         except IndexError:
-            return ""
+            last_pep_results = "None", "None", "None", "None"
+
+        try:
+            notpep_results = self.PiCam2.find(b2,b3).sort("Time", -1).limit(1)
+            last_notpep_results = notpep_results[0]['PEPStat'], notpep_results[0]['Date'], notpep_results[0]['Time'][:-7]
+        except IndexError:
+            last_notpep_results = "None", "None", "None", "None"
+        self.con.close()
+        return last_pep_results, last_notpep_results
 
 
 
 # if __name__ == '__main__' :
     # db = DbData()
     # # print(db.gd_gm_pep_status())
-    # print(db.last_gd())
-    # print(db.last_pep())
-    # print(db.piCam2_last25_images())
-#     print(db.all_events())
-#     print(db.all_health_checks())
-#     print(db.piCam2_all_today_events())
-#     print(db.piCam1_all_today_events())
-
-#     # print(db.piCam2_last_still_event())
-#     # print(db.piCam1_last_still_event())
-    
-#     # print(db.piCam2_last_moving_event())
-#     print(db.piCam1_last_moving_event())
-    
-   
