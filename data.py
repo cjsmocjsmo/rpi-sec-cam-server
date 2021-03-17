@@ -117,13 +117,14 @@ class DbData:
         b3 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
         
         try:
-            open_results = self.PiCam2.find(b1,b3).sort("Time", -1).limit(1)
+            open_results = self.PiCam2.find(b1,b3).sort("Time", -1).limit(10)
             last_open_results = open_results[0]['GDStat'], open_results[0]['Date'], open_results[0]['Time'][:-7]
         except IndexError:
             last_open_results = "None", "None", "None", "None"
 
         try:
-            closed_results = self.PiCam2.find(b2,b3).sort("Time", -1).limit(1)
+            closed_results = self.PiCam2.find(b2,b3).sort("Time", -1).limit(10)
+            pprint(closed_results)
             last_closed_results = closed_results[0]['GDStat'], closed_results[0]['Date'], closed_results[0]['Time'][:-7]
         except IndexError:
             last_closed_results = "None", "None", "None", "None"
@@ -170,6 +171,6 @@ class DbData:
 
 
 
-# if __name__ == '__main__' :
-    # db = DbData()
-    # # print(db.gd_gm_pep_status())
+if __name__ == '__main__' :
+    db = DbData()
+    print(db.last_gd())
