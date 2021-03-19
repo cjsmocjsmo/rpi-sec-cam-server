@@ -78,7 +78,7 @@ class DbData:
     def piCam1_last25_images(self):
         b1 = {"Camera":"PiCam1", "Date":self.today}
         b2 = {"_id":0}
-        results = self.PiCam1.find(b1,b2).sort("Time", -1).limit(25)
+        results = self.PiCam1.find(b1,b2).sort("Name", -1).limit(25)
         http_path_list = []
         for r in results:
             _, file_path = r['Filename'].split('images/', 1)
@@ -92,7 +92,7 @@ class DbData:
     def piCam2_last25_images(self):
         b1 = {"Camera":"PiCam2", "Date":self.today}
         b2 = {"_id":0}
-        results = self.PiCam2.find(b1,b2).sort("Time", -1).limit(25)
+        results = self.PiCam2.find(b1,b2).sort("Name", -1).limit(25)
         http_path_list = []
         for r in results:
             _, file_path = r['Filename'].split('images/', 1)
@@ -117,13 +117,15 @@ class DbData:
         b3 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
         
         try:
-            open_results = self.PiCam2.find(b1,b3).sort("Time", -1).limit(10)
+            open_results = self.PiCam2.find(b1,b3).sort("Name", -1).limit(10)
             last_open_results = open_results[0]['GDStat'], open_results[0]['Date'], open_results[0]['Time'][:-7]
         except IndexError:
             last_open_results = "None", "None", "None", "None"
 
         try:
-            closed_results = self.PiCam2.find(b2,b3).sort("Time", -1).limit(10)
+            closed_results = self.PiCam2.find(b2,b3).sort("Name", -1).limit(10)
+            # for c in closed_results:
+            #     pprint(c)
             last_closed_results = closed_results[0]['GDStat'], closed_results[0]['Date'], closed_results[0]['Time'][:-7]
         except IndexError:
             last_closed_results = "None", "None", "None", "None"
@@ -136,13 +138,13 @@ class DbData:
         b3 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
         
         try:
-            home_results = self.PiCam2.find(b1,b3).sort("Time", -1).limit(1)
+            home_results = self.PiCam2.find(b1,b3).sort("Name", -1).limit(1)
             last_home_results = home_results[0]['GMStat'], home_results[0]['Date'], home_results[0]['Time'][:-7]
         except IndexError:
             last_home_results = "None", "None", "None", "None"
         
         try:
-            nothome_results = self.PiCam2.find(b2,b3).sort("Time", -1).limit(1)
+            nothome_results = self.PiCam2.find(b2,b3).sort("Name", -1).limit(1)
             last_nothome_results = nothome_results[0]['GMStat'], nothome_results[0]['Date'], nothome_results[0]['Time'][:-7]
         except IndexError:
             last_nothome_results = "None", "None", "None", "None"
@@ -155,13 +157,13 @@ class DbData:
         b3 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
         
         try:
-            pep_results = self.PiCam2.find(b1,b3).sort("Time", -1).limit(1)
+            pep_results = self.PiCam2.find(b1,b3).sort("Name", -1).limit(1)
             last_pep_results = pep_results[0]['PEPStat'], pep_results[0]['Date'], pep_results[0]['Time'][:-7]
         except IndexError:
             last_pep_results = "None", "None", "None", "None"
 
         try:
-            notpep_results = self.PiCam2.find(b2,b3).sort("Time", -1).limit(1)
+            notpep_results = self.PiCam2.find(b2,b3).sort("Name", -1).limit(1)
             last_notpep_results = notpep_results[0]['PEPStat'], notpep_results[0]['Date'], notpep_results[0]['Time'][:-7]
         except IndexError:
             last_notpep_results = "None", "None", "None", "None"
