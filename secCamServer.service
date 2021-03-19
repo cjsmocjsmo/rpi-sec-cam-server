@@ -1,0 +1,14 @@
+[Unit]
+Description=Imagehub info server
+After=multi-user.target
+
+[Service]
+Type=idle
+User=pi
+Restart=always
+RestartSec=10
+ExecStart=sh /home/pi/startRpiSecCamServer.sh
+
+[Install]
+WantedBy=multi-user.target
+
