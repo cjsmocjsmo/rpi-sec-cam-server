@@ -196,8 +196,8 @@ class statsHandler(BaseHandler):
 
     @tornado.gen.coroutine
     def get(self):
-        # picDirSize = yield self.pic_dir_size()
-        # totalDiskSize = yield self.total_disk_size()
+        picDirSize = yield self.pic_dir_size()
+        totalDiskSize = yield self.total_disk_size()
         last_health_event = yield self.last_health()
         piCam1_last_moving_event = yield self.piCam1_last_moving()
         piCam2_last_moving_event = yield self.piCam2_last_moving()
@@ -208,8 +208,8 @@ class statsHandler(BaseHandler):
         all_events = yield self.all_Events()
 
         z = {
-            # "picDirSize": picDirSize,
-            # "totalDiskSize": totalDiskSize,
+            "picDirSize": picDirSize,
+            "totalDiskSize": totalDiskSize,
             "health": last_health_event,
             "picam1LM": piCam1_last_moving_event,
             "picam2LM": piCam2_last_moving_event,
@@ -333,31 +333,31 @@ class last_pepHandler(BaseHandler):
         lastpep = data.DbData().last_pep()
         self.write(dict(lastpep=lastpep))
 
-# class SocketHandler(tornado.websocket.WebSocketHandler):
-#     def check_origin(self, origin):
-#         return True
+class SocketHandler(tornado.websocket.WebSocketHandler):
+    def check_origin(self, origin):
+        return True
 
-#     def open(self):
-#         if self not in cl:
-#             cl.append(self)
+    def open(self):
+        if self not in cl:
+            cl.append(self)
 
-#     def on_close(self):
-#         if self in cl:
-#             cl.remove(self)
+    def on_close(self):
+        if self in cl:
+            cl.remove(self)
 
-# class status_postHandler(tornado.web.RequestHandler):
-#     @tornado.web.asynchronous
-#     def post(self):
-#         gds = self.get_argument("GDStat")
-#         gms = self.get_argument("GMStat")
-#         peps = self.get_argument("PEPStat")
-#         data = gds, gms, peps
-#         print(gds)
-#         print(gms)
-#         print(peps)
-#         data = json.dumps(data)
-#         for c in cl:
-#             c.write_message(data)
+class status_postHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def post(self):
+        gds = self.get_argument("GDStat")
+        gms = self.get_argument("GMStat")
+        peps = self.get_argument("PEPStat")
+        data = gds, gms, peps
+        print(gds)
+        print(gms)
+        print(peps)
+        data = json.dumps(data)
+        for c in cl:
+            c.write_message(data)
 
 
 class picam1_todays_eventsHandler(BaseHandler):
