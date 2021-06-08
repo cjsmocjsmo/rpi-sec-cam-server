@@ -18,6 +18,7 @@
 import os
 import re
 import yaml
+import json
 import parselogs
 import data
 import glob
@@ -26,6 +27,7 @@ import subprocess
 import tornado.web
 import tornado.ioloop
 import tornado.httpserver
+import tornado.websocket
 from datetime import date
 from urllib.parse import urlparse, parse_qs
 from tornado.options import define, options, parse_command_line
@@ -39,6 +41,7 @@ PATH = '/media/pi/IMAGEHUB/imagehub_data'
 
 # print(conf["imagehub_port"])
 
+cl = []
 define('port', default=8090, help='run on the given port', type=int)
 
 class Application(tornado.web.Application):
@@ -64,7 +67,8 @@ class Application(tornado.web.Application):
             (r"/last_gm", last_gmHandler),
             (r"/last_pep", last_pepHandler),
 
-            # (r"/Count", countHandler),
+            (r'/ws', SocketHandler),
+            (r"/status_post", status_postHandler),
             # (r"/DBCount", totalPicDBHandler),
             # (r"/SecCams/(.*)", tornado.web.StaticFileHandler, {'path': seccams}),
             # (r"/TVShows/(.*)", tornado.web.StaticFileHandler, {'path': TVShows}),
@@ -102,13 +106,6 @@ class db_folder_sizeHandler(BaseHandler):
         seccam_size_in_bytes = db_seccam_stats['fileSize']
         scl_stats = db_scl.command("dbstats")
         scl_size_in_bytes = scl_stats['fileSize']
-
-        
-
-
-
-
-
         total_size_in_bytes = seccam_size_in_bytes + scl_size_in_bytes
 
         if total_size_in_bytes < 1048576:
@@ -199,8 +196,8 @@ class statsHandler(BaseHandler):
 
     @tornado.gen.coroutine
     def get(self):
-        picDirSize = yield self.pic_dir_size()
-        totalDiskSize = yield self.total_disk_size()
+        # picDirSize = yield self.pic_dir_size()
+        # totalDiskSize = yield self.total_disk_size()
         last_health_event = yield self.last_health()
         piCam1_last_moving_event = yield self.piCam1_last_moving()
         piCam2_last_moving_event = yield self.piCam2_last_moving()
@@ -211,8 +208,8 @@ class statsHandler(BaseHandler):
         all_events = yield self.all_Events()
 
         z = {
-            "picDirSize": picDirSize,
-            "totalDiskSize": totalDiskSize,
+            # "picDirSize": picDirSize,
+            # "totalDiskSize": totalDiskSize,
             "health": last_health_event,
             "picam1LM": piCam1_last_moving_event,
             "picam2LM": piCam2_last_moving_event,
@@ -335,6 +332,32 @@ class last_pepHandler(BaseHandler):
     def get(self):
         lastpep = data.DbData().last_pep()
         self.write(dict(lastpep=lastpep))
+
+# class SocketHandler(tornado.websocket.WebSocketHandler):
+#     def check_origin(self, origin):
+#         return True
+
+#     def open(self):
+#         if self not in cl:
+#             cl.append(self)
+
+#     def on_close(self):
+#         if self in cl:
+#             cl.remove(self)
+
+# class status_postHandler(tornado.web.RequestHandler):
+#     @tornado.web.asynchronous
+#     def post(self):
+#         gds = self.get_argument("GDStat")
+#         gms = self.get_argument("GMStat")
+#         peps = self.get_argument("PEPStat")
+#         data = gds, gms, peps
+#         print(gds)
+#         print(gms)
+#         print(peps)
+#         data = json.dumps(data)
+#         for c in cl:
+#             c.write_message(data)
 
 
 class picam1_todays_eventsHandler(BaseHandler):
