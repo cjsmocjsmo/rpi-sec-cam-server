@@ -27,7 +27,7 @@ import subprocess
 import tornado.web
 import tornado.ioloop
 import tornado.httpserver
-import tornado.websocket
+# import tornado.websocket
 from datetime import date
 from urllib.parse import urlparse, parse_qs
 from tornado.options import define, options, parse_command_line
@@ -52,7 +52,7 @@ class Application(tornado.web.Application):
             (r"/CamShots/(.*)", tornado.web.StaticFileHandler, {'path': mpath}),
             (r"/main", MainHandler),
             (r"/db_folder_size", db_folder_sizeHandler),
-            (r"/image_folder_size",image_folder_sizeHander),
+            (r"/image_folder_size",image_folder_sizeHandler),
             (r"/total_size_on_disk", total_size_on_diskHandler),
             (r"/pingpc1", ping_pc1Handler),
             (r"/pingpc2", ping_pc2Handler),
@@ -67,7 +67,7 @@ class Application(tornado.web.Application):
             (r"/last_gm", last_gmHandler),
             (r"/last_pep", last_pepHandler),
 
-            (r'/ws', SocketHandler),
+            # (r'/ws', SocketHandler),
             (r"/status_post", status_postHandler),
             # (r"/DBCount", totalPicDBHandler),
             # (r"/SecCams/(.*)", tornado.web.StaticFileHandler, {'path': seccams}),
@@ -87,6 +87,14 @@ class BaseHandler(tornado.web.RequestHandler):
         self.set_header("Access-Control-Allow-Headers", "*")
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Content-Type", "application/json")
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
+        self.set_header('Access-Control-Max-Age', 1000)
+
+class BaseJPGHandler(tornado.web.RequestHandler):
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Headers", "*")
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Content-Type", "image/jpeg")
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
         self.set_header('Access-Control-Max-Age', 1000)
 
@@ -138,7 +146,7 @@ class db_folder_sizeHandler(BaseHandler):
         db_file_size = yield self.db_stats()
         self.write(dict(db_file_size=db_file_size))
 
-class image_folder_sizeHander(BaseHandler):
+class image_folder_sizeHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         path = '/'.join((PATH, 'images'))
@@ -259,13 +267,13 @@ class ping_pc2Handler(BaseHandler):
         }
         self.write(result)
 
-class pc1_last25_picsHandler(BaseHandler):
+class pc1_last25_picsHandler(BaseJPGHandler):
     @tornado.gen.coroutine
     def get(self):
         last25 = data.DbData().piCam1_last25_images()
         self.write(dict(last25=last25))
 
-class pc2_last25_picsHandler(BaseHandler):
+class pc2_last25_picsHandler(BaseJPGHandler):
     @tornado.gen.coroutine
     def get(self):
         last25 = data.DbData().piCam2_last25_images()
