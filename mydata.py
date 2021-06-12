@@ -14,7 +14,7 @@ PiCam1 = SecCamCon.picam1
 PiCam2 = SecCamCon.picam2
 
 SCLClient = pymongo.MongoClient()
-SCLCon = SCLClient.SLC
+SCLCon = SCLClient.SCL
 PiCamLogs = SCLCon.pclogs
 
 # db = con['SecCam']
@@ -82,7 +82,7 @@ class DbData:
         return len(results)
 
     def all_events(self):
-        results = SCLCon.count()
+        results = PiCamLogs.count()
         #con.close()
         return results
 
