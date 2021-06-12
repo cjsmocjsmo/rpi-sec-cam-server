@@ -57,6 +57,20 @@ class Application(tornado.web.Application):
             (r"/pingpc1", ping_pc1Handler),
             (r"/pingpc2", ping_pc2Handler),
             (r"/stats", statsHandler),
+
+
+            (r"/pic_dir_size", pic_dir_sizeHandler),
+            (r"/total_disk_size", total_disk_sizeHandler),
+            (r"/pc1_last_moving", pc1_last_movingHandler),
+            (r"/pc2_last_moving", pc2_last_movingHandler),
+            (r"/health", healthHandler),
+            (r"/pc1_last_still", pc1_last_stillHandler),
+            (r"/pc2_last_still", pc2_last_stillHandler),
+            (r"/pc1_todays_events", pc1_todays_eventsHandler),
+            (r"/pc2_todays_events", pc2_todays_eventsHandler),
+            (r"/all_events", all_eventsHandler),
+
+
             (r"/picam1_todays_events", picam1_todays_eventsHandler),
             (r"/picam2_todays_events", picam2_todays_eventsHandler),
             (r"/pc1_last25_pics", pc1_last25_picsHandler),
@@ -159,6 +173,97 @@ class total_size_on_diskHandler(BaseHandler):
     def get(self):
         size = subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8')
         self.write(dict(total_size_on_disk=size))
+
+
+
+
+
+
+
+
+
+
+
+
+
+class pic_dir_sizeHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        path = "/".join((PATH, "images"))
+        return subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8') + "B"
+
+class total_disk_sizeHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        return subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8') + "B"
+
+class pc1_last_movingHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        return data.DbData().piCam1_last_moving_event()
+
+class pc2_last_movingHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        return data.DbData().piCam2_last_moving_event()
+
+class healthHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        return data.DbData().all_health_checks()
+
+class pc1_last_stillHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        return data.DbData().piCam1_last_still_event()
+
+class pc2_last_stillHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        return data.DbData().piCam2_last_still_event()
+
+class pc1_todays_eventsHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        return data.DbData().piCam1_all_today_events()
+
+class pc2_todays_eventsHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def git(self):
+        return data.DbData().piCam2_all_today_events()
+
+class all_eventsHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        return data.DbData().piCam2_all_today_events()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class statsHandler(BaseHandler):
 
