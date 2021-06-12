@@ -49,7 +49,7 @@ class Application(tornado.web.Application):
         mpath = '/'.join((PATH, "images/"))
         # seccams = "/tmp/secCams/SEC/"
         handlers = [
-            (r"/CamShots/(.*)", tornado.web.StaticFileHandler, {'path': mpath}),
+            (r"/CamShots/(.*)", BaseJPGHandler, {'path': mpath}),
             (r"/main", MainHandler),
             (r"/db_folder_size", db_folder_sizeHandler),
             (r"/image_folder_size",image_folder_sizeHandler),
@@ -90,7 +90,7 @@ class BaseHandler(tornado.web.RequestHandler):
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
         self.set_header('Access-Control-Max-Age', 1000)
 
-class BaseJPGHandler(tornado.web.RequestHandler):
+class BaseJPGHandler(tornado.web.StaticFileHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Authorization")
         self.set_header("Access-Control-Allow-Origin", "*")
