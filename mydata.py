@@ -95,7 +95,7 @@ class DbData:
         http_path_list = []
         for r in results:
             _, file_path = r['Filename'].split('images/', 1)
-            http = "http://db:8090/CamShots"
+            http = "http://192.168.0.26:8090/CamShots"
             http_path = "/".join((http, file_path))
             http_path_list.append(http_path)
         http_path_list.sort(reverse=True)
@@ -109,7 +109,8 @@ class DbData:
         http_path_list = []
         for r in results:
             _, file_path = r['Filename'].split('images/', 1)
-            http = "http://db:8090/CamShots"
+            # http = "http://db:8090/CamShots"
+            http = "http://192.168.0.26:8090/CamShots"
             http_path = "/".join((http, file_path))
             http_path_list.append(http_path)
         http_path_list.sort(reverse=True)
