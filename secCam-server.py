@@ -483,7 +483,8 @@ class picam1_todays_eventsHandler(BaseHandler):
         z = {
             "picam1": p.picam1_todays_events(),
         }
-        [print(a) for a in z["picam1"]]
+        for a in z["picam1"]:
+            print(a) 
         pprint(z)
         self.write(z)
 
