@@ -235,9 +235,9 @@ class pc2_todays_eventsHandler(BaseHandler):
 class all_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        data = data.DbData().all_events()
-        print(data)
-        return data
+        dataa = data.DbData().all_events()
+        print(dataa)
+        return dataa
 
 
 
