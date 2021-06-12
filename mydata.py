@@ -80,7 +80,7 @@ class DbData:
         return len(results)
 
     def all_events(self):
-        results = PiCamLogs.count()
+        results = SCLClient.count()
         #con.close()
         return results
 
