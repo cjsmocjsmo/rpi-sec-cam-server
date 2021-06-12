@@ -245,7 +245,7 @@ class all_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         mydataa = mydata.DbData().all_events()
-        self.write(dict(all_events=mydataa))
+        self.write(dict(all_events=[mydataa]))
 
 
 
