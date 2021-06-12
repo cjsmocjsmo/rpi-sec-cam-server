@@ -3,17 +3,23 @@
 # import os
 from datetime import date
 # from pathlib import Path
-from pymongo import MongoClient
+from pymongo
 from pprint import pprint
 
 
 
-con = MongoClient()
-db = con['SecCam']
-PiCam1 = db['picam1']
-PiCam2 = db['picam2']
-db2 = con['SCL']
-PiCamLogs = db2['pclogs']
+SecCamClient = pymongo.MongoClient("mongodb://db:27017/SecCam")
+PiCam1 = SecCamClient.picam1
+PiCam2 = SecCamClient.picam2
+
+SCLClient = pymongo.MongoClient("mongodb://db:27017/SCL")
+PiCamLogs = SCLClient.pclogs
+
+# db = con['SecCam']
+# PiCam1 = db['picam1']
+# PiCam2 = db['picam2']
+# db2 = con['SCL']
+# PiCamLogs = db2['pclogs']
 
 class DbData:
     def __init__(self):

@@ -200,42 +200,42 @@ class total_disk_sizeHandler(BaseHandler):
 class pc1_last_movingHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return mydata.DbmyData().piCam1_last_moving_event()
+        return mydata.DbData().piCam1_last_moving_event()
 
 class pc2_last_movingHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return mydata.DbmyData().piCam2_last_moving_event()
+        return mydata.DbData().piCam2_last_moving_event()
 
 class healthHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return mydata.DbmyData().all_health_checks()
+        return mydata.DbData().all_health_checks()
 
 class pc1_last_stillHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return mydata.DbmyData().piCam1_last_still_event()
+        return mydata.DbData().piCam1_last_still_event()
 
 class pc2_last_stillHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return mydata.DbmyData().piCam2_last_still_event()
+        return mydata.DbData().piCam2_last_still_event()
 
 class pc1_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return mydata.DbmyData().piCam1_all_today_events()
+        return mydata.DbData().piCam1_all_today_events()
 
 class pc2_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
     def git(self):
-        return mydata.DbmyData().piCam2_all_today_events()
+        return mydata.DbData().piCam2_all_today_events()
 
 class all_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        mydataa = mydata.DbmyData().all_events()
+        mydataa = mydata.DbData().all_events()
         print(mydataa)
         return mydataa
 
@@ -280,35 +280,35 @@ class statsHandler(BaseHandler):
 
     @tornado.gen.coroutine
     def piCam1_last_moving(self):
-        return mydata.DbmyData().piCam1_last_moving_event()
+        return mydata.DbData().piCam1_last_moving_event()
 
     @tornado.gen.coroutine
     def piCam2_last_moving(self):
-        return mydata.DbmyData().piCam2_last_moving_event()
+        return mydata.DbData().piCam2_last_moving_event()
 
     @tornado.gen.coroutine
     def last_health(self):
-        return mydata.DbmyData().all_health_checks()
+        return mydata.DbData().all_health_checks()
 
     @tornado.gen.coroutine
     def piCam1_last_still(self):
-        return mydata.DbmyData().piCam1_last_still_event()
+        return mydata.DbData().piCam1_last_still_event()
 
     @tornado.gen.coroutine
     def piCam2_last_still(self):
-        return mydata.DbmyData().piCam2_last_still_event()
+        return mydata.DbData().piCam2_last_still_event()
 
     @tornado.gen.coroutine
     def piCam1_all_today_events(self):
-        return mydata.DbmyData().piCam1_all_today_events()
+        return mydata.DbData().piCam1_all_today_events()
 
     @tornado.gen.coroutine
     def piCam2_all_today_events(self):
-        return mydata.DbmyData().piCam2_all_today_events()
+        return mydata.DbData().piCam2_all_today_events()
 
     @tornado.gen.coroutine
     def all_Events(self):
-        return mydata.DbmyData().all_events()
+        return mydata.DbData().all_events()
 
     @tornado.gen.coroutine
     def get(self):
@@ -378,19 +378,19 @@ class ping_pc2Handler(BaseHandler):
 class pc1_last25_picsHandler(BaseJPGHandler):
     @tornado.gen.coroutine
     def get(self):
-        last25 = mydata.DbmyData().piCam1_last25_images()
+        last25 = mydata.DbData().piCam1_last25_images()
         self.write(dict(last25=last25))
 
 class pc2_last25_picsHandler(BaseJPGHandler):
     @tornado.gen.coroutine
     def get(self):
-        last25 = mydata.DbmyData().piCam2_last25_images()
+        last25 = mydata.DbData().piCam2_last25_images()
         self.write(dict(last25=last25))
 
 class gd_gm_pep_statusHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        status = mydata.DbmyData().gd_gm_pep_current_status()
+        status = mydata.DbData().gd_gm_pep_current_status()
         self.write(dict(status=status))
 
 class pc1_last_fifty_picsHandler(BaseHandler):
@@ -408,7 +408,7 @@ class pc1_last_fifty_picsHandler(BaseHandler):
     @tornado.gen.coroutine
     def glob_pic_dir(self):
         picdir = yield self.get_today()
-        globdir = "/media/pi/IMAGEHUB/imagehub_mydata/images/" + picdir + "/*.jpg"
+        globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
         picglob = glob.glob(globdir)
         lenpicglob = len(picglob)
         if lenpicglob != 0:
@@ -434,19 +434,19 @@ class pc1_last_fifty_picsHandler(BaseHandler):
 class last_gdHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        lastgd = mydata.DbmyData().last_gd()
+        lastgd = mydata.DbData().last_gd()
         self.write(dict(lastgd=lastgd))
 
 class last_gmHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        lastgm = mydata.DbmyData().last_gm()
+        lastgm = mydata.DbData().last_gm()
         self.write(dict(lastgm=lastgm))
 
 class last_pepHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        lastpep = mydata.DbmyData().last_pep()
+        lastpep = mydata.DbData().last_pep()
         self.write(dict(lastpep=lastpep))
 
 # class SocketHandler(tornado.websocket.WebSocketHandler):
