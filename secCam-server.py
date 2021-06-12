@@ -341,17 +341,17 @@ class last_pepHandler(BaseHandler):
         lastpep = data.DbData().last_pep()
         self.write(dict(lastpep=lastpep))
 
-class SocketHandler(tornado.websocket.WebSocketHandler):
-    def check_origin(self, origin):
-        return True
+# class SocketHandler(tornado.websocket.WebSocketHandler):
+#     def check_origin(self, origin):
+#         return True
 
-    def open(self):
-        if self not in cl:
-            cl.append(self)
+#     def open(self):
+#         if self not in cl:
+#             cl.append(self)
 
-    def on_close(self):
-        if self in cl:
-            cl.remove(self)
+#     def on_close(self):
+#         if self in cl:
+#             cl.remove(self)
 
 class status_postHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
