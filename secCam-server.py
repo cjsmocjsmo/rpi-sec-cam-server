@@ -220,13 +220,13 @@ class healthHandler(BaseHandler):
 class pc1_last_stillHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        pc1_last_still = mydata.DbData().piCam1_last_still_event()
+        events = mydata.DbData().piCam1_last_still_event()
         self.write(dict(pc1_last_still=events))
 
 class pc2_last_stillHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        last_still = mydata.DbData().piCam2_last_still_event()
+        events = mydata.DbData().piCam2_last_still_event()
         self.write(dict(pc2_last_still=events))
 
 class pc1_todays_eventsHandler(BaseHandler):
