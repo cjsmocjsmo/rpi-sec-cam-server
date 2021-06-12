@@ -8,11 +8,11 @@ from pprint import pprint
 
 
 
-SecCamClient = pymongo.MongoClient("http://192.168.0.26:27017/SecCam")
+SecCamClient = pymongo.MongoClient()
 PiCam1 = SecCamClient.picam1
 PiCam2 = SecCamClient.picam2
 
-SCLClient = pymongo.MongoClient("http://192.168.0.26:27017/SCL")
+SCLClient = pymongo.MongoClient()
 PiCamLogs = SCLClient.pclogs
 
 # db = con['SecCam']
@@ -91,7 +91,7 @@ class DbData:
         http_path_list = []
         for r in results:
             _, file_path = r['Filename'].split('images/', 1)
-            http = "http://192.168.0.26:8090/CamShots"
+            http = "http://db:8090/CamShots"
             http_path = "/".join((http, file_path))
             http_path_list.append(http_path)
         http_path_list.sort(reverse=True)
@@ -105,7 +105,7 @@ class DbData:
         http_path_list = []
         for r in results:
             _, file_path = r['Filename'].split('images/', 1)
-            http = "http://192.168.0.26:8090/CamShots"
+            http = "http://db:8090/CamShots"
             http_path = "/".join((http, file_path))
             http_path_list.append(http_path)
         http_path_list.sort(reverse=True)
