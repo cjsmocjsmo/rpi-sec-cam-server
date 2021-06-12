@@ -92,7 +92,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class BaseJPGHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
+        self.set_header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Authorization")
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Content-Type", "image/jpeg")
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
@@ -270,22 +270,12 @@ class ping_pc2Handler(BaseHandler):
 class pc1_last25_picsHandler(BaseJPGHandler):
     @tornado.gen.coroutine
     def get(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "image/jpeg")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
         last25 = data.DbData().piCam1_last25_images()
         self.write(dict(last25=last25))
 
 class pc2_last25_picsHandler(BaseJPGHandler):
     @tornado.gen.coroutine
     def get(self):
-        self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Content-Type", "image/jpeg")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
         last25 = data.DbData().piCam2_last25_images()
         self.write(dict(last25=last25))
 
