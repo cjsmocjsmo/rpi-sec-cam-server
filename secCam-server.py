@@ -97,6 +97,7 @@ class BaseJPGHandler(tornado.web.RequestHandler):
         self.set_header("Content-Type", "image/jpeg")
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
         self.set_header('Access-Control-Max-Age', 1000)
+        self.set_header("Access-Control-Allow-Headers", "access-control-allow-origin,authorization,content-type") 
 
 class MainHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
