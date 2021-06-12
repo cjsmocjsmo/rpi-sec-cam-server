@@ -22,6 +22,7 @@ PiCamLogs = SCLCon.pclogs
 # PiCam2 = db['picam2']
 # db2 = con['SCL']
 # PiCamLogs = db2['pclogs']
+print(PiCamLogs.count())
 
 class DbData:
     def __init__(self):
@@ -83,6 +84,7 @@ class DbData:
 
     def all_events(self):
         results = PiCamLogs.count()
+        print(results)
         #con.close()
         return results
 

@@ -190,54 +190,62 @@ class pic_dir_sizeHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         path = "/".join((PATH, "images"))
-        return subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8') + "B"
+        events = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8') + "B"
+        self.write(dict(pic_dir_size=events))
 
 class total_disk_sizeHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8') + "B"
+        events = subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8') + "B"
+        self.write(dict(total_disk=events))
 
 class pc1_last_movingHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return mydata.DbData().piCam1_last_moving_event()
+        events = mydata.DbData().piCam1_last_moving_event()
+        self.write(dict(pc1_last_moving=events))
 
 class pc2_last_movingHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return mydata.DbData().piCam2_last_moving_event()
+        events = mydata.DbData().piCam2_last_moving_event()
+        self.write(dict(pc2_last_moving=events))
 
 class healthHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return mydata.DbData().all_health_checks()
+        events = mydata.DbData().all_health_checks()
+        self.write(dict(health=events))
 
 class pc1_last_stillHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return mydata.DbData().piCam1_last_still_event()
+        pc1_last_still = mydata.DbData().piCam1_last_still_event()
+        self.write(dict(pc1_last_still=events))
 
 class pc2_last_stillHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return mydata.DbData().piCam2_last_still_event()
+        last_still = mydata.DbData().piCam2_last_still_event()
+        self.write(dict(pc2_last_still=events))
 
 class pc1_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        return mydata.DbData().piCam1_all_today_events()
+        events = mydata.DbData().piCam1_all_today_events()
+        self.write(dict(pc1_todays_events=events))
 
 class pc2_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
-    def git(self):
-        return mydata.DbData().piCam2_all_today_events()
+    def get(self):
+        events = mydata.DbData().piCam2_all_today_events()
+        self.write(dict(pc2_todays_events=events))
 
 class all_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         mydataa = mydata.DbData().all_events()
-        print(mydataa)
-        return mydataa
+        self.write(dict(all_events=mydataa))
 
 
 
