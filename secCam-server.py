@@ -64,8 +64,8 @@ class Application(tornado.web.Application):
             (r"/pc_last_moving", pc_last_movingHandler),
             # (r"/pc2_last_moving", pc2_last_movingHandler),
             (r"/health", healthHandler),
-            (r"/pc1_last_still", pc1_last_stillHandler),
-            (r"/pc2_last_still", pc2_last_stillHandler),
+            (r"/pc_last_still", pc_last_stillHandler),
+            (r"/pc_last_still", pc_last_stillHandler),
             (r"/pc1_todays_events", pc1_todays_eventsHandler),
             (r"/pc2_todays_events", pc2_todays_eventsHandler),
             (r"/all_events", all_eventsHandler),
@@ -199,31 +199,14 @@ class total_disk_sizeHandler(BaseHandler):
         events = subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8') + "B"
         self.write(dict(total_disk=[events]))
 
-
-
-
-
 class pc_last_movingHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         pc1 = mydata.DbData().piCam1_last_moving_event()
-        print(pc1)
         pc1_events = pc1['DateTime']
-        # self.write(dict(pc_last_moving=[events]))
-
-# class pc2_last_movingHandler(BaseHandler):
-#     @tornado.gen.coroutine
-#     def get(self):
         pc2 = mydata.DbData().piCam2_last_moving_event()
-        
-        print(pc2)
         pc2_events = pc2['DateTime']
         self.write(dict(pc_last_moving=[pc1_events, pc2_events]))
-
-
-
-
-
 
 class healthHandler(BaseHandler):
     @tornado.gen.coroutine
@@ -231,17 +214,31 @@ class healthHandler(BaseHandler):
         events = mydata.DbData().all_health_checks()
         self.write(dict(health=[events]))
 
-class pc1_last_stillHandler(BaseHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        events = mydata.DbData().piCam1_last_still_event()
-        self.write(dict(pc1_last_still=[events]))
 
-class pc2_last_stillHandler(BaseHandler):
+
+
+
+
+class pc_last_stillHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        events = mydata.DbData().piCam2_last_still_event()
-        self.write(dict(pc2_last_still=[events]))
+        pc1 = mydata.DbData().piCam1_last_still_event()
+        pc1_events = pc1["DateTime"]
+
+#         self.write(dict(pc_last_still=[events]))
+
+# class pc2_last_stillHandler(BaseHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+        pc2 = mydata.DbData().piCam2_last_still_event()
+        pc2_events = pc2['DateTime']
+        self.write(dict(pc_last_still=[pc1_events, pc2_events]))
+
+
+
+
+
+
 
 class pc1_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
