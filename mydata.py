@@ -9,11 +9,13 @@ from pprint import pprint
 
 
 SecCamClient = pymongo.MongoClient()
-PiCam1 = SecCamClient.picam1
-PiCam2 = SecCamClient.picam2
+SecCamCon = SecCamClient.SecCam
+PiCam1 = SecCamCon.picam1
+PiCam2 = SecCamCon.picam2
 
 SCLClient = pymongo.MongoClient()
-PiCamLogs = SCLClient.pclogs
+SCLCon = SCLClient.SLC
+PiCamLogs = SCLCon.pclogs
 
 # db = con['SecCam']
 # PiCam1 = db['picam1']
