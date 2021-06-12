@@ -82,7 +82,7 @@ class DbData:
         return len(results)
 
     def all_events(self):
-        results = SCLClient.count()
+        results = SCLCon.count()
         #con.close()
         return results
 
