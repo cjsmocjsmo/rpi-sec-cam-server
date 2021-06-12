@@ -22,28 +22,28 @@ class DbData:
         b1 = {"Body":"PiCam1", "Tail":"moving"}
         b2 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
         results = self.PiCamLogs.find(b1, b2).sort("DateTime", -1)
-        self.con.close()
+        #self.con.close()
         return results[0]
 
     def piCam2_last_moving_event(self):
         b1 = {"Body":"PiCam2", "Tail":"moving"}
         b2 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
         results = self.PiCamLogs.find(b1, b2).sort("DateTime", -1)
-        self.con.close()
+        #self.con.close()
         return results[0]
 
     def piCam1_last_still_event(self):
         b1 = {"Body":"PiCam1", "Tail":"still"}
         b2 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
         results = self.PiCamLogs.find(b1, b2).sort("DateTime", -1)
-        self.con.close()
+        #self.con.close()
         return results[0]
 
     def piCam2_last_still_event(self):
         b1 = {"Body":"PiCam2", "Tail":"still"}
         b2 = {"_id":0, "DateTimeMessage":0, "Message":0, "Year":0, "Month":0, "Day":0, "Hour":0, "Minute":0, "Second":0, "Millisecond":0}
         results = self.PiCamLogs.find(b1, b2).sort("DateTime", -1)
-        self.con.close()
+        #self.con.close()
         return results[0]
  
     def piCam1_all_today_events(self):
@@ -51,7 +51,7 @@ class DbData:
         b2 = {"_id":0}
         search = self.PiCamLogs.find(b1, b2)
         results = [s for s in search]
-        self.con.close()
+        #self.con.close()
         return len(results)
         
     def piCam2_all_today_events(self):
@@ -59,7 +59,7 @@ class DbData:
         b2 = {"_id":0}
         search = self.PiCamLogs.find(b1, b2)
         results = [s for s in search]
-        self.con.close()
+        #self.con.close()
         return len(results)
 
     def all_health_checks(self):
@@ -67,12 +67,12 @@ class DbData:
         b2 = {"_id":0}
         search = self.PiCamLogs.find(b1,b2)
         results = [s for s in search]
-        self.con.close()
+        #self.con.close()
         return len(results)
 
     def all_events(self):
         results = self.PiCamLogs.count()
-        self.con.close()
+        #self.con.close()
         return results
 
     def piCam1_last25_images(self):
@@ -86,7 +86,7 @@ class DbData:
             http_path = "/".join((http, file_path))
             http_path_list.append(http_path)
         http_path_list.sort(reverse=True)
-        self.con.close()
+        #self.con.close()
         return http_path_list
 
     def piCam2_last25_images(self):
@@ -100,14 +100,14 @@ class DbData:
             http_path = "/".join((http, file_path))
             http_path_list.append(http_path)
         http_path_list.sort(reverse=True)
-        self.con.close()
+        #self.con.close()
         return http_path_list
 
     def gd_gm_pep_current_status(self):
         b1 = {"Camera":"PiCam2", "Date":self.today}
         b2 = {"_id":0}
         results = self.PiCam2.find(b1,b2).sort("Time", -1).limit(1)
-        self.con.close()
+        #self.con.close()
         for r in results:
             return r["GDStat"], r['GDProb'], r['GMStat'], r['GMProb'], r['PEPStat'], r['PEPProb']
 
@@ -129,7 +129,7 @@ class DbData:
             last_closed_results = closed_results[0]['GDStat'], closed_results[0]['Date'], closed_results[0]['Time'][:-7]
         except IndexError:
             last_closed_results = "None", "None", "None", "None"
-        self.con.close()
+        #self.con.close()
         return last_open_results, last_closed_results
         
     def last_gm(self):
@@ -148,7 +148,7 @@ class DbData:
             last_nothome_results = nothome_results[0]['GMStat'], nothome_results[0]['Date'], nothome_results[0]['Time'][:-7]
         except IndexError:
             last_nothome_results = "None", "None", "None", "None"
-        self.con.close()
+        #self.con.close()
         return last_home_results, last_nothome_results
 
     def last_pep(self):
@@ -167,7 +167,7 @@ class DbData:
             last_notpep_results = notpep_results[0]['PEPStat'], notpep_results[0]['Date'], notpep_results[0]['Time'][:-7]
         except IndexError:
             last_notpep_results = "None", "None", "None", "None"
-        self.con.close()
+        #self.con.close()
         return last_pep_results, last_notpep_results
 
 
