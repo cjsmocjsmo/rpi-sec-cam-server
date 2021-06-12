@@ -8,11 +8,11 @@ from pprint import pprint
 
 
 
-SecCamClient = pymongo.MongoClient("mongodb://db:27017/SecCam")
+SecCamClient = pymongo.MongoClient("mongodb://192.168.0.26:27017/SecCam")
 PiCam1 = SecCamClient.picam1
 PiCam2 = SecCamClient.picam2
 
-SCLClient = pymongo.MongoClient("mongodb://db:27017/SCL")
+SCLClient = pymongo.MongoClient("mongodb://192.168.0.26:27017/SCL")
 PiCamLogs = SCLClient.pclogs
 
 # db = con['SecCam']
