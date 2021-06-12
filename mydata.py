@@ -3,7 +3,7 @@
 # import os
 from datetime import date
 # from pathlib import Path
-from pymongo
+import pymongo
 from pprint import pprint
 
 
