@@ -27,11 +27,19 @@ import subprocess
 import tornado.web
 import tornado.ioloop
 import tornado.httpserver
-# import tornado.websocket
 from datetime import date
 from urllib.parse import urlparse, parse_qs
 from tornado.options import define, options, parse_command_line
 from pprint import pprint 
+import pymongo
+
+from mydata import Conversions
+SecCamClient = pymongo.MongoClient()
+SecCamCon = SecCamClient.SecCam
+PiCam1 = SecCamCon.picam1
+PiCam2 = SecCamCon.picam2
+
+
 
 PATH = '/media/pi/IMAGEHUB/imagehub_data'
 
@@ -51,42 +59,35 @@ class Application(tornado.web.Application):
         handlers = [
             (r"/CamShots/(.*)", BaseJPGHandler, {'path': mpath}),
             (r"/main", MainHandler),
-            (r"/db_folder_size", db_folder_sizeHandler),
-            (r"/image_folder_size",image_folder_sizeHandler),
+            (r"/db_file_size", db_file_sizeHandler),
+            (r"/image_folder_size", image_folder_sizeHandler),
             (r"/total_size_on_disk", total_size_on_diskHandler),
             (r"/pingpc", ping_pcHandler),
-            # (r"/pingpc2", ping_pc2Handler),
-            # (r"/stats", statsHandler),
-
-
-            (r"/pic_dir_size", pic_dir_sizeHandler),
-            (r"/total_disk_size", total_disk_sizeHandler),
-            (r"/pc_last_moving", pc_last_movingHandler),
-            # (r"/pc2_last_moving", pc2_last_movingHandler),
-            (r"/health", healthHandler),
-            (r"/pc_last_still", pc_last_stillHandler),
-            (r"/pc_last_still", pc_last_stillHandler),
+            (r"/total_disk_size_in_db", total_disk_size_in_dbHandler),
             (r"/pc1_todays_events", pc1_todays_eventsHandler),
             (r"/pc2_todays_events", pc2_todays_eventsHandler),
             (r"/all_events", all_eventsHandler),
-
-
-            # (r"/picam1_todays_events", picam1_todays_eventsHandler),
-            # (r"/picam2_todays_events", picam2_todays_eventsHandler),
-            (r"/pc1_last25_pics", pc1_last25_picsHandler),
-            (r"/pc2_last25_pics", pc2_last25_picsHandler),
-            (r"/gd_gm_pep_status", gd_gm_pep_statusHandler),
             (r"/pc1_last_fifty_pics", pc1_last_fifty_picsHandler),
+            (r"/pc2_last_fifty_pics", pc2_last_fifty_picsHandler),
+            (r"/all_pc1_pic_size", all_pc1_pic_sizeHandler),
+            (r"/all_pc2_pic_size", all_pc2_pic_sizeHandler),
+            (r"/all_pics_size", all_pics_sizeHandler),
+            (r"/pc1_last_still", pc1_last_stillHandler),
+            (r"/pc2_last_still", pc2_last_stillHandler),
+            (r"/pc1_last_moving", pc1_last_movingHandler),
+            (r"/pc2_last_moving", pc2_last_movingHandler),
+
+            (r"/health", healthHandler),
+            (r"/gd_gm_pep_status", gd_gm_pep_statusHandler),
             (r"/last_gd", last_gdHandler),
             (r"/last_gm", last_gmHandler),
             (r"/last_pep", last_pepHandler),
 
-            # (r'/ws', SocketHandler),
-            (r"/status_post", status_postHandler),
-            # (r"/DBCount", totalPicDBHandler),
-            # (r"/SecCams/(.*)", tornado.web.StaticFileHandler, {'path': seccams}),
-            # (r"/TVShows/(.*)", tornado.web.StaticFileHandler, {'path': TVShows}),
-            # (r"/Pictures/(.*)", tornado.web.StaticFileHandler, {'path': Pictures}),
+
+
+
+
+            
         ]
         settings = dict(
             static_path = os.path.join(os.path.dirname(__file__), "static"),
@@ -118,8 +119,47 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('secCam.html')
 
-class db_folder_sizeHandler(BaseHandler):
+class all_pc1_pic_sizeHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        pipe = [{'$group': {'_id': None, 'total': {'$sum': '$Size'}}}]
+        pc1 = PiCam1.aggregate(pipeline=pipe)
+        pc1_total_size_bytes = Conversions().convert_size(pc1['result'][0]['total'])
+        self.write(dict(pc1_total_size_bytes=[pc1_total_size_bytes]))
 
+class all_pc2_pic_sizeHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        pipe = [{'$group': {'_id': None, 'total': {'$sum': '$Size'}}}]
+        pc2 = PiCam2.aggregate(pipeline=pipe)
+        print(pc2['result'][0]['total'])
+        pc2_total_size_bytes = Conversions().convert_size(pc2['result'][0]['total'])
+        self.write(dict(pc2_total_size_bytes=[pc2_total_size_bytes]))
+
+class all_pics_sizeHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def pc1_total(self):
+        pipe = [{'$group': {'_id': None, 'total': {'$sum': '$Size'}}}]
+        pc1 = PiCam1.aggregate(pipeline=pipe)
+        return pc1['result'][0]['total']
+
+    @tornado.gen.coroutine
+    def pc2_total(self):
+        pipe = [{'$group': {'_id': None, 'total': {'$sum': '$Size'}}}]
+        pc2 = PiCam2.aggregate(pipeline=pipe)
+        return pc2['result'][0]['total']
+
+    @tornado.gen.coroutine
+    def get(self):
+        pc1 = yield self.pc1_total()
+        pc2 = yield self.pc2_total()
+        total = pc1 + pc2
+        size = Conversions().convert_size(total)
+        self.write(dict(total_size=[size]))
+
+
+
+class db_file_sizeHandler(BaseHandler):
     @tornado.gen.coroutine
     def db_stats(self):
         con = MongoClient()
@@ -129,20 +169,20 @@ class db_folder_sizeHandler(BaseHandler):
         seccam_size_in_bytes = db_seccam_stats['fileSize']
         scl_stats = db_scl.command("dbstats")
         scl_size_in_bytes = scl_stats['fileSize']
-        total_size_in_bytes = seccam_size_in_bytes + scl_size_in_bytes
+        total_size = seccam_size_in_bytes + scl_size_in_bytes
 
-        if total_size_in_bytes < 1048576:
-            kb = total_size_in_bytes / 1024
+        if total_size < 1048576:
+            kb = total_size / 1024
             a1 = "{}KB".format(str(kb))
             print(a1)
             return a1
-        elif total_size_in_bytes < 1073741824:
-            mb = total_size_in_bytes / (1024*1024)
+        elif total_size < 1073741824:
+            mb = total_size / (1024*1024)
             b1 = "{}MB".format(str(mb))
             print(b1)
             return b1
-        elif total_size_in_bytes > 1073741824:
-            gb = total_size_in_bytes / (1024*1024*1024)
+        elif total_size > 1073741824:
+            gb = total_size / (1024*1024*1024)
             c1 = "{}GB".format(str(gb))
             print(c1)
             return c1
@@ -151,7 +191,7 @@ class db_folder_sizeHandler(BaseHandler):
 
 
 
-        # total_size = total_size_in_bytes / (1024*1024)
+        # total_size = total_size / (1024*1024)
         # size = str(total_size)
         # zize = "{}M".format(size[:5])
         # return zize
@@ -174,71 +214,122 @@ class total_size_on_diskHandler(BaseHandler):
         size = subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8')
         self.write(dict(total_size_on_disk=size))
 
+# class pic_dir_sizeHandler(BaseHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+#         path = "/".join((PATH, "images"))
+#         events = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8') + "B"
+#         self.write(dict(pic_dir_size=[events]))
 
-
-
-
-
-
-
-
-
-
-
-
-class pic_dir_sizeHandler(BaseHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        path = "/".join((PATH, "images"))
-        events = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8') + "B"
-        self.write(dict(pic_dir_size=[events]))
-
-class total_disk_sizeHandler(BaseHandler):
+class total_disk_size_in_dbHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
         events = subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8') + "B"
         self.write(dict(total_disk=[events]))
 
-class pc_last_movingHandler(BaseHandler):
+
+
+
+
+
+
+
+
+
+
+
+class pc1_last_movingHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        pc1 = mydata.DbData().piCam1_last_moving_event()
-        pc1_events = pc1['DateTime']
-        pc2 = mydata.DbData().piCam2_last_moving_event()
-        pc2_events = pc2['DateTime']
-        self.write(dict(pc_last_moving=[pc1_events, pc2_events]))
+        command = "tail -n 100 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam1|motion|moving'"
+        result = os.popen(command, 'r', 1)
+        result_list = []
+        for r in result:
+            result_list.append(r)
+        lresult = len(result_list)
+        if lresult == 1:
+            self.write(dict(pc1_last_moving=[result_list[0].split(",")[0]]))
+        elif lresult > 1:
+            last_moving = result_list.pop()
+            self.write(dict(pc1_last_moving=[last_moving.split(",")[0]]))
+    
+
+class pc2_last_movingHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        command = "tail -n 100 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam2|motion|moving'"
+        result = os.popen(command, 'r', 1)
+        result_list = []
+        for r in result:
+            result_list.append(r)
+        lresult = len(result_list)
+        if lresult == 1:
+            self.write(dict(pc2_last_moving=[result_list[0].split(",")[0]]))
+        elif lresult > 1:
+            last_moving = result_list.pop()
+            self.write(dict(pc2_last_moving=[last_moving.split(",")[0]]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class healthHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        events = mydata.DbData().all_health_checks()
-        self.write(dict(health=[events]))
+        command = "tail -n 1000 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'No messages received'"
+        result = os.popen(command, 'r', 1)
+        result_list = []
+        for r in result:
+            result_list.append(r)
+        lresult = len(result_list)
+        if lresult < 1:
+            self.write(dict(last_health=["None"]))
+        elif lresult == 1:
+            self.write(dict(last_health=[result_list[0].split(",")[0]]))
+        else:
+            last_health = result_list.pop()
+            self.write(dict(last_health=[last_health.split(",")[0]]))
 
 
-
-
-
-
-class pc_last_stillHandler(BaseHandler):
+class pc1_last_stillHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        pc1 = mydata.DbData().piCam1_last_still_event()
-        pc1_events = pc1["DateTime"]
+        command = "tail -n 100 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam1|motion|still'"
+        result = os.popen(command, 'r', 1)
+        result_list = []
+        for r in result:
+            result_list.append(r)
+        lresult = len(result_list)
+        if lresult == 1:
+            self.write(dict(pc1_last_still=[result_list[0].split(",")[0]]))
+        elif lresult > 1:
+            last_still = result_list.pop()
+            self.write(dict(pc1_last_still=[last_still.split(",")[0]]))
 
-#         self.write(dict(pc_last_still=[events]))
-
-# class pc2_last_stillHandler(BaseHandler):
-#     @tornado.gen.coroutine
-#     def get(self):
-        pc2 = mydata.DbData().piCam2_last_still_event()
-        pc2_events = pc2['DateTime']
-        self.write(dict(pc_last_still=[pc1_events, pc2_events]))
-
-
-
-
-
-
+class pc2_last_stillHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get(self):
+        command = "tail -n 100 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam2|motion|still'"
+        result = os.popen(command, 'r', 1)
+        result_list = []
+        for r in result:
+            result_list.append(r)
+        lresult = len(result_list)
+        if lresult == 1:
+            self.write(dict(pc2_last_still=[result_list[0].split(",")[0]]))
+        elif lresult > 1:
+            last_still = result_list.pop()
+            self.write(dict(pc2_last_still=[last_still.split(",")[0]]))
 
 class pc1_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
@@ -257,104 +348,6 @@ class all_eventsHandler(BaseHandler):
     def get(self):
         mydataa = mydata.DbData().all_events()
         self.write(dict(all_events=[mydataa]))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# class statsHandler(BaseHandler):
-
-#     @tornado.gen.coroutine
-#     def pic_dir_size(self):
-#         path = "/".join((PATH, "images"))
-#         return subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8') + "B"
-
-#     @tornado.gen.coroutine
-#     def total_disk_size(self):
-#         return subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8') + "B"
-
-#     @tornado.gen.coroutine
-#     def piCam1_last_moving(self):
-#         return mydata.DbData().piCam1_last_moving_event()
-
-#     @tornado.gen.coroutine
-#     def piCam2_last_moving(self):
-#         return mydata.DbData().piCam2_last_moving_event()
-
-#     @tornado.gen.coroutine
-#     def last_health(self):
-#         return mydata.DbData().all_health_checks()
-
-#     @tornado.gen.coroutine
-#     def piCam1_last_still(self):
-#         return mydata.DbData().piCam1_last_still_event()
-
-#     @tornado.gen.coroutine
-#     def piCam2_last_still(self):
-#         return mydata.DbData().piCam2_last_still_event()
-
-#     @tornado.gen.coroutine
-#     def piCam1_all_today_events(self):
-#         return mydata.DbData().piCam1_all_today_events()
-
-#     @tornado.gen.coroutine
-#     def piCam2_all_today_events(self):
-#         return mydata.DbData().piCam2_all_today_events()
-
-#     @tornado.gen.coroutine
-#     def all_Events(self):
-#         return mydata.DbData().all_events()
-
-#     @tornado.gen.coroutine
-#     def get(self):
-#         picDirSize = yield self.pic_dir_size()
-#         totalDiskSize = yield self.total_disk_size()
-#         last_health_event = yield self.last_health()
-#         piCam1_last_moving_event = yield self.piCam1_last_moving()
-#         piCam2_last_moving_event = yield self.piCam2_last_moving()
-#         piCam1_last_still_event = yield self.piCam1_last_still()
-#         piCam2_last_still_event = yield self.piCam2_last_still()
-#         piCam1_all_today = yield self.piCam1_all_today_events()
-#         piCam2_all_today = yield self.piCam2_all_today_events()
-#         all_events = yield self.all_Events()
-
-#         z = {
-#             "picDirSize": picDirSize,
-#             "totalDiskSize": totalDiskSize,
-#             "health": last_health_event,
-#             "picam1LM": piCam1_last_moving_event,
-#             "picam2LM": piCam2_last_moving_event,
-#             "picam1LS": piCam1_last_still_event,
-#             "picam2LS": piCam2_last_still_event,
-#             "picam1AllToday": piCam1_all_today,
-#             "picam2AllToday": piCam2_all_today,
-#             "totalEvents": all_events,
-#         }
-#         self.write(z)
 
 class ping_pcHandler(BaseHandler):
     @tornado.gen.coroutine
@@ -382,21 +375,7 @@ class ping_pcHandler(BaseHandler):
         pc1 = yield self.pc1_ping()
         pc2 = yield self.pc2_ping()
         result = [pc1, pc2]
-
         self.write(dict(ping_results=result))
-
-
-class pc1_last25_picsHandler(BaseJPGHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        last25 = mydata.DbData().piCam1_last25_images()
-        self.write(dict(last25=last25))
-
-class pc2_last25_picsHandler(BaseJPGHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        last25 = mydata.DbData().piCam2_last25_images()
-        self.write(dict(last25=last25))
 
 class gd_gm_pep_statusHandler(BaseHandler):
     @tornado.gen.coroutine
@@ -442,6 +421,44 @@ class pc1_last_fifty_picsHandler(BaseHandler):
         plist = ["/".join((prefix, p)) for p in picglob]
         self.write(dict(plist=plist))
 
+class pc2_last_fifty_picsHandler(BaseHandler):
+    @tornado.gen.coroutine
+    def get_today(self):
+        d1 = date.today()
+        return d1.strftime("%Y-%m-%d")
+
+    @tornado.gen.coroutine
+    def get_prefix(self):
+        today = yield self.get_today()
+        prefix = "http://192.168.0.26:8090/CamShots/" + today
+        return prefix
+
+    @tornado.gen.coroutine
+    def glob_pic_dir(self):
+        picdir = yield self.get_today()
+        globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
+        picglob = glob.glob(globdir)
+        lenpicglob = len(picglob)
+        if lenpicglob != 0:
+            pc1list = []
+            pc1 = re.compile("PiCam2")
+            [pc1list.append(p) for p in picglob if re.search(pc1, p)]
+            pcg = [os.path.split(p)[1] for p in pc1list]
+            pcg.sort(reverse=True)
+            if len(pcg) > 26:
+                return pcg[:26]
+            else:
+                return pcg
+        else:
+            return None
+            
+    @tornado.gen.coroutine
+    def get(self):
+        prefix = yield self.get_prefix()
+        picglob = yield self.glob_pic_dir()
+        plist = ["/".join((prefix, p)) for p in picglob]
+        self.write(dict(plist=plist))
+
 class last_gdHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
@@ -459,33 +476,6 @@ class last_pepHandler(BaseHandler):
     def get(self):
         lastpep = mydata.DbData().last_pep()
         self.write(dict(lastpep=lastpep))
-
-# class SocketHandler(tornado.websocket.WebSocketHandler):
-#     def check_origin(self, origin):
-#         return True
-
-#     def open(self):
-#         if self not in cl:
-#             cl.append(self)
-
-#     def on_close(self):
-#         if self in cl:
-#             cl.remove(self)
-
-class status_postHandler(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
-    def post(self):
-        gds = self.get_argument("GDStat")
-        gms = self.get_argument("GMStat")
-        peps = self.get_argument("PEPStat")
-        mydata = gds, gms, peps
-        print(gds)
-        print(gms)
-        print(peps)
-        mydata = json.dumps(mydata)
-        for c in cl:
-            c.write_message(mydata)
-
 
 class picam1_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
