@@ -307,7 +307,7 @@ class healthHandler(BaseHandler):
         if lresult < 1:
             self.write(dict(last_health=["None"]))
         elif lresult == 1:
-            last_heath = result_list[0].split(",")[0]
+            last_health = result_list[0].split(",")[0]
             datE, timE = last_health.split(" ")
             self.write(dict(last_health=[datE, timE]))
         else:
