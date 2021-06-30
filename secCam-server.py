@@ -241,33 +241,45 @@ class total_disk_size_in_dbHandler(BaseHandler):
 class pc1_last_movingHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        command = "tail -n 100 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam1|motion|moving'"
+        command = "tail -n 3000 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam1|motion|moving'"
         result = os.popen(command, 'r', 1)
         result_list = []
         for r in result:
             result_list.append(r)
         lresult = len(result_list)
-        if lresult == 1:
-            self.write(dict(pc1_last_moving=[result_list[0].split(",")[0]]))
-        elif lresult > 1:
+        if lresult < 1:
+            self.write(dict(pc1_last_moving=["None", "None"]))
+        elif lresult == 1:
+            event = result_list[0].split(",")[0]
+            datE, timE = event.split(" ")
+            self.write(dict(pc1_last_moving=[datE, timE]))
+        else:
             last_moving = result_list.pop()
-            self.write(dict(pc1_last_moving=[last_moving.split(",")[0]]))
+            event = last_moving.split(",")[0]
+            datE, timE = event.split(" ")
+            self.write(dict(pc1_last_moving=[datE, timE]))
     
 
 class pc2_last_movingHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        command = "tail -n 100 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam2|motion|moving'"
+        command = "tail -n 3000 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam2|motion|moving'"
         result = os.popen(command, 'r', 1)
         result_list = []
         for r in result:
             result_list.append(r)
         lresult = len(result_list)
-        if lresult == 1:
-            self.write(dict(pc2_last_moving=[result_list[0].split(",")[0]]))
-        elif lresult > 1:
+        if lresult < 1:
+            self.write(dict(pc2_last_moving=["None", "None"]))
+        elif lresult == 1:
+            event = result_list[0].split(",")[0]
+            datE, timE = event.split(" ")
+            self.write(dict(pc2_last_moving=[datE, timE]))
+        else:
             last_moving = result_list.pop()
-            self.write(dict(pc2_last_moving=[last_moving.split(",")[0]]))
+            event = last_moving.split(",")[0]
+            datE, timE = event.split(" ")
+            self.write(dict(pc2_last_moving=[datE, timE]))
 
 
 
@@ -286,7 +298,7 @@ class pc2_last_movingHandler(BaseHandler):
 class healthHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        command = "tail -n 1000 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'No messages received'"
+        command = "tail -n 30000 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'No messages received'"
         result = os.popen(command, 'r', 1)
         result_list = []
         for r in result:
@@ -295,41 +307,57 @@ class healthHandler(BaseHandler):
         if lresult < 1:
             self.write(dict(last_health=["None"]))
         elif lresult == 1:
-            self.write(dict(last_health=[result_list[0].split(",")[0]]))
+            last_heath = result_list[0].split(",")[0]
+            datE, timE = last_health.split(" ")
+            self.write(dict(last_health=[datE, timE]))
         else:
             last_health = result_list.pop()
-            self.write(dict(last_health=[last_health.split(",")[0]]))
+            lastHealth = last_health.split(",")[0]
+            datE, timE = lastHealth.split(" ")
+            self.write(dict(last_health=[datE, timE]))
 
 
 class pc1_last_stillHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        command = "tail -n 100 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam1|motion|still'"
+        command = "tail -n 3000 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam1|motion|still'"
         result = os.popen(command, 'r', 1)
         result_list = []
         for r in result:
             result_list.append(r)
         lresult = len(result_list)
-        if lresult == 1:
-            self.write(dict(pc1_last_still=[result_list[0].split(",")[0]]))
-        elif lresult > 1:
+        if lresult < 1:
+            self.write(dict(pc1_last_still=["None", "None"]))
+        elif lresult == 1:
+            event = result_list[0].split(",")[0]
+            datE, timE = event.split(" ")
+            self.write(dict(pc1_last_still=[datE, timE]))
+        else:
             last_still = result_list.pop()
-            self.write(dict(pc1_last_still=[last_still.split(",")[0]]))
+            event = last_still.split(",")[0]
+            datE, timE = event.split(" ")
+            self.write(dict(pc1_last_still=[datE, timE]))
 
 class pc2_last_stillHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        command = "tail -n 100 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam2|motion|still'"
+        command = "tail -n 3000 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam2|motion|still'"
         result = os.popen(command, 'r', 1)
         result_list = []
         for r in result:
             result_list.append(r)
         lresult = len(result_list)
-        if lresult == 1:
-            self.write(dict(pc2_last_still=[result_list[0].split(",")[0]]))
-        elif lresult > 1:
+        if lresult < 1:
+            self.write(dict(pc2_last_still=["None", "None"]))
+        elif lresult == 1:
+            event = result_list[0].split(",")[0]
+            datE, timE = event.split(" ")
+            self.write(dict(pc2_last_still=[datE, timE]))
+        else:
             last_still = result_list.pop()
-            self.write(dict(pc2_last_still=[last_still.split(",")[0]]))
+            event = last_still.split(",")[0]
+            datE, timE = event.split(" ")
+            self.write(dict(pc2_last_still=[datE, timE]))
 
 class pc1_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
