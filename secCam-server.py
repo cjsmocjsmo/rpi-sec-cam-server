@@ -17,8 +17,8 @@
 
 import os
 import re
-import yaml
-import json
+# import yaml
+# import json
 import parselogs
 import mydata
 import glob
@@ -63,7 +63,7 @@ class Application(tornado.web.Application):
             (r"/image_folder_size", image_folder_sizeHandler),
             (r"/total_size_on_disk", total_size_on_diskHandler),
             (r"/pingpc", ping_pcHandler),
-            (r"/total_disk_size_in_db", total_disk_size_in_dbHandler),
+            # (r"/total_disk_size_in_db", total_disk_size_in_dbHandler),
             (r"/pc1_todays_events", pc1_todays_eventsHandler),
             (r"/pc2_todays_events", pc2_todays_eventsHandler),
             (r"/all_events", all_eventsHandler),
@@ -82,12 +82,6 @@ class Application(tornado.web.Application):
             (r"/last_gd", last_gdHandler),
             (r"/last_gm", last_gmHandler),
             (r"/last_pep", last_pepHandler),
-
-
-
-
-
-            
         ]
         settings = dict(
             static_path = os.path.join(os.path.dirname(__file__), "static"),
@@ -211,8 +205,57 @@ class image_folder_sizeHandler(BaseHandler):
 class total_size_on_diskHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        size = subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8')
-        self.write(dict(total_size_on_disk=size))
+        log_report = "/media/pi/IMAGEHUB/ImageHubReports/log_report.txt"
+        with open(log_report, "r") as infile:
+            size = infile.read()
+        size1 = int(size)
+
+        db_report = "/media/pi/IMAGEHUB/ImageHubReports/log_report.txt"
+        with open(db_report, "r") as infile:
+            size2 = infile.read()
+        size2 = int(size2)
+        
+        glob_path = "/media/pi/IMAGEHUB/ImageHubReports/images/*"
+        imgfiles = glob.glob(glob_path)
+        sumlist = []
+        for imgf in imgfiles:
+            with open(imgf, "r") as infile:
+                asum = infile.read()
+                sumlist.append(int(asum))
+        size3 = sum(sumlist)
+
+        sizes = size1 + size2 + size3
+        if sizes < 1048576:
+            kb = sizes / 1024
+            kb = str(kb)
+            kb = kb[:4]
+            a1 = "{}KB".format(str(kb))
+            print(a1)
+            self.write(dict(total_size_on_disk=a1))
+        elif sizes < 1073741824:
+            mb = sizes / (1024*1024)
+            mb = str(mb)
+            mb = mb[:4]
+            b1 = "{}MB".format(str(mb))
+            print(b1)
+            self.write(dict(total_size_on_disk=b1))
+        elif sizes > 1073741824:
+            gb = sizes / (1024*1024*1024)
+            gb = str(gb)
+            gb = gb[:4]
+            c1 = "{}GB".format(str(gb))
+            print(c1)
+            self.write(dict(total_size_on_disk=c1))
+        else:
+            print("GUUUUUUUP")
+
+
+
+
+    # @tornado.gen.coroutine
+    # def get(self):
+    #     size = subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8')
+    #     self.write(dict(total_size_on_disk=size))
 
 # class pic_dir_sizeHandler(BaseHandler):
 #     @tornado.gen.coroutine
@@ -221,11 +264,11 @@ class total_size_on_diskHandler(BaseHandler):
 #         events = subprocess.check_output(['du','-sh', path]).split()[0].decode('utf-8') + "B"
 #         self.write(dict(pic_dir_size=[events]))
 
-class total_disk_size_in_dbHandler(BaseHandler):
-    @tornado.gen.coroutine
-    def get(self):
-        events = subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8') + "B"
-        self.write(dict(total_disk=[events]))
+# class total_disk_size_in_dbHandler(BaseHandler):
+#     @tornado.gen.coroutine
+#     def get(self):
+#         events = subprocess.check_output(['du','-sh', PATH]).split()[0].decode('utf-8') + "B"
+#         self.write(dict(total_disk=[events]))
 
 
 
@@ -281,46 +324,36 @@ class pc2_last_movingHandler(BaseHandler):
             datE, timE = event.split(" ")
             self.write(dict(pc2_last_moving=[datE, timE]))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class healthHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        command = "tail -n 30000 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'No messages received'"
+        command = "tail -n 20000 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'No messages received'"
         result = os.popen(command, 'r', 1)
         result_list = []
         for r in result:
             result_list.append(r)
+            if len(result_list) > 0:
+                break
         lresult = len(result_list)
         if lresult < 1:
             self.write(dict(last_health=["None"]))
-        elif lresult == 1:
+        else:
             last_health = result_list[0].split(",")[0]
             datE, timE = last_health.split(" ")
             self.write(dict(last_health=[datE, timE]))
-        else:
-            last_health = result_list.pop()
-            lastHealth = last_health.split(",")[0]
-            datE, timE = lastHealth.split(" ")
-            self.write(dict(last_health=[datE, timE]))
-
 
 class pc1_last_stillHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        command = "tail -n 3000 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam1|motion|still'"
+        command = " ".join((
+            "tail",
+            "-n",
+            '3000',
+            '/media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log',
+            '|',
+            "grep",
+            'PiCam1|motion|still',
+        ))
         result = os.popen(command, 'r', 1)
         result_list = []
         for r in result:
@@ -341,23 +374,33 @@ class pc1_last_stillHandler(BaseHandler):
 class pc2_last_stillHandler(BaseHandler):
     @tornado.gen.coroutine
     def get(self):
-        command = "tail -n 3000 /media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log | grep 'PiCam2|motion|still'"
+        command = " ".join((
+            "tail",
+            "-n",
+            '3000',
+            '/media/pi/IMAGEHUB/imagehub_data/logs/imagehub.log',
+            '|',
+            "grep",
+            'PiCam2|motion|still',
+        ))
         result = os.popen(command, 'r', 1)
         result_list = []
         for r in result:
             result_list.append(r)
+            if len(result_list) > 0:
+                break
         lresult = len(result_list)
         if lresult < 1:
             self.write(dict(pc2_last_still=["None", "None"]))
-        elif lresult == 1:
+        else:
             event = result_list[0].split(",")[0]
             datE, timE = event.split(" ")
             self.write(dict(pc2_last_still=[datE, timE]))
-        else:
-            last_still = result_list.pop()
-            event = last_still.split(",")[0]
-            datE, timE = event.split(" ")
-            self.write(dict(pc2_last_still=[datE, timE]))
+        # else:
+        #     last_still = result_list.pop()
+        #     event = last_still.split(",")[0]
+        #     datE, timE = event.split(" ")
+        #     self.write(dict(pc2_last_still=[datE, timE]))
 
 class pc1_todays_eventsHandler(BaseHandler):
     @tornado.gen.coroutine
@@ -420,13 +463,13 @@ class pc1_last_fifty_picsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get_prefix(self):
         today = yield self.get_today()
-        prefix = "http://192.168.0.26:8090/CamShots/" + today
+        prefix = "/".join(("http://192.168.0.26:8090/CamShots", today))
         return prefix
 
     @tornado.gen.coroutine
     def glob_pic_dir(self):
         picdir = yield self.get_today()
-        globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
+        globdir = "/".join(("/media/pi/IMAGEHUB/imagehub_data/images", picdir, "*.jpg"))
         picglob = glob.glob(globdir)
         lenpicglob = len(picglob)
         if lenpicglob != 0:
@@ -458,13 +501,13 @@ class pc2_last_fifty_picsHandler(BaseHandler):
     @tornado.gen.coroutine
     def get_prefix(self):
         today = yield self.get_today()
-        prefix = "http://192.168.0.26:8090/CamShots/" + today
+        prefix = "/".join(("http://192.168.0.26:8090/CamShots", today))
         return prefix
 
     @tornado.gen.coroutine
     def glob_pic_dir(self):
         picdir = yield self.get_today()
-        globdir = "/media/pi/IMAGEHUB/imagehub_data/images/" + picdir + "/*.jpg"
+        globdir = "/".join(("/media/pi/IMAGEHUB/imagehub_data/images", picdir, "*.jpg"))
         picglob = glob.glob(globdir)
         lenpicglob = len(picglob)
         if lenpicglob != 0:

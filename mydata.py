@@ -135,7 +135,7 @@ class Conversions:
             return "{}MB".format(mb)
         elif total_size > 1073741824:
             g1 = total_size / (1024*1024*1024)
-            g2 = str(gb)
+            g2 = str(g1)
             gb = g2[:6]
             return "{}GB".format(gb)
         else:
